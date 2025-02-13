@@ -62,24 +62,26 @@ For example: OS version, programs, libraries, etc.
 -->
 - Ensure that git is installed on your machine. [Download Git](https://git-scm.com/downloads)
 
-
-
 ## Usage
-To run the project, run the following command from the root directory of the project:
-```bash
 
+To run the project, run the following command from the root directory of the project:
+
+```bash
+docker compose up --build
 ```
 <!-- TODO: Instructions on how to run the project and use its features. -->
 
 ## Testing
-To run the test suite, run the following command from the root directory of the project:
-```bash
 
+To run the test suite, run the following command from the root directory of the project:
+
+```bash
+docker compose run backend python -m pytest
 ```
 
 ## Team
-This project would not have been possible without the hard work and dedication of all of the contributors. Thank you for the time and effort you have put into making this project a reality.
 
+This project would not have been possible without the hard work and dedication of all of the contributors. Thank you for the time and effort you have put into making this project a reality.
 
 <table align="center">
     <tr>
@@ -96,7 +98,7 @@ This project would not have been possible without the hard work and dedication o
 
 ![Group picture](docs/img/team.png)
 
-
 ### License
+
 ------
 Distributed under the MIT License. See `LICENSE` for more information.
