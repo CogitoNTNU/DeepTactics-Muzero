@@ -1,1 +1,23 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up backend Docker service
+        run: |
+          docker compose build backend
+          docker compose run backend python -m pytest
+          docker compose up -d backend
+          docker compose down
+
 # TODO
+
