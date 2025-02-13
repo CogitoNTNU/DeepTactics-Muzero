@@ -46,6 +46,15 @@ OPENAI_API_KEY = 'your_openai_api_key'
 MONGODB_URI = 'your_secret_key'
 ```
 -->
+Use type hinting in all methods when contributing.
+Here is an example: 
+```Python
+import numpy as np
+import torch
+
+def dummy_fun(a: int, b: ndarray, c: torch.tensor) -> list[int]:
+  pass
+```
 
 ### Prerequisites
 <!-- TODO: In this section you put what is needed for the program to run.
