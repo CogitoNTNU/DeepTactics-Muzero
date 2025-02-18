@@ -3,11 +3,11 @@ import torch.nn as nn
 
 
 class ResBlock(nn.Module):
-    def __init__(self, in_channels :int , out_channels : int, kernel_size: int, stride : int, padding : int) -> None:
+    def __init__(self, channels :int, kernel_size: int, stride : int, padding : int) -> None:
         super(ResBlock, self).__init__()
-        self.c1 = nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=stride, padding=padding)
+        self.c1 = nn.Conv2d(in_channels=channels, out_channels=channels, kernel_size=kernel_size, stride=stride, padding=padding)
         self.relu = nn.ReLU()
-        self.c2 = nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=stride, padding=padding)
+        self.c2 = nn.Conv2d(in_channels=channels, out_channels=channels, kernel_size=kernel_size, stride=stride, padding=padding)
 
     def forward(self, x : torch.Tensor):
         out= self.c1(x)
@@ -18,7 +18,7 @@ class ResBlock(nn.Module):
 
 
 if __name__ == "__main__":
-    resBlock = ResBlock(6,6,3,1,1)
+    resBlock = ResBlock(6,3,1,1)
     ones = torch.ones(6, 6, 256)  # All ones
     print(resBlock.forward(ones))
 
