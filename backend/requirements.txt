@@ -40,3 +40,4 @@ watchfiles==1.0.4
 websockets==14.2
 ale-py==0.10.2
 gymnasium[atari]==1.0.0
+pre-commit
