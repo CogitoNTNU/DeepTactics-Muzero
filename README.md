@@ -79,6 +79,14 @@ To run the test suite, run the following command from the root directory of the 
 docker compose run backend python -m pytest
 ```
 
+If you want to do quick testing without needing to build the docker image, you can run the following command from the root directory of the project:
+
+```bash
+pytest backend/tests
+```
+
+If the tests look good locally, then you can build the docker image and run the tests in the docker container using the `docker compose run backend pytest` commmand.
+
 ## Team
 
 This project would not have been possible without the hard work and dedication of all of the contributors. Thank you for the time and effort you have put into making this project a reality.
