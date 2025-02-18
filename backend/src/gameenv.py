@@ -7,12 +7,12 @@ class game:
         self.obs, self.info = self.env.reset()
         self.episode_over: bool = False
 
-    def register_action(self, move):
-        action = self.env.action_space.sample() #move, now its random
+    def register_action(self, action):
+        action = self.env.action_space.sample() #remove line, now its random
         self.obs, self.reward, terminated, truncated, info = self.env.step(action)
         self.episode_over = terminated or truncated
     
-    def action_loop(self, moveset):
+    def action_loop(self, networkdecider):
         while not self.episode_over:
-            self.register_action()
+            self.register_action(networkdecider)
         self.env.close()
