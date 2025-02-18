@@ -75,7 +75,7 @@ class Environment(object):
         self.env = gym.make(gamefile) 
         self.obs, self.info = self.env.reset()
         self.episode_over: bool = False
-        self.input_size:int = self.env.spec
+        self.input_size = self.env.action_space
 
     def step(self, action):
         action = self.env.action_space.sample() #remove line, now its random
