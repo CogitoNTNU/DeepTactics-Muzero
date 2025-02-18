@@ -1,6 +1,7 @@
 import gymnasium as gym
 import ale_py
 
+
 ######################---Disse skal nok ligge i en annen fil, placeholders settes her---######################
 class Action(object):
 
@@ -70,10 +71,11 @@ class ActionHistory(object):
 
 class Environment(object):
     """The environment MuZero is interacting with."""
-    def __init__(self, gamefile: str = 'ALE/Breakout-v5'):
-        self.env = gym.make(gamefile, continuous = True)  # remove render_mode in training
+    def __init__(self, gamefile: str = 'CartPole-v1'): #'ALE/Breakout-v5'
+        self.env = gym.make(gamefile) 
         self.obs, self.info = self.env.reset()
         self.episode_over: bool = False
+        self.input_size = self.env.action_space
 
     def step(self, action):
         action = self.env.action_space.sample() #remove line, now its random
