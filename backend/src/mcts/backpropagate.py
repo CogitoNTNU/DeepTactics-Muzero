@@ -1,4 +1,5 @@
 from typing import List
+from backend.src.utils.minmaxstats import MinMaxStats
 from src.mcts.node import Node
 from src.game.player import Player
 
