@@ -9,3 +9,6 @@ class Node:
         self.value = 0
         self.state = state
         self.policy_value = policy_value
+
+    def expanded(self) -> bool:
+        return len(self.children) > 0
