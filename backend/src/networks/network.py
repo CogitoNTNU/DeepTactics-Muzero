@@ -32,6 +32,11 @@ class Network(nn.Module):
         self.hidden_layer_size = config.hidden_layer_size
         self.action_space_size = config.action_space_size
 
-
+        # Representation: from raw observation to hidden state.
+        self.representation = nn.Sequential(
+            nn.Linear(config.observation_space_size, config.hidden_layer_size),
+            nn.ReLU(),
+            ResidualBlock(config.hidden_layer_size, config.hidden_layer_size)
+        )
 
 
