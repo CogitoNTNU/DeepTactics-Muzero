@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from typing import NamedTuple, Dict
 
 from src.networks.config import MuZeroConfig
-from architecture import Action, ResidualBlock
+from residualblock import Action, ResBlock
 
 
 class NetworkOutput(NamedTuple):
