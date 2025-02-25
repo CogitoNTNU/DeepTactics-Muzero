@@ -1,7 +1,27 @@
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from config import OBSERVATION_SHAPE, HIDDEN_DIM, ACTION_SIZE, NUM_RESIDUAL_BLOCKS
+from typing import NamedTuple, Dict
+
+from config import MuZeroConfig
+from architecture import Action, ResidualBlock
+
+
+class NetworkOutput(NamedTuple):
+    """
+    The output from initial_inference or recurrent_inference:
+      - value: scalar value estimate
+      - reward: scalar immediate reward
+      - policy_logits: dictionary {Action(a): prob_a}
+      - policy_tensor: raw tensor of shape [batch_size, action_space_size]
+      - hidden_state: shape [batch_size, hidden_layer_size]
+    """
+    value: torch.Tensor
+    reward: torch.Tensor
+    policy_logits: Dict[Action, float]
+    policy_tensor: torch.Tensor
+    hidden_state: torch.Tensor
 
 
 class ResidualBlock(nn.Module):
@@ -19,19 +39,109 @@ class ResidualBlock(nn.Module):
         out += identity
         return F.relu(out)
 
-
-class Network(nn.Module):
-    def __init__(self, config):
         """
         Expects a config object with:
           - observation_space_size: int
           - action_space_size: int
           - hidden_layer_size: int
         """
+
+class Network(nn.Module):
+    def __init__(self, config):
         super(Network, self).__init__()
+        self.config = config
         self.hidden_layer_size = config.hidden_layer_size
         self.action_space_size = config.action_space_size
 
+        # Representation: from raw observation to hidden state.
+        self.representation = nn.Sequential(
+            nn.Linear(config.observation_space_size, config.hidden_layer_size),
+            nn.ReLU(),
+            ResidualBlock(config.hidden_layer_size, config.hidden_layer_size)
+        )
 
+        # Value head: predicts scalar value from hidden state.
+        self.value_head = nn.Sequential(
+            nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
+            nn.ReLU(),
+            nn.Linear(config.hidden_layer_size, 1),
+            nn.ReLU()
+        )
 
+        # Policy head: predicts action probabilities from hidden state.
+        self.policy_head = nn.Sequential(
+            nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
+            nn.ReLU(),
+            nn.Linear(config.hidden_layer_size, config.action_space_size),
+            nn.Softmax(dim=-1)
+        )
 
+        # Dynamics: given [hidden_state, action one-hot] -> next hidden state
+        self.dynamics = nn.Sequential(
+            nn.Linear(config.hidden_layer_size + config.action_space_size, config.hidden_layer_size),
+            nn.ReLU(),
+            nn.Linear(config.hidden_layer_size, config.hidden_layer_size)
+        )
+
+        # Reward head: same input as dynamics, but outputs a scalar reward.
+        self.reward_head = nn.Sequential(
+            nn.Linear(config.hidden_layer_size + config.action_space_size, config.hidden_layer_size),
+            nn.ReLU(),
+            nn.Linear(config.hidden_layer_size, 1),
+            nn.ReLU()
+        )
+
+        self.tot_training_steps = 0
+
+    def initial_inference(self, observation: torch.Tensor) -> NetworkOutput:
+        """
+        For the first step from an environment observation.
+        The reward is set to zero because no action has yet been taken.
+        """
+        if observation.dim() == 1:
+            # Expand dims if shape is [observation_space_size].
+            observation = observation.unsqueeze(0)
+        hidden_state = self.representation(observation)
+        value = self.value_head(hidden_state)
+        policy = self.policy_head(hidden_state)
+
+        # Reward is zero at the root.
+        reward = torch.zeros((observation.shape[0], 1), device=observation.device, dtype=observation.dtype)
+
+        # Build a dictionary for the first element in the batch.
+        policy_dict = {Action(a): policy[0, a].item() for a in range(self.action_space_size)}
+
+        return NetworkOutput(value, reward, policy_dict, policy, hidden_state)
+
+    def recurrent_inference(self, hidden_state: torch.Tensor, action: Action) -> NetworkOutput:
+        """
+        Takes a hidden state plus an action (converted to one-hot),
+        returns the next hidden state, reward, value, and policy.
+        """
+        # Convert the single integer action to a one-hot.
+        # For simplicity, we assume batch size of 1 or hidden_state is [1, hidden_size].
+        action_tensor = torch.tensor([action.index], device=hidden_state.device)
+        action_one_hot = F.one_hot(action_tensor, num_classes=self.action_space_size).float()
+
+        # Concatenate hidden state + action.
+        nn_input = torch.cat([hidden_state, action_one_hot], dim=-1)
+
+        # Next hidden state.
+        next_hidden_state = self.dynamics(nn_input)
+        # Reward from the same input.
+        reward = self.reward_head(nn_input)
+        # Then compute value, policy from next hidden state.
+        value = self.value_head(next_hidden_state)
+        policy = self.policy_head(next_hidden_state)
+        # Build dictionary for policy.
+        policy_dict = {Action(a): policy[0, a].item() for a in range(self.action_space_size)}
+
+        return NetworkOutput(value, reward, policy_dict, policy, next_hidden_state)
+
+    def get_weights(self):
+        # Returns all parameters of the network.
+        return list(self.parameters())
+
+    def training_steps(self) -> int:
+        # How many steps/batches the network has been trained for.
+        return self.tot_training_steps
