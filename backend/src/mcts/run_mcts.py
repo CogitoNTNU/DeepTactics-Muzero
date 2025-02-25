@@ -14,7 +14,7 @@ def run_mcts(config: Config,
     
     min_max_stats = MinMaxStats(config.known_bounds)
 
-    for _ in range(config.num_simulations):
+    for _ in range(config.n_tree_searches):
         
         history = action_history.clone()
         node = root

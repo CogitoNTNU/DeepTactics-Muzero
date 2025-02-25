@@ -16,8 +16,9 @@ def expand_node(node: Node, to_play: Player, actions: List[Action], network_outp
     node.to_play = to_play
     node.hidden_state = network_output.hidden_state
     node.reward = network_output.reward
+    
     # TODO fiks linje under til å fungere med PyTorch
     policy = {a: math.exp(network_output.policy_logits[a]) for a in actions}
     policy_sum = sum(policy.values())
     for action, p in policy.items():
-        node.children[action] = Node(p / policy_sum)
+        node.children[action] = Node(node, policy_value = p / policy_sum)
