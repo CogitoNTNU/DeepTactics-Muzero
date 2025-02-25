@@ -4,8 +4,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from typing import NamedTuple, Dict
 
-from config import MuZeroConfig
-from architecture import Action, ResidualBlock
+from src.networks.config import MuZeroConfig
+from residualblock import Action, ResBlock
 
 
 class NetworkOutput(NamedTuple):
@@ -45,6 +45,7 @@ class ResidualBlock(nn.Module):
           - action_space_size: int
           - hidden_layer_size: int
         """
+
 
 class Network(nn.Module):
     def __init__(self, config):
@@ -93,6 +94,9 @@ class Network(nn.Module):
 
         self.tot_training_steps = 0
 
+
+
+
     def initial_inference(self, observation: torch.Tensor) -> NetworkOutput:
         """
         For the first step from an environment observation.
@@ -112,6 +116,8 @@ class Network(nn.Module):
         policy_dict = {Action(a): policy[0, a].item() for a in range(self.action_space_size)}
 
         return NetworkOutput(value, reward, policy_dict, policy, hidden_state)
+
+
 
     def recurrent_inference(self, hidden_state: torch.Tensor, action: Action) -> NetworkOutput:
         """
@@ -138,9 +144,12 @@ class Network(nn.Module):
 
         return NetworkOutput(value, reward, policy_dict, policy, next_hidden_state)
 
+
     def get_weights(self):
         # Returns all parameters of the network.
         return list(self.parameters())
+
+
 
     def training_steps(self) -> int:
         # How many steps/batches the network has been trained for.
