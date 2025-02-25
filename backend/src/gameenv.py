@@ -20,10 +20,15 @@ class Action(object):
 
 class Player(object):
   def __init__(self, is_cartpole:bool = True):
-    if(is_cartpole):
+    self.is_cartpole: bool = is_cartpole
+    self.turn_multiplier = 1
+  
+  def change_player(self):
+    if(self.is_cartpole):
       self.turn_multiplier = 1
     else:
-      self.turn_multiplier = "Todo" #//TODO: hente inn for othello
+      self.turn_multiplier *= -1
+
 
 class Node(object):
 
@@ -68,14 +73,15 @@ class ActionHistory(object):
     return [Action(i) for i in range(self.action_space_size)]
 
   def to_play(self) -> Player:
-    return Player()
+    return Player() #//TODO: player objektet må holdes på av actionhistory og endres hver gang man 
+                            #appender i add_action men kommer an på hvordan play er satt opp
   
 ##############################################################################################################
 
 
 class Environment(object):
     """The environment MuZero is interacting with."""
-    def __init__(self, gamefile: str = 'CartPole-v1'): #'ALE/Breakout-v5'
+    def __init__(self, gamefile: str): #'ALE/Breakout-v5'
         self.env = gym.make(gamefile) 
         self.obs, self.info = self.env.reset()
         self.episode_over: bool = False
@@ -96,15 +102,16 @@ class Environment(object):
 class Game(object):
   """A single episode of interaction with the environment."""
 
-  def __init__(self, action_space_size: int, discount: float):
-    self.environment = Environment()  # Game specific environment.
+  def __init__(self, action_space_size: int, discount: float, gamefile: str = 'CartPole-v1', is_cartpole: bool=True):
+    self.environment = Environment(gamefile=gamefile)  # Game specific environment.
     self.history = []
     self.rewards = []
     self.child_visits = []
     self.root_values = []
     self.action_space_size = action_space_size
     self.discount = discount
-    self.is_cartpole:bool = True
+    self.is_cartpole:bool = is_cartpole
+    self.player = Player(is_cartpole=self.is_cartpole)
 
   def terminal(self) -> bool:
     return self.environment.episode_over
@@ -119,6 +126,7 @@ class Game(object):
     reward = self.environment.step(action)
     self.rewards.append(reward)
     self.history.append(action)
+    self.player.change_player() #sjekk at denne ikke blir kaldt på før to_play men etter
 
   def store_search_statistics(self, root: Node):
     sum_visits = sum(child.visit_count for child in root.children.values())
@@ -163,7 +171,7 @@ class Game(object):
     return targets
 
   def to_play(self) -> Player:
-    return Player()
+    return self.player
 
   def action_history(self) -> ActionHistory:
     return ActionHistory(self.history, self.action_space_size)
