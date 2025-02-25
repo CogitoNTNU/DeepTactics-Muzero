@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from typing import NamedTuple, Dict
 
-from config import MuZeroConfig
+from src.networks.config import MuZeroConfig
 from architecture import Action, ResidualBlock
 
 
