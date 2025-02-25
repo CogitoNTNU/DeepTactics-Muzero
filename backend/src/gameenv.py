@@ -19,7 +19,7 @@ class Action(object):
 
 
 class Player(object):
-  def __init_(self, is_cartpole:bool = True, ):
+  def __init_(self, is_cartpole:bool = True):
     if(is_cartpole):
       self.turn_multiplier = 1
     else:
@@ -84,10 +84,14 @@ class Environment(object):
 
     def step(self, action):
         action = self.env.action_space.sample() #remove line, now its random
-        self.obs, self.reward, terminated, truncated, info = self.env.step(action)
+        self.obs, self.reward, terminal, truncated, info = self.env.step(action)
+        self.episode_over = terminal and truncated 
 
     def close(self):
         self.env.close()
+    
+    def action_space(self):
+      self.env.action_space
 
 class Game(object):
   """A single episode of interaction with the environment."""
@@ -100,15 +104,17 @@ class Game(object):
     self.root_values = []
     self.action_space_size = action_space_size
     self.discount = discount
+    self.is_cartpole:bool = True
 
   def terminal(self) -> bool:
-    # Game specific termination rules.
-    pass
+    return self.environment.episode_over
 
   def legal_actions(self) -> list[Action]:
-    # Game specific calculation of legal actions.
-    return []
-
+    if(self.is_cartpole):
+      return [0, 1]
+    else:
+      return self.environment.get_possible_actions() #her må en othello env defienres på forhond
+    
   def apply(self, action: Action):
     reward = self.environment.step(action)
     self.rewards.append(reward)
