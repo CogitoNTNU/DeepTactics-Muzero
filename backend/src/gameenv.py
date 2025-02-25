@@ -19,7 +19,11 @@ class Action(object):
 
 
 class Player(object):
-  pass
+  def __init_(self, is_cartpole:bool = True, ):
+    if(is_cartpole):
+      self.turn_multiplier = 1
+    else:
+      self.turn_multiplier = "Todo" #//TODO: hente inn for othello
 
 class Node(object):
 
@@ -76,6 +80,7 @@ class Environment(object):
         self.obs, self.info = self.env.reset()
         self.episode_over: bool = False
         self.input_size = self.env.action_space
+
 
     def step(self, action):
         action = self.env.action_space.sample() #remove line, now its random
