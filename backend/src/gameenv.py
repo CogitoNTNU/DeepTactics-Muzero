@@ -19,7 +19,7 @@ class Action(object):
 
 
 class Player(object):
-  def __init_(self, is_cartpole:bool = True):
+  def __init__(self, is_cartpole:bool = True):
     if(is_cartpole):
       self.turn_multiplier = 1
     else:
