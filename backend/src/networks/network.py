@@ -21,30 +21,7 @@ class ResidualBlock(nn.Module):
 
 
 
-class RepresentationNetwork(nn.Module):
-    def __init__(self):
-        super().__init__()
-        # Input channels derived from config
-        input_channels = OBSERVATION_SHAPE[0]
 
-        # Initial convolution for feature extraction
-        self.conv = nn.Conv2d(input_channels, 64, kernel_size=3, stride=2, padding=1)
-
-        # Stack residual blocks for better feature learning
-        self.residual = nn.Sequential(*[ResidualBlock(64) for _ in range(NUM_RESIDUAL_BLOCKS)])
-
-        # Calculate flattened size: downsampling by stride=2 halves each dimension
-        flattened_size = 64 * (OBSERVATION_SHAPE[1] // 2) * (OBSERVATION_SHAPE[2] // 2)
-
-        # Fully connected layer to produce hidden state
-        self.fc = nn.Linear(flattened_size, HIDDEN_DIM)
-
-    def forward(self, x):
-        x = F.relu(self.conv(x))
-        x = self.residual(x)
-        x = torch.flatten(x, start_dim=1)
-        x = self.fc(x)
-        return x
 
 
 
