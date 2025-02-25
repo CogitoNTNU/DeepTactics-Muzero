@@ -1,12 +1,13 @@
-﻿from src.config import Config
+﻿from src.networks.network import Network
+from src.config import Config
 from src.mcts.node import Node
 from src.mcts.add_dirichlet import add_exploration_noise
 from src.mcts.expand import expand_node
 from src.mcts.run_mcts import run_mcts
 from src.mcts.select_action import select_action
-from gameenv import Game
+from src.gameenv import Game
 
-def play_game(config: Config, network):
+def play_game(config: Config, network: Network):
     
     game = Game()
     
@@ -16,7 +17,7 @@ def play_game(config: Config, network):
         
         root = Node()
         current_observation = game.make_image(-1) # should get the observation (state) from the env.
-        expand_node(root, game.to_play(), game.legal_actions(), network.inital_inference(current_observation)) # inital_inference should give the inital policy, value and hiddenstate (from representation network)
+        expand_node(root, game.to_play(), game.legal_actions(), network.initial_inference(current_observation)) # inital_inference should give the inital policy, value and hiddenstate (from representation network)
 
         add_exploration_noise(config, root)
 

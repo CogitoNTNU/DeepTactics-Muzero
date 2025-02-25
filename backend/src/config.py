@@ -1,6 +1,29 @@
+from typing import Optional
+from src.utils.minmaxstats import KnownBounds
+
+def visit_softmax_temperature(num_moves, training_steps):
+            if training_steps < 100:
+                return 3
+            elif training_steps < 125:
+                return 2      
+            elif training_steps < 150:
+                return 1      
+            elif training_steps < 175:
+                return 0.5      
+            elif training_steps < 200:
+                return 0.250      
+            elif training_steps < 225:
+                return 0.125      
+            elif training_steps < 250:
+                return 0.075
+            else:
+                return 0.001
+
 class Config:
     def __init__(
         self,
+        visit_softmax_temperature_fn=visit_softmax_temperature,
+        known_bounds: Optional[KnownBounds] = None,
         action_space: int = 18, # 18 legal actions in atari
         input_planes: int = 128, # 3 rbg planes * 32 last states + 32 last actions
         height: int = 96, # Pixel height and with
@@ -18,8 +41,8 @@ class Config:
         diriclet_noise = 0.25,
         dirichlet_exploaration_factor = 0.25, # Set this to 0 for deterministic prior probabilites
         batch_size = 2048,
-        encode_game_state_fn = encode_state_atari,
-        softmax_policy_fn = softmax_policy_atari_train,
+        # encode_game_state_fn = encode_state_atari,
+        # softmax_policy_fn = softmax_policy_atari_train,
         info_print_rate = 10,
         training_interval = 1_000,
         num_training_rolluts = 5,
@@ -27,7 +50,7 @@ class Config:
         model_save_filename = "test",
     ):
         # Only to keep the type checker happy
-        gym.register_envs(ale_py)
+        # gym.register_envs(ale_py)
 
         # Environment
         self.action_space = action_space
@@ -45,6 +68,7 @@ class Config:
 
         self.dirichlet_noise_alpha = diriclet_noise
         self.dirichlet_exploration_factor = dirichlet_exploaration_factor # e = 0.25 as seen in Alphago Zero paper
+        self.visit_softmax_temperature_fn = visit_softmax_temperature_fn
 
         # Training
         self.batch_size = batch_size
@@ -63,11 +87,15 @@ class Config:
         self.discount = discount
 
         # Functions that you might want to customize for your enviroment
-        self.softmax_policy_fn = softmax_policy_fn
-        self.encode_game_state_fn = encode_game_state_fn
+        # self.softmax_policy_fn = softmax_policy_fn
+        # self.encode_game_state_fn = encode_game_state_fn
 
         # Logging
         self.info_print_rate = info_print_rate
         
-    def init_game(self) -> gym.Env:
-        pass
+        self.known_bounds = known_bounds
+        
+        
+        
+    # def init_game(self) -> gym.Env:
+    #     pass
