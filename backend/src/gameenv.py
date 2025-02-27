@@ -23,7 +23,7 @@ class Player(object):
     self.is_cartpole: bool = is_cartpole
     self.turn_multiplier = 1
   
-  def change_player(self): #//TODO: denne er ikke brukt, så spilleren endres aldri må fikses i othello
+  def change_player(self):
     if(self.is_cartpole):
       self.turn_multiplier = 1
     else:
