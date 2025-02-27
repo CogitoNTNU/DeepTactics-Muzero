@@ -58,7 +58,7 @@ class Network(nn.Module):
         self.representation = nn.Sequential(
             nn.Linear(config.observation_space_size, config.hidden_layer_size),
             nn.ReLU(),
-            ResidualBlock(config.hidden_layer_size, config.hidden_layer_size)
+            ResidualBlock(config.hidden_layer_size)
         )
 
         # Value head: predicts scalar value from hidden state.
@@ -79,23 +79,22 @@ class Network(nn.Module):
 
         # Dynamics: given [hidden_state, action one-hot] -> next hidden state
         self.dynamics = nn.Sequential(
-            nn.Linear(config.hidden_layer_size + config.action_space_size, config.hidden_layer_size),
+            nn.Linear(config.hidden_layer_size +
+                      config.action_space_size, config.hidden_layer_size),
             nn.ReLU(),
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size)
         )
 
         # Reward head: same input as dynamics, but outputs a scalar reward.
         self.reward_head = nn.Sequential(
-            nn.Linear(config.hidden_layer_size + config.action_space_size, config.hidden_layer_size),
+            nn.Linear(config.hidden_layer_size +
+                      config.action_space_size, config.hidden_layer_size),
             nn.ReLU(),
             nn.Linear(config.hidden_layer_size, 1),
             nn.ReLU()
         )
 
         self.tot_training_steps = 0
-
-
-
 
     def initial_inference(self, observation: torch.Tensor) -> NetworkOutput:
         """
@@ -110,14 +109,14 @@ class Network(nn.Module):
         policy = self.policy_head(hidden_state)
 
         # Reward is zero at the root.
-        reward = torch.zeros((observation.shape[0], 1), device=observation.device, dtype=observation.dtype)
+        reward = torch.zeros(
+            (observation.shape[0], 1), device=observation.device, dtype=observation.dtype)
 
         # Build a dictionary for the first element in the batch.
-        policy_dict = {Action(a): policy[0, a].item() for a in range(self.action_space_size)}
+        policy_dict = {Action(a): policy[0, a].item()
+                       for a in range(self.action_space_size)}
 
         return NetworkOutput(value, reward, policy_dict, policy, hidden_state)
-
-
 
     def recurrent_inference(self, hidden_state: torch.Tensor, action: Action) -> NetworkOutput:
         """
@@ -126,8 +125,10 @@ class Network(nn.Module):
         """
         # Convert the single integer action to a one-hot.
         # For simplicity, we assume batch size of 1 or hidden_state is [1, hidden_size].
-        action_tensor = torch.tensor([action.index], device=hidden_state.device)
-        action_one_hot = F.one_hot(action_tensor, num_classes=self.action_space_size).float()
+        action_tensor = torch.tensor(
+            [action.index], device=hidden_state.device)
+        action_one_hot = F.one_hot(
+            action_tensor, num_classes=self.action_space_size).float()
 
         # Concatenate hidden state + action.
         nn_input = torch.cat([hidden_state, action_one_hot], dim=-1)
@@ -140,16 +141,14 @@ class Network(nn.Module):
         value = self.value_head(next_hidden_state)
         policy = self.policy_head(next_hidden_state)
         # Build dictionary for policy.
-        policy_dict = {Action(a): policy[0, a].item() for a in range(self.action_space_size)}
+        policy_dict = {Action(a): policy[0, a].item()
+                       for a in range(self.action_space_size)}
 
         return NetworkOutput(value, reward, policy_dict, policy, next_hidden_state)
-
 
     def get_weights(self):
         # Returns all parameters of the network.
         return list(self.parameters())
-
-
 
     def training_steps(self) -> int:
         # How many steps/batches the network has been trained for.
