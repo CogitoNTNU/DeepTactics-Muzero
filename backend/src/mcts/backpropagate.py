@@ -4,7 +4,7 @@ from src.mcts.node import Node
 from src.game.player import Player
 
 
-def backpropagate(search_path: List[Node], value: float, to_play: Player,
+def backpropagate(search_path: List[Node], value: float, to_play: int,
                   discount: float, min_max_stats: MinMaxStats):
     for node in reversed(search_path):
         node.value_sum += value if node.to_play == to_play else -value
