@@ -10,7 +10,8 @@ from src.gameenv import Game
 
 def play_game(config: Config, network: Network):
     print("Playing the game")
-    game = Game(config.action_space, config.discount)
+    game = Game(config.action_space_size, config.discount)
+
     # game.history should be a list of actions taken.
     i = 0
     while not game.terminal() and len(game.action_history().history) < config.max_moves:
