@@ -1,7 +1,6 @@
-﻿from numpy import argmax
-from src.config import Config
+﻿from src.config import Config
 from src.mcts.node import Node
-from math import sqrt, log
+import torch
 
 
 def select_child(config: Config,  node: Node):
@@ -13,14 +12,24 @@ def select_child(config: Config,  node: Node):
     # The score for a node is based on its value, plus an exploration bonus based on the prior.
 
 
+
 def puct_score(config: Config, node: Node):
     if node.visits == 0:
-        Q = 0
+        Q = torch.tensor(0.0)  # Ensure Q is a tensor
     else:
-        Q = node.value_sum/node.visits
-    
+        Q = torch.tensor(node.value_sum / node.visits)  # Convert Q to tensor
+
     if node.parent is None:
-        P = 0
+        P = torch.tensor(0.0)  # Ensure P is a tensor
     else:
-        P = node.parent.visits
-    return argmax(Q + node.policy_value * sqrt((P)/(1+Q))*(config.c1 + log((P + config.c2 + 1) / config.c2)))
+        P = torch.tensor(node.parent.visits)  # Convert P to tensor
+
+    # Ensure policy_value is a tensor
+    policy_value = node.policy_value
+    if not isinstance(policy_value, torch.Tensor):
+        policy_value = torch.tensor(policy_value, dtype=torch.float32)
+
+    # Compute the score as a tensor
+    score = Q + policy_value * torch.sqrt((P) / (1 + Q)) * (config.c1 + torch.log((P + config.c2 + 1) / config.c2))
+
+    return torch.argmax(score)

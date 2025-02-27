@@ -111,11 +111,9 @@ class Network(nn.Module):
         if observation.dim() == 1:
             observation = observation.unsqueeze(0)
 
-        print(f"Processed observation shape: {observation.shape}")
         # hidden_state = self.representation(observation) # TODO make this return correct values
         hidden_state = torch.zeros(
             (observation.shape[0], self.hidden_layer_size), device=observation.device)
-        print(f"Processed observation shape: {hidden_state.shape}")
         value = self.value_head(hidden_state)
         policy = self.policy_head(hidden_state)
 
