@@ -20,7 +20,6 @@ class NetworkOutput(NamedTuple):
     value: torch.Tensor
     reward: torch.Tensor
     policy_logits: Dict[Action, float]
-    policy_tensor: torch.Tensor
     hidden_state: torch.Tensor
 
 
@@ -112,7 +111,7 @@ class Network(nn.Module):
             observation = observation.unsqueeze(0)
 
         # hidden_state = self.representation(observation) # TODO make this return correct values
-        hidden_state = torch.zeros(
+        hidden_state = torch.rand(
             (observation.shape[0], self.hidden_layer_size), device=observation.device)
         value = self.value_head(hidden_state)
         policy = self.policy_head(hidden_state)
@@ -125,7 +124,7 @@ class Network(nn.Module):
         policy_dict = {Action(a): policy[0, a].item()
                        for a in range(self.action_space_size)}
 
-        return NetworkOutput(value, reward, policy_dict, policy, hidden_state)
+        return NetworkOutput(value, reward, policy_dict, hidden_state)
 
     def recurrent_inference(self, hidden_state: torch.Tensor, action: Action) -> NetworkOutput:
         """
@@ -153,7 +152,7 @@ class Network(nn.Module):
         policy_dict = {Action(a): policy[0, a].item()
                        for a in range(self.action_space_size)}
 
-        return NetworkOutput(value, reward, policy_dict, policy, next_hidden_state)
+        return NetworkOutput(value, reward, policy_dict, next_hidden_state)
 
             
     def get_weights(self):
