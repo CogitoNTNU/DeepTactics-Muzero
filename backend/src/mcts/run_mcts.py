@@ -1,4 +1,4 @@
-﻿from src.mcts import backpropagate
+﻿from src.mcts.backpropagate import backpropagate
 from src.mcts.expand import expand_node
 from src.mcts.puct import select_child
 from src.networks.network import Network

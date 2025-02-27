@@ -101,16 +101,21 @@ class Network(nn.Module):
         For the first step from an environment observation.
         The reward is set to zero because no action has yet been taken.
         """
-        
-        import torch
-
+        # Convert list to tensor if necessary
         if not isinstance(observation, torch.Tensor):
-            observation = torch.tensor(observation, dtype=torch.float32)  # Convert list to tensor
+            observation = torch.tensor(observation, dtype=torch.float32)
+
+        if observation.dim() > 2:  # If it's mistakenly shaped like an image
+            observation = observation.flatten()
 
         if observation.dim() == 1:
-            # Expand dims if shape is [observation_space_size].
             observation = observation.unsqueeze(0)
-        hidden_state = self.representation(observation)
+
+        print(f"Processed observation shape: {observation.shape}")
+        # hidden_state = self.representation(observation) # TODO make this return correct values
+        hidden_state = torch.zeros(
+            (observation.shape[0], self.hidden_layer_size), device=observation.device)
+        print(f"Processed observation shape: {hidden_state.shape}")
         value = self.value_head(hidden_state)
         policy = self.policy_head(hidden_state)
 

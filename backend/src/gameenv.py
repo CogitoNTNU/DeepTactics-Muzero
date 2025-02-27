@@ -62,7 +62,7 @@ class ActionHistory(object):
     self.player = player
 
   def clone(self):
-    return ActionHistory(self.history, self.action_space_size)
+    return ActionHistory(self.history, self.action_space_size, self.player)
 
   def add_action(self, action: Action):
     self.history.append(action)
@@ -140,7 +140,7 @@ class Game(object):
 
   def make_image(self, state_index: int):
     # Game specific feature planes.
-    return []
+    return [1,1,1,1]
 
   def make_target(self, state_index: int, num_unroll_steps: int, td_steps: int, to_play: Player):
     # The value target is the discounted root value of the search tree N steps

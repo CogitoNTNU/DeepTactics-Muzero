@@ -14,4 +14,13 @@ def select_child(config: Config,  node: Node):
 
 
 def puct_score(config: Config, node: Node):
-    return argmax(node.value_sum/node.visits + node.policy_value * sqrt((node.parent.visits)/(1+node.visits))*(config.c1 + log((node.parent.visits + config.c2 + 1) / config.c2)))
+    if node.visits == 0:
+        Q = 0
+    else:
+        Q = node.value_sum/node.visits
+    
+    if node.parent is None:
+        P = 0
+    else:
+        P = node.parent.visits
+    return argmax(Q + node.policy_value * sqrt((P)/(1+Q))*(config.c1 + log((P + config.c2 + 1) / config.c2)))
