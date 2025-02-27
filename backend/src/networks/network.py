@@ -58,7 +58,7 @@ class Network(nn.Module):
         self.representation = nn.Sequential(
             nn.Linear(config.observation_space_size, config.hidden_layer_size),
             nn.ReLU(),
-            ResidualBlock(config.hidden_layer_size, config.hidden_layer_size)
+            ResidualBlock(config.hidden_layer_size)
         )
 
         # Value head: predicts scalar value from hidden state.
@@ -79,14 +79,16 @@ class Network(nn.Module):
 
         # Dynamics: given [hidden_state, action one-hot] -> next hidden state
         self.dynamics = nn.Sequential(
-            nn.Linear(config.hidden_layer_size + config.action_space_size, config.hidden_layer_size),
+            nn.Linear(config.hidden_layer_size +
+                      config.action_space_size, config.hidden_layer_size),
             nn.ReLU(),
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size)
         )
 
         # Reward head: same input as dynamics, but outputs a scalar reward.
         self.reward_head = nn.Sequential(
-            nn.Linear(config.hidden_layer_size + config.action_space_size, config.hidden_layer_size),
+            nn.Linear(config.hidden_layer_size +
+                      config.action_space_size, config.hidden_layer_size),
             nn.ReLU(),
             nn.Linear(config.hidden_layer_size, 1),
             nn.ReLU()
@@ -94,14 +96,17 @@ class Network(nn.Module):
 
         self.tot_training_steps = 0
 
-
-
-
     def initial_inference(self, observation: torch.Tensor) -> NetworkOutput:
         """
         For the first step from an environment observation.
         The reward is set to zero because no action has yet been taken.
         """
+        
+        import torch
+
+        if not isinstance(observation, torch.Tensor):
+            observation = torch.tensor(observation, dtype=torch.float32)  # Convert list to tensor
+
         if observation.dim() == 1:
             # Expand dims if shape is [observation_space_size].
             observation = observation.unsqueeze(0)
@@ -110,14 +115,14 @@ class Network(nn.Module):
         policy = self.policy_head(hidden_state)
 
         # Reward is zero at the root.
-        reward = torch.zeros((observation.shape[0], 1), device=observation.device, dtype=observation.dtype)
+        reward = torch.zeros(
+            (observation.shape[0], 1), device=observation.device, dtype=observation.dtype)
 
         # Build a dictionary for the first element in the batch.
-        policy_dict = {Action(a): policy[0, a].item() for a in range(self.action_space_size)}
+        policy_dict = {Action(a): policy[0, a].item()
+                       for a in range(self.action_space_size)}
 
         return NetworkOutput(value, reward, policy_dict, policy, hidden_state)
-
-
 
     def recurrent_inference(self, hidden_state: torch.Tensor, action: Action) -> NetworkOutput:
         """
@@ -126,8 +131,10 @@ class Network(nn.Module):
         """
         # Convert the single integer action to a one-hot.
         # For simplicity, we assume batch size of 1 or hidden_state is [1, hidden_size].
-        action_tensor = torch.tensor([action.index], device=hidden_state.device)
-        action_one_hot = F.one_hot(action_tensor, num_classes=self.action_space_size).float()
+        action_tensor = torch.tensor(
+            [action.index], device=hidden_state.device)
+        action_one_hot = F.one_hot(
+            action_tensor, num_classes=self.action_space_size).float()
 
         # Concatenate hidden state + action.
         nn_input = torch.cat([hidden_state, action_one_hot], dim=-1)
@@ -140,15 +147,23 @@ class Network(nn.Module):
         value = self.value_head(next_hidden_state)
         policy = self.policy_head(next_hidden_state)
         # Build dictionary for policy.
-        policy_dict = {Action(a): policy[0, a].item() for a in range(self.action_space_size)}
+        policy_dict = {Action(a): policy[0, a].item()
+                       for a in range(self.action_space_size)}
 
         return NetworkOutput(value, reward, policy_dict, policy, next_hidden_state)
 
-
+            
     def get_weights(self):
-        # Returns all parameters of the network.
-        return list(self.parameters())
-
+        # Returns the weights of this network.
+        networks = (self.representation, 
+                    self.value, 
+                    self.policy,
+                    self.dynamics, 
+                    self.reward)
+        
+        return [variables
+                for variables_list in map(lambda n: n.weights, networks)
+                for variables in variables_list] 
 
 
     def training_steps(self) -> int:

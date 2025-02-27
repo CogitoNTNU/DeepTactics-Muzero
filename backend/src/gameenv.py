@@ -56,9 +56,10 @@ class ActionHistory(object):
   Only used to keep track of the actions executed.
   """
 
-  def __init__(self, history: list[Action], action_space_size: int):
+  def __init__(self, history: list[Action], action_space_size: int, player: Player):
     self.history = list(history)
     self.action_space_size = action_space_size
+    self.player = player
 
   def clone(self):
     return ActionHistory(self.history, self.action_space_size)
@@ -72,9 +73,9 @@ class ActionHistory(object):
   def action_space(self) -> list[Action]:
     return [Action(i) for i in range(self.action_space_size)]
 
-  def to_play(self) -> Player:
-    return Player() #//TODO: player objektet må holdes på av actionhistory og endres hver gang man 
-                            #appender i add_action men kommer an på hvordan play er satt opp
+  def to_play(self) -> int:
+    self.player.change_player()
+    return self.player.turn_multiplier
   
 ##############################################################################################################
 
@@ -174,4 +175,4 @@ class Game(object):
     return self.player
 
   def action_history(self) -> ActionHistory:
-    return ActionHistory(self.history, self.action_space_size)
+    return ActionHistory(self.history, self.action_space_size, self.player)
