@@ -21,4 +21,4 @@ def expand_node(node: Node, to_play: Player, actions: List[Action], network_outp
     policy = {a: math.exp(network_output.policy_logits[a]) for a in actions}
     policy_sum = sum(policy.values())
     for action, p in policy.items():
-        node.children[action] = Node(node, policy_value=p / policy_sum)
+        node.children[action] = Node(node, policy_value = p / policy_sum, player=node.to_play) #//TODO: er player til barnet ikke en anne spiller
