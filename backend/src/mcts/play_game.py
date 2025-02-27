@@ -15,7 +15,8 @@ def play_game(config: Config, network: Network):
     # game.history should be a list of actions taken.
     while not game.terminal() and len(game.action_history().history) < config.max_moves:
 
-        root = Node(None, None, 0)
+        # Player is always 1 becuase cartpole only has one player
+        root = Node(None, None, policy_value=0, player=1)
         # should get the observation (state) from the env.
         current_observation = game.make_image(-1)
         # inital_inference should give the inital policy, value and hiddenstate (from representation network)
