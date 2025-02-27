@@ -12,7 +12,7 @@ import math
 # NetworkOutput får vi fra initial_inference fra network...
 
 
-def expand_node(node: Node, to_play: int, actions: List[Action], network_output: NetworkOutput):
+def expand_node(node: Node, to_play: Player, actions: List[Action], network_output: NetworkOutput):
     node.to_play = to_play
     node.hidden_state = network_output.hidden_state
     node.reward = network_output.reward

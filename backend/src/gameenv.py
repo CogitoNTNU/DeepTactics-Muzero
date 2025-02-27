@@ -23,11 +23,15 @@ class Player(object):
     self.is_cartpole: bool = is_cartpole
     self.turn_multiplier = 1
   
-  def change_player(self):
+  def change_player(self): #//TODO: denne er ikke brukt, så spilleren endres aldri må fikses i othello
     if(self.is_cartpole):
       self.turn_multiplier = 1
     else:
       self.turn_multiplier *= -1
+
+  def get_turn_multiplier(self): 
+    return self.turn_multiplier
+  
 
 class ActionHistory(object):
   """Simple history container used inside the search.
@@ -53,8 +57,7 @@ class ActionHistory(object):
     return [Action(i) for i in range(self.action_space_size)]
 
   def to_play(self) -> int:
-    self.player.change_player()
-    return self.player.turn_multiplier
+    return self.player
   
 ##############################################################################################################
 
@@ -119,7 +122,7 @@ class Game(object):
 
   def make_image(self, state_index: int):
     # Game specific feature planes.
-    return []
+    return self.environment.obs
 
   def make_target(self, state_index: int, num_unroll_steps: int, td_steps: int, to_play: Player):
     # The value target is the discounted root value of the search tree N steps

@@ -1,7 +1,8 @@
 ﻿from typing import Dict, Optional
+from src.gameenv import Player
 
 class Node:
-    def __init__(self, parent: Optional['Node'], state: None, policy_value: float, player: int) -> None:
+    def __init__(self, parent: Optional['Node'], state: None, policy_value: float, player: Player) -> None:
         self.children: Dict[int, Node] = {}
         self.parent = parent
         self.visits = 0
