@@ -32,5 +32,4 @@ class ActionHistory(object):
         return [Action(i) for i in range(self.action_space_size)]
 
     def to_play(self) -> Player:
-
         return Player(1)

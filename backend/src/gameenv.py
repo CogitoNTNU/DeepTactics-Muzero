@@ -62,7 +62,7 @@ class ActionHistory(object):
     self.player = player
 
   def clone(self):
-    return ActionHistory(self.history, self.action_space_size)
+    return ActionHistory(self.history, self.action_space_size, self.player)
 
   def add_action(self, action: Action):
     self.history.append(action)
@@ -130,17 +130,17 @@ class Game(object):
     self.player.change_player() #sjekk at denne ikke blir kaldt på før to_play men etter
 
   def store_search_statistics(self, root: Node):
-    sum_visits = sum(child.visit_count for child in root.children.values())
+    sum_visits = sum(child.value() for child in root.children.values())
     action_space = (Action(index) for index in range(self.action_space_size))
     self.child_visits.append([
-        root.children[a].visit_count / sum_visits if a in root.children else 0
+        root.children[a].value() / sum_visits if a in root.children else 0
         for a in action_space
     ])
     self.root_values.append(root.value())
 
   def make_image(self, state_index: int):
     # Game specific feature planes.
-    return []
+    return [1,1,1,1]
 
   def make_target(self, state_index: int, num_unroll_steps: int, td_steps: int, to_play: Player):
     # The value target is the discounted root value of the search tree N steps

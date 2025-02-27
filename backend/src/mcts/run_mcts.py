@@ -1,4 +1,4 @@
-﻿from src.mcts import backpropagate
+﻿from src.mcts.backpropagate import backpropagate
 from src.mcts.expand import expand_node
 from src.mcts.puct import select_child
 from src.networks.network import Network
@@ -14,9 +14,7 @@ def run_mcts(config: Config,
              network: Network):
 
     min_max_stats = MinMaxStats(config.known_bounds)
-
     for _ in range(config.n_tree_searches):
-
         history = action_history.clone()
         node = root
         search_path = [node]
