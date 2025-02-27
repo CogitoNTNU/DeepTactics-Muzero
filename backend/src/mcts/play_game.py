@@ -15,7 +15,7 @@ def play_game(config: Config, network: Network):
     # game.history should be a list of actions taken.
     while not game.terminal() and len(game.action_history().history) < config.max_moves:
 
-        root = Node()
+        root = Node(None, None, 0)
         # should get the observation (state) from the env.
         current_observation = game.make_image(-1)
         # inital_inference should give the inital policy, value and hiddenstate (from representation network)
