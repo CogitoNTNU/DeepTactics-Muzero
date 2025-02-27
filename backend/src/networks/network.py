@@ -152,9 +152,19 @@ class Network(nn.Module):
 
         return NetworkOutput(value, reward, policy_dict, policy, next_hidden_state)
 
+            
     def get_weights(self):
-        # Returns all parameters of the network.
-        return list(self.parameters())
+        # Returns the weights of this network.
+        networks = (self.representation, 
+                    self.value, 
+                    self.policy,
+                    self.dynamics, 
+                    self.reward)
+        
+        return [variables
+                for variables_list in map(lambda n: n.weights, networks)
+                for variables in variables_list] 
+
 
     def training_steps(self) -> int:
         # How many steps/batches the network has been trained for.
