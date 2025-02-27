@@ -101,6 +101,12 @@ class Network(nn.Module):
         For the first step from an environment observation.
         The reward is set to zero because no action has yet been taken.
         """
+        
+        import torch
+
+        if not isinstance(observation, torch.Tensor):
+            observation = torch.tensor(observation, dtype=torch.float32)  # Convert list to tensor
+
         if observation.dim() == 1:
             # Expand dims if shape is [observation_space_size].
             observation = observation.unsqueeze(0)
