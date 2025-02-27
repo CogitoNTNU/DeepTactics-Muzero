@@ -5,7 +5,7 @@ class Node:
         self.children: Dict[int, Node] = {}
         self.parent = parent
         self.visits = 0
-        self.value = 0
+        self.value_sum = 0
         self.state = state
         self.policy_value = policy_value
         self.to_play = player
