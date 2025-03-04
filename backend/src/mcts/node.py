@@ -1,9 +1,9 @@
 ﻿from typing import Dict, Optional
-from src.gameenv import Player
+from src.gameenv import Action
 
 class Node:
-    def __init__(self, parent: Optional['Node'], state: None, policy_value: float, player: Player) -> None:
-        self.children: Dict[int, Node] = {}
+    def __init__(self, parent: Optional['Node'], state: None, policy_value: float, player: int) -> None:
+        self.children: Dict[Action, Node] = {}
         self.parent = parent
         self.visits = 0
         self.value_sum = 0
