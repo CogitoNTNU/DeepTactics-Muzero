@@ -39,5 +39,6 @@ uvloop==0.21.0
 watchfiles==1.0.4
 websockets==15.0
 ale-py==0.10.2
-gymnasium[atari]==1.1.0
+gymnasium==1.1.0
 pre-commit
+    
