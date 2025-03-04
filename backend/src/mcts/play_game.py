@@ -8,30 +8,30 @@ from src.mcts.select_action import select_action
 from src.gameenv import Game
 
 
-def play_game(config: Config, network: Network):
-    print("Playing the game")
+def play_game(config: Config, network: Network) -> Game:
+    # TODO Create a problem generator to assign state of MCTS
     game = Game(config.action_space, config.discount)
+    print("Playing the game")
     # game.history should be a list of actions taken.
-    i = 0
+    
     while not game.terminal() and len(game.action_history().history) < config.max_moves:
         # Player is always 1 becuase cartpole only has one player
-        root = Node(None, None, policy_value=0, player=1)
-        # should get the observation (state) from the env.
-        current_observation = game.make_image(-1)
+        root = Node(None, state = None, policy_value=0, player=1)  
+        
+        current_observation = game.environment.obs
+        
         # inital_inference should give the inital policy, value and hiddenstate (from representation network)
         expand_node(root, game.to_play(), game.legal_actions(),
                     network.initial_inference(current_observation))
 
         add_exploration_noise(config, root)
 
-        # We then run a Monte Carlo Tree Search using only action sequences and the
-        # model learned by the network.
         run_mcts(config, root, game.action_history(), network)
         # select action, but with respect to the temperature
         action = select_action(config, len(
             game.action_history().history), root, network)
         game.apply(action)
         game.store_search_statistics(root)
-        print(f"Move {action}")
+        print("Action taken: ", action)
 
     return game
