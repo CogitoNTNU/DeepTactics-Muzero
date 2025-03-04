@@ -31,6 +31,7 @@ class ActionHistory(object):
     self.history = list(history)
     self.action_space_size = action_space_size
     self.player = player
+    
 
   def clone(self):
     return ActionHistory(self.history, self.action_space_size, self.player)
@@ -53,6 +54,7 @@ class ActionHistory(object):
 class Environment(object):
     """The environment MuZero is interacting with."""
     def __init__(self, gamefile: str): #'ALE/Breakout-v5'
+        self.env = gym.make(gamefile, render_mode="human") 
         self.env = gym.make(gamefile, render_mode="human") 
         self.obs, self.info = self.env.reset()
         self.episode_over: bool = False
