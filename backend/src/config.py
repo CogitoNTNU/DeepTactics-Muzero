@@ -26,7 +26,7 @@ class Config:
         self,
         visit_softmax_temperature_fn=visit_softmax_temperature,
         known_bounds: Optional[KnownBounds] = None,
-        action_space: int = 1,  # 1 legal actions in cartpole
+        action_space: int = 2,  # 2 legal actions in cartpole
         input_planes: int = 128,  # 3 rbg planes * 32 last states + 32 last actions
         height: int = 96,  # Pixel height and with
         width: int = 96,
