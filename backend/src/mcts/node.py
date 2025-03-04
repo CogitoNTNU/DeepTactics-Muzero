@@ -1,5 +1,5 @@
 ﻿from typing import Dict, Optional
-from src.gameenv import Action
+from src.game.action import Action
 
 class Node:
     def __init__(self, parent: Optional['Node'], state: None, policy_value: float, player: int) -> None:
