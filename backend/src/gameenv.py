@@ -51,7 +51,7 @@ class ActionHistory(object):
 class Environment(object):
     """The environment MuZero is interacting with."""
     def __init__(self, gamefile: str): #'ALE/Breakout-v5'
-        self.env = gym.make(gamefile, render_mode="rgb_array") 
+        self.env = gym.make(gamefile, render_mode="human") 
         self.obs, self.info = self.env.reset()
         self.episode_over: bool = False
         self.input_size = self.env.action_space

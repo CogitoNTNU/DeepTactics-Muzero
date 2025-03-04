@@ -6,7 +6,7 @@ from src.mcts.expand import expand_node
 from src.mcts.run_mcts import run_mcts
 from src.mcts.select_action import select_action
 from src.gameenv import Game
-
+import time
 
 def play_game(config: Config, network: Network) -> Game:
     # TODO Create a problem generator to assign state of MCTS
@@ -34,5 +34,6 @@ def play_game(config: Config, network: Network) -> Game:
         game.store_search_statistics(root)
         print("Action taken: ", action)
         game.environment.env.render()
+        time.sleep(0.05)
 
     return game
