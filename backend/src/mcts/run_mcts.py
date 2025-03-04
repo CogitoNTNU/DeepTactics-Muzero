@@ -5,7 +5,7 @@ from src.networks.network import Network
 from src.utils.minmaxstats import MinMaxStats
 from src.config import Config
 from src.mcts.node import Node
-from src.game.action_history import ActionHistory
+from src.gameenv import ActionHistory
 
 
 def run_mcts(config: Config,
@@ -20,7 +20,7 @@ def run_mcts(config: Config,
         search_path = [node]
 
         while node.expanded():
-            action, node = select_child(config, node)
+            action, node = select_child(config, node, min_max_stats)
             history.add_action(action)
             search_path.append(node)
 
