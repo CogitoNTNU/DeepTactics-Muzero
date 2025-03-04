@@ -1,5 +1,6 @@
 import random
 import numpy as np
+from src.gameenv import Game
 
 class ReplayBuffer:
     def __init__(self):
