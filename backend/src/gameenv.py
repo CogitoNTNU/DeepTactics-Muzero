@@ -1,21 +1,9 @@
 import gymnasium as gym
 import ale_py
 from src.mcts.node import Node
+from src.game.action import Action 
 
 ######################---Disse skal nok ligge i en annen fil, placeholders settes her---######################
-class Action(object):
-
-  def __init__(self, index: int):
-    self.index = index
-
-  def __hash__(self):
-    return self.index
-
-  def __eq__(self, other):
-    return self.index == other.index
-
-  def __gt__(self, other):
-    return self.index > other.index
 
 
 class Player(object):
@@ -65,7 +53,7 @@ class ActionHistory(object):
 class Environment(object):
     """The environment MuZero is interacting with."""
     def __init__(self, gamefile: str): #'ALE/Breakout-v5'
-        self.env = gym.make(gamefile) 
+        self.env = gym.make(gamefile, render_mode="human") 
         self.obs, self.info = self.env.reset()
         self.episode_over: bool = False
         self.input_size = self.env.action_space
