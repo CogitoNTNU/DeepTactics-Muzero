@@ -8,10 +8,7 @@ from src.mcts.node import Node
 from src.gameenv import ActionHistory
 
 
-def run_mcts(config: Config,
-             root: Node,
-             action_history: ActionHistory,
-             network: Network):
+def run_mcts(config: Config, root: Node, action_history: ActionHistory, network: Network):
 
     min_max_stats = MinMaxStats(config.known_bounds)
     for _ in range(config.n_tree_searches):
@@ -37,3 +34,4 @@ def run_mcts(config: Config,
                       history.to_play(),
                       config.discount,
                       min_max_stats)
+

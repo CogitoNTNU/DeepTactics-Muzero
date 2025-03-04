@@ -1,6 +1,6 @@
 import gymnasium as gym
 import ale_py
-
+from src.mcts.node import Node
 
 ######################---Disse skal nok ligge i en annen fil, placeholders settes her---######################
 class Action(object):
@@ -29,26 +29,9 @@ class Player(object):
     else:
       self.turn_multiplier *= -1
 
-
-class Node(object):
-
-  def __init__(self, prior: float):
-    self.visit_count = 0
-    self.to_play = -1
-    self.prior = prior
-    self.value_sum = 0
-    self.children = {}
-    self.hidden_state = None
-    self.reward = 0
-
-  def expanded(self) -> bool:
-    return len(self.children) > 0
-
-  def value(self) -> float:
-    if self.visit_count == 0:
-      return 0
-    return self.value_sum / self.visit_count
-
+  def get_turn_multiplier(self): 
+    return self.turn_multiplier
+  
 
 class ActionHistory(object):
   """Simple history container used inside the search.
@@ -74,8 +57,7 @@ class ActionHistory(object):
     return [Action(i) for i in range(self.action_space_size)]
 
   def to_play(self) -> int:
-    self.player.change_player()
-    return self.player.turn_multiplier
+    return self.player
   
 ##############################################################################################################
 
@@ -141,7 +123,8 @@ class Game(object):
 
   def make_image(self, state_index: int):
     # Game specific feature planes.
-    return [1,1,1,1]
+    return [1,1,1,1] #self.environment.obs
+
 
   def make_target(self, state_index: int, num_unroll_steps: int, td_steps: int, to_play: Player):
     # The value target is the discounted root value of the search tree N steps
