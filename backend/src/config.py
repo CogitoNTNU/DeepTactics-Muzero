@@ -26,7 +26,7 @@ class Config:
         self,
         visit_softmax_temperature_fn=visit_softmax_temperature,
         known_bounds: Optional[KnownBounds] = None,
-        action_space: int = 1,  # 1 legal actions in cartpole
+        action_space_size: int = 2,       # CartPole defaults: 2
         input_planes: int = 128,  # 3 rbg planes * 32 last states + 32 last actions
         height: int = 96,  # Pixel height and with
         width: int = 96,
@@ -49,6 +49,10 @@ class Config:
         # softmax_policy_fn = softmax_policy_atari_train,
         info_print_rate=10,
         training_interval=1_000,
+        learning_rate: float = 0.001,
+        hidden_layer_size: int = 32,
+        observation_space_size: int = 4,
+        fine_tune: bool = False,
         num_training_rolluts=5,
         model_load_filename="test",
         model_save_filename="test",
@@ -57,7 +61,7 @@ class Config:
         # gym.register_envs(ale_py)
 
         # Environment
-        self.action_space = action_space
+        self.action_space_size = action_space_size
         self.max_moves = max_moves
         self.game_name = game_name
         self.input_planes = input_planes
@@ -76,6 +80,7 @@ class Config:
         self.visit_softmax_temperature_fn = visit_softmax_temperature_fn
 
         # Training
+        self.learning_rate = learning_rate
         self.batch_size = batch_size
         self.weight_decay = 1e-4
         self.momentum = 0.9
@@ -85,6 +90,11 @@ class Config:
 
         self.num_training_rolluts = num_training_rolluts
 
+        # Network 
+        self.observation_space_size = observation_space_size
+        self.hidden_layer_size = hidden_layer_size
+        self.fine_tune = fine_tune
+        
         # PUCT parameters
         self.c1 = c1
         self.c2 = c2
@@ -102,3 +112,7 @@ class Config:
 
     # def init_game(self) -> gym.Env:
     #     pass
+    def finetune(self):
+        if self.fine_tune:
+            self.learning_rate = 0.0001
+            # Add further modifications as needed

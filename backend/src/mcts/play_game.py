@@ -9,12 +9,12 @@ from src.gameenv import Game
 
 
 def play_game(config: Config, network: Network):
-
-    game = Game(config.action_space, config.discount)
+    print("Playing the game")
+    game = Game(config.action_space_size, config.discount)
 
     # game.history should be a list of actions taken.
+    i = 0
     while not game.terminal() and len(game.action_history().history) < config.max_moves:
-
         # Player is always 1 becuase cartpole only has one player
         root = Node(None, None, policy_value=0, player=1)
         # should get the observation (state) from the env.
@@ -33,5 +33,6 @@ def play_game(config: Config, network: Network):
             game.action_history().history), root, network)
         game.apply(action)
         game.store_search_statistics(root)
+        print(f"Move {action}")
 
     return game

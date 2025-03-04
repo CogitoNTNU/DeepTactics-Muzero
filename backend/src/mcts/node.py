@@ -18,6 +18,6 @@ class Node:
     
     def value(self) -> float:
         if self.visits == 0:
-            return 0
-        return self.value / self.visits
+            return 0.0
+        return self.value_sum / self.visits
     

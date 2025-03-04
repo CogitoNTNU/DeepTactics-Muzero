@@ -1,4 +1,4 @@
-﻿from src.mcts import backpropagate
+﻿from src.mcts.backpropagate import backpropagate
 from src.mcts.expand import expand_node
 from src.mcts.puct import select_child
 from src.networks.network import Network
@@ -11,9 +11,7 @@ from src.game.action_history import ActionHistory
 def run_mcts(config: Config, root: Node, action_history: ActionHistory, network: Network):
 
     min_max_stats = MinMaxStats(config.known_bounds)
-
     for _ in range(config.n_tree_searches):
-
         history = action_history.clone()
         node = root
         search_path = [node]
@@ -26,6 +24,19 @@ def run_mcts(config: Config, root: Node, action_history: ActionHistory, network:
         # Inside the search tree we use the dynamics function to obtain the next
         # hidden state given an action and the previous hidden state.
         parent = search_path[-2]
+<<<<<<< HEAD
         network_output = network.recurrent_inference(parent.hidden_state, history.last_action())
         expand_node(node, history.to_play(), history.action_space(), network_output)
         backpropagate(search_path, network_output.value, history.to_play(), config.discount, min_max_stats)
+=======
+        network_output = network.recurrent_inference(parent.hidden_state,
+                                                     history.last_action())
+        expand_node(node, history.to_play(),
+                    history.action_space(), network_output)
+
+        backpropagate(search_path,
+                      network_output.value,
+                      history.to_play(),
+                      config.discount,
+                      min_max_stats)
+>>>>>>> 528aa0b54fe45817b76ba8cd68571ccf2d2d00f5
