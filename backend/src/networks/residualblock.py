@@ -1,20 +1,6 @@
 import torch
 import torch.nn as nn
-
-class Action:
-    def __init__(self, index: int):
-        self.index = index
-
-    def __hash__(self):
-        return hash(self.index)
-
-    def __eq__(self, other):
-        return self.index == other.index
-
-    def __str__(self):
-        return str(self.index)
     
-
 class ResBlock(nn.Module):
     def __init__(self, channels :int, kernel_size: int, stride : int, padding : int) -> None:
         super(ResBlock, self).__init__()
