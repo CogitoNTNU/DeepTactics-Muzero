@@ -1,23 +1,9 @@
 import gymnasium as gym
 import ale_py
 from src.mcts.node import Node
-from src.game.action import Action
-
-class Player(object):
-  def __init__(self, is_cartpole:bool = True):
-    self.is_cartpole: bool = is_cartpole
-    self.turn_multiplier = 1
-  
-  def change_player(self):
-    if(self.is_cartpole):
-      self.turn_multiplier = 1
-    else:
-      self.turn_multiplier *= -1
-
-  def get_turn_multiplier(self): 
-    return self.turn_multiplier
-  
-
+from src.game.action import Action 
+from src.game.player import Player
+######################---Disse skal nok ligge i en annen fil, placeholders settes her---######################
 class ActionHistory(object):
   """Simple history container used inside the search.
 
@@ -51,6 +37,7 @@ class ActionHistory(object):
 class Environment(object):
     """The environment MuZero is interacting with."""
     def __init__(self, gamefile: str): #'ALE/Breakout-v5'
+        self.env = gym.make(gamefile, render_mode="human") 
         self.env = gym.make(gamefile, render_mode="human") 
         self.obs, self.info = self.env.reset()
         self.episode_over: bool = False
