@@ -3,8 +3,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from typing import NamedTuple, Dict
-
-from src.networks.residualblock import Action, ResBlock
+from src.game.action import Action
+from src.networks.residualblock import ResBlock
 
 
 class NetworkOutput(NamedTuple):
