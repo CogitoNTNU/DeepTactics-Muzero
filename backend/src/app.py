@@ -4,6 +4,18 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
+# TODO add CORS middleware
+# Use this as some basic security feature.
+# Will make it harder for attackers from other domains to access the backend API.
+"""
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    # frontend container.
+    # cogito websites
+]
+"""
+
 # Websockets ?? Interesting
 
 @app.post("/predict")
