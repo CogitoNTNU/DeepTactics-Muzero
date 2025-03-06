@@ -6,8 +6,8 @@ from utils.shared_storage import SharedStorage
 
 def self_play(config: Config, storage: SharedStorage, 
               replayBuffer: ReplayBuffer):
-    nr_of_games_to_play = 1000
-    for i in range(nr_of_games_to_play):
+    nr_of_games_to_play = 10000
+    for i in range(1, nr_of_games_to_play):
         network = storage.latest_network()
         game = play_game(config, network)
         replayBuffer.update_buffer(game)
