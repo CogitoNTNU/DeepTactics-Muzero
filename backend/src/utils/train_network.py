@@ -3,8 +3,9 @@ from src.game.action import Action
 from src.utils.replay_buffer import ReplayBuffer
 from src.utils.shared_storage import SharedStorage
 from src.networks.network import Network
-import torch
+import torch as torch
 import torch.optim as optim
+import torch.nn.functional as F
 
 def update_weights(optimizer, network: Network, batch, weight_decay: float):
     
@@ -85,7 +86,7 @@ def train_network(config: Config, storage: SharedStorage, replay_buffer: ReplayB
 
 def scalar_loss(prediction, target) -> float:
     # MSE in board games, cross entropy between categorical values in Atari.
-    return tf.losses.mean_squared_error(target, prediction)
+    return F.mse_loss(prediction, target)
 
 def scale_gradient(tensor, scale: float):
     # Scales the gradient for the backward pass.
