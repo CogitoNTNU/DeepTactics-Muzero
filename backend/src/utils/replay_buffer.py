@@ -1,10 +1,12 @@
 import random
 import numpy as np
+from src.config import Config
 from src.gameenv import Game
 
 class ReplayBuffer:
     def __init__(self):
         self.buffer_size: int = 10000
+        self.batch_size = Config().batch_size
         self.buffer: list[list[dict]] = []  #Stores game trajectories
         
     def update_buffer(self, game: Game):
@@ -17,6 +19,24 @@ class ReplayBuffer:
         entry = random.randint(0, len(self.buffer)-1)
         buffer_entry = self.buffer[entry]
         return buffer_entry
+    
+    def sample_batch(self, num_unroll_steps: int, td_steps: int, action_space_size: int):
+        games = [self.sample_game() for _ in range(self.batch_size)]
+        game_pos = [(g, self.sample_position(g)) for g in games]
+        return [(g.make_image(i), 
+                    g.history[i:i + num_unroll_steps],
+                    g.make_target(i, num_unroll_steps, td_steps, g.to_play()))
+                for (g, i) in game_pos]
+    
+    def sample_game(self) -> Game:
+        
+        # Sample game from buffer either uniformly or according to some priority.
+        return self.buffer[np.random.choice(range(len(self.buffer)))]
+
+    def sample_position(self, game) -> int:
+        
+        # Sample position from game either uniformly or according to some priority.
+        return np.random.choice(range(len(game.rewards) - 1))
     
     #Returns the rest of the trajectory from a random postion in a game
     def get_positions(self, buffer_entry: list, history_length: int = 0, nr_of_next_states: int = 5) -> tuple:

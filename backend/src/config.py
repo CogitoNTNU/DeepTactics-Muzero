@@ -82,6 +82,8 @@ class Config:
 
         # Training
         self.learning_rate = learning_rate
+        self.lr_decay_steps = 20
+        self.lr_decay_rate = 0.1
         self.batch_size = batch_size
         self.weight_decay = 1e-4
         self.momentum = 0.9
@@ -90,6 +92,8 @@ class Config:
         self.model_save_filepath = "models/" + game_name + "/" + model_save_filename
         self.training_episodes = training_episodes
         self.num_training_rolluts = num_training_rolluts
+        self.td_steps = 7 # ????
+        self.num_unroll_steps = 500 # ????
 
         # Network 
         self.observation_space_size = observation_space_size

@@ -44,7 +44,8 @@ class Environment(object):
     def step(self, action):
         self.action = action
         self.obs, self.reward, terminal, truncated, info = self.env.step(action)        
-        self.episode_over = terminal or truncated 
+        self.episode_over = terminal or truncated
+        return self.reward
 
     def close(self):
         self.env.close()
@@ -93,7 +94,7 @@ class Game(object):
 
   def make_image(self, state_index: int):
     # Game specific feature planes.
-    return [1,1,1,1] #self.environment.obs
+    return self.environment.obs
 
 
   def make_target(self, state_index: int, num_unroll_steps: int, td_steps: int, to_play: Player):

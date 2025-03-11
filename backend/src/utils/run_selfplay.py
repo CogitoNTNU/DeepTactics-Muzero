@@ -2,7 +2,7 @@
 
 
 from src.config import Config
-from src.mcts import play_game
+from src.mcts.play_game import play_game
 from src.utils.replay_buffer import ReplayBuffer
 from src.utils.shared_storage import SharedStorage
 
