@@ -3,8 +3,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from typing import NamedTuple, Dict
-
-from src.networks.residualblock import Action, ResBlock
+from src.game.action import Action
+from src.networks.residualblock import ResBlock
 
 
 class NetworkOutput(NamedTuple):
@@ -56,7 +56,7 @@ class Network(nn.Module):
         self.representation = nn.Sequential(
             nn.Linear(config.observation_space_size, config.hidden_layer_size),
             nn.ReLU(),
-            ResidualBlock(config.hidden_layer_size)
+        
         )
 
         # Value head: predicts scalar value from hidden state.
@@ -109,9 +109,9 @@ class Network(nn.Module):
         if observation.dim() == 1:
             observation = observation.unsqueeze(0)
 
-        # hidden_state = self.representation(observation) # TODO make this return correct values
-        hidden_state = torch.rand(
-            (observation.shape[0], self.hidden_layer_size), device=observation.device)
+        hidden_state = self.representation(observation) # TODO make this return correct values
+        #hidden_state = torch.rand(
+            #(observation.shape[0], self.hidden_layer_size), device=observation.device)
         value = self.value_head(hidden_state)
         policy = self.policy_head(hidden_state)
 
