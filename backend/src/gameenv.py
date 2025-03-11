@@ -44,7 +44,8 @@ class Environment(object):
     def step(self, action):
         self.action = action
         self.obs, self.reward, terminal, truncated, info = self.env.step(action)        
-        self.episode_over = terminal or truncated 
+        self.episode_over = terminal or truncated
+        return self.reward
 
     def close(self):
         self.env.close()
