@@ -9,7 +9,6 @@ from src.gameenv import Game
 import time
 
 def play_game(config: Config, network: Network) -> Game:
-    # TODO Create a problem generator to assign state of MCTS
     game = Game(config.action_space_size, config.discount)
     print("Playing the game")
     # game.history should be a list of actions taken.
@@ -34,6 +33,5 @@ def play_game(config: Config, network: Network) -> Game:
         game.store_search_statistics(root)
         print("Action taken: ", action)
         game.environment.env.render()
-        time.sleep(0.05)
 
     return game

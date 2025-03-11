@@ -31,6 +31,5 @@ class ReplayBuffer:
         buffer_entry = self.get_game_trajectory()
         return self.get_positions(buffer_entry, n_last_states, nr_of_next_states) #Returns the last n states of a trajectory from the replay buffer
     
-    
-    
-        
+    def last_game(self) -> Game:
+        return self.buffer[-1]

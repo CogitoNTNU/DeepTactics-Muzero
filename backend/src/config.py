@@ -37,6 +37,7 @@ class Config:
         num_selfplay_games=1_000_000,
         max_replay_games=125_000,  # Replay buffer size
         n_tree_searches=50,
+        training_episodes=200,
         epsilon: float = 0.001,
         discount: float = 0.997,
         c1: float = 1.25,
@@ -87,7 +88,7 @@ class Config:
         self.training_interval = training_interval
         self.model_load_filepath = "models/" + game_name + "/" + model_load_filename
         self.model_save_filepath = "models/" + game_name + "/" + model_save_filename
-
+        self.training_episodes = training_episodes
         self.num_training_rolluts = num_training_rolluts
 
         # Network 

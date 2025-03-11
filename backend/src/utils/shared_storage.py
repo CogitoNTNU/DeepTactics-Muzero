@@ -1,4 +1,4 @@
-from networks.network import Network 
+from src.networks.network import Network 
 
 class SharedStorage(object):
     def __init__(self):

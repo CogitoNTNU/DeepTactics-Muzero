@@ -133,3 +133,6 @@ class Game(object):
 
   def action_history(self) -> ActionHistory:
     return ActionHistory(self.history, self.action_space_size, self.player)
+  
+  def total_rewards(self):
+    return sum(self.rewards)
