@@ -76,7 +76,8 @@ def train_network(config: Config, storage: SharedStorage, replay_buffer: ReplayB
     network = storage.latest_network()
     # learning_rate = config.learning_rate * config.lr_decay_rate**(iterations / config.lr_decay_steps)
     learning_rate = config.learning_rate
-    # optimizer = tf.keras.optimizers.SGD(learning_rate, config.momentum)
+    optimizer = torch.optim.SGD(network.parameters(), lr=learning_rate, momentum=config.momentum, weight_decay=config.weight_decay)
+
 
     batch = replay_buffer.sample_batch(config.num_unroll_steps, config.td_steps, config.action_space_size)
     loss = update_weights(optimizer, network, batch, config.weight_decay)
