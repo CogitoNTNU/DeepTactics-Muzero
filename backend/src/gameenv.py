@@ -3,13 +3,12 @@ import ale_py
 from src.mcts.node import Node
 from src.game.action import Action 
 from src.game.player import Player
-######################---Disse skal nok ligge i en annen fil, placeholders settes her---######################
+
+
 class ActionHistory(object):
   """Simple history container used inside the search.
-
   Only used to keep track of the actions executed.
   """
-
   def __init__(self, history: list[Action], action_space_size: int, player: Player):
     self.history = list(history)
     self.action_space_size = action_space_size
@@ -30,8 +29,6 @@ class ActionHistory(object):
 
   def to_play(self) -> int:
     return self.player
-  
-##############################################################################################################
 
 
 class Environment(object):
