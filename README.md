@@ -110,3 +110,18 @@ This project would not have been possible without the hard work and dedication o
 
 ------
 Distributed under the MIT License. See `LICENSE` for more information.
+
+## IDUN tutorial
+You need to have access to IDUN or another supercomputer.
+This works for Mac/Linux.
+```bash
+ssh-add ~/.ssh/your_github_key
+```
+```bash
+ssh -A idun.hpc.ntnu.no
+```
+
+Test if github workd:
+```bash
+ssh -T git@github.com
+```
