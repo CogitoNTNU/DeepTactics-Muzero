@@ -19,8 +19,8 @@ def launch_job(f, *args):
 
 def muzero(config: Config):
     
-    storage = SharedStorage(config)
-    replay_buffer = ReplayBuffer(config)
+    storage = SharedStorage()
+    replay_buffer = ReplayBuffer()
     
     rewards = []
     losses = []
@@ -62,4 +62,4 @@ def muzero(config: Config):
         plt.show()        
         
 ### Entry-point function
-muzero(Config)
+muzero(Config())

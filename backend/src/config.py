@@ -82,6 +82,8 @@ class Config:
 
         # Training
         self.learning_rate = learning_rate
+        self.lr_decay_steps = 20
+        self.lr_decay_rate = 0.1
         self.batch_size = batch_size
         self.weight_decay = 1e-4
         self.momentum = 0.9

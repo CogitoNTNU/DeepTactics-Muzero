@@ -74,7 +74,8 @@ def update_weights(optimizer, network: Network, batch, weight_decay: float):
 def train_network(config: Config, storage: SharedStorage, replay_buffer: ReplayBuffer, iterations: int):
     
     network = storage.latest_network()
-    learning_rate = config.lr_init * config.lr_decay_rate**(iterations / config.lr_decay_steps)
+    # learning_rate = config.learning_rate * config.lr_decay_rate**(iterations / config.lr_decay_steps)
+    learning_rate = config.learning_rate
     optimizer = tf.keras.optimizers.SGD(learning_rate, config.momentum)
 
     batch = replay_buffer.sample_batch(config.num_unroll_steps, config.td_steps, config.action_space_size)
