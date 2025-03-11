@@ -70,25 +70,17 @@ def update_weights(optimizer, network: Network, batch, weight_decay: float):
 
     return loss
 
-def train_network(config, storage, replay_buffer, iterations: int):
-    network = storage.latest_network()  # Ensure this is a PyTorch model
-    network.train()  # Set the model to training mode
+def train_network(config: Config, storage: SharedStorage, replay_buffer: ReplayBuffer, iterations: int):
+    
+    network = storage.latest_network()
+    learning_rate = config.lr_init * config.lr_decay_rate**(iterations / config.lr_decay_steps)
+    optimizer = tf.keras.optimizers.SGD(learning_rate, config.momentum)
 
-    # Compute learning rate using decay
-    learning_rate = config.lr_init * (config.lr_decay_rate ** (iterations / config.lr_decay_steps))
-
-    # Initialize optimizer
-    optimizer = optim.SGD(network.parameters(), lr=learning_rate, momentum=config.momentum, weight_decay=config.weight_decay)
-
-    # Sample batch from replay buffer
     batch = replay_buffer.sample_batch(config.num_unroll_steps, config.td_steps, config.action_space_size)
-
-    # Compute loss
-    loss = update_weights(optimizer, network, batch)
-
-    # Update training steps counter
+    loss = update_weights(optimizer, network, batch, config.weight_decay)
+    
     network.tot_training_steps += 1
-
+    
     return loss
 
 def scalar_loss(prediction, target) -> float:
