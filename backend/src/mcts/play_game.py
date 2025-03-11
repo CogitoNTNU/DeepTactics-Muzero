@@ -20,15 +20,13 @@ def play_game(config: Config, network: Network) -> Game:
         current_observation = game.environment.obs
         
         # inital_inference should give the inital policy, value and hiddenstate (from representation network)
-        expand_node(root, game.to_play(), game.legal_actions(),
-                    network.initial_inference(current_observation))
+        expand_node(root, game.to_play(), game.legal_actions(), network.initial_inference(current_observation))
 
         add_exploration_noise(config, root)
 
         run_mcts(config, root, game.action_history(), network)
         # select action, but with respect to the temperature
-        action = select_action(config, len(
-            game.action_history().history), root, network)
+        action = select_action(config, len(game.action_history().history), root, network)
         game.apply(action)
         game.store_search_statistics(root)
         print("Action taken: ", action)
