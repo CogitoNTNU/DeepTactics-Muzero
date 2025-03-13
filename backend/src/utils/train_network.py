@@ -106,7 +106,7 @@ def train_network(config: Config, storage: SharedStorage, replay_buffer: ReplayB
     lossfunc = TorchLoss()
     network = storage.latest_network()  # Ensure this is a PyTorch model
     network.train()  # Set the model to training mode
-    network = storage.latest_network()
+
     # learning_rate = config.learning_rate * config.lr_decay_rate**(iterations / config.lr_decay_steps)
     learning_rate = config.learning_rate
     optimizer = optim.SGD(network.parameters(), lr=learning_rate, momentum=config.momentum, weight_decay=config.weight_decay)
@@ -122,6 +122,8 @@ def train_network(config: Config, storage: SharedStorage, replay_buffer: ReplayB
 
     # Update training steps counter
     network.tot_training_steps += 1
+
+    network.train(False)
     
     return loss
 

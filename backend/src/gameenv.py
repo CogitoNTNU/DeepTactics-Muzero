@@ -94,7 +94,7 @@ class Game(object):
 
   def make_image(self, state_index: int):
     # Game specific feature planes.
-    return self.environment.obs
+    return self.history[state_index]
 
 
   def make_target(self, state_index: int, num_unroll_steps: int, td_steps: int, to_play: Player):

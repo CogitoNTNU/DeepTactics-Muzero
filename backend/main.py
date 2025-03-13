@@ -8,9 +8,6 @@ from IPython.display import clear_output
 from matplotlib import pyplot as plt
 import numpy as np
 
-def launch_job(f, *args):
-    f(*args)
-    
 # MuZero training is split into two independent parts: 
 # Network training and self-play data generation.
 # These two parts only communicate by transferring the latest network checkpoint
@@ -31,7 +28,7 @@ def muzero(config: Config):
     for i in range(config.training_episodes):
         
         # self-play
-        launch_job(run_selfplay, config, storage, replay_buffer)
+        run_selfplay(config, storage, replay_buffer)
         
         # print and plot rewards
         game = replay_buffer.last_game()
@@ -39,8 +36,9 @@ def muzero(config: Config):
         rewards.append(reward_e)
         moving_averages.append(np.mean(rewards[-20:]))
         
-        for _ in range(10):
-            clear_output(wait=True)
+        # ??????
+        #for _ in range(10):
+            #clear_output(wait=True)
                 
         print('Episode ' + str(i+1) + ' ' + 'reward: ' + str(reward_e))
         print('Moving Average (20): ' + str(np.mean(rewards[-20:])))
@@ -48,10 +46,12 @@ def muzero(config: Config):
         print('Moving Average: ' + str(np.mean(rewards)))
         print('Elapsed time: ' + str((time.time() - t) / 60) + ' minutes')       
         
+        """
         plt.plot(rewards)
         plt.plot(moving_averages)
         plt.show()
-                
+        """
+
         # training
         loss = train_network(config, storage, replay_buffer, i).numpy()[0]
                 
