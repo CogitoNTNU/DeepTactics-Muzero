@@ -1,21 +1,20 @@
 from typing import Union
-
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# TODO add CORS middleware
-# Use this as some basic security feature.
-# Will make it harder for attackers from other domains to access the backend API.
-"""
-origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    # frontend container.
-    # cogito websites
+origins = [ # Allow frontend to access the backend
+    "http://localhost:9135",
 ]
-"""
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Websockets ?? Interesting
 
 @app.post("/predict")
