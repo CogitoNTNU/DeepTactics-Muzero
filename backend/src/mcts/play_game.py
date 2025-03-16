@@ -31,7 +31,6 @@ def play_game(config: Config, network: Network) -> Game:
             game.action_history().history), root, network)
         game.apply(action)
         game.store_search_statistics(root)
-        print("Action taken: ", action)
         game.environment.env.render()
 
     return game

@@ -1,4 +1,5 @@
-﻿from src.config import Config
+﻿import torch
+from src.config import Config
 from src.game.action import Action
 from src.utils.replay_buffer import ReplayBuffer
 from src.utils.shared_storage import SharedStorage
@@ -7,28 +8,29 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
-def calculate_loss(batch):
+def calculate_loss(batch_coll):
     loss = 0
-    print(len(batch))
-    print(batch[0])
-    for predictions, targets in batch:
-        for k, (prediction, target) in enumerate(zip(predictions, targets)):
+
+    for zipped_pairs in batch_coll:
+        for step_idx, (prediction, target) in enumerate(zipped_pairs):
     
             gradient_scale, value, reward, policy_t = prediction
             target_value, target_reward, target_policy = target
 
-            l_a = F.mse_loss(value, [target_value])
+            l_a = F.mse_loss(value, torch.tensor([target_value]))
         
-            if k > 0:
-                l_b = F.mse_loss(reward, [target_reward])
+            if step_idx > 0:
+                l_b = F.mse_loss(reward, torch.tensor([target_reward]))
             else:
                 l_b = 0
-        
-            l_c = F.cross_entropy(policy_t, target_policy)
+
+            print(policy_t.keys())
+            print(target_policy)       
+            l_c = F.cross_entropy(policy_t.values(), target_policy)
             
             loss += l_a + l_b + l_c       
             # loss += scale_gradient(l, gradient_scale)                   
-    return loss / len(batch)
+    return loss / len(batch_coll)
 
 
 def update_weights(optimizer, network: Network, batch):
@@ -45,8 +47,8 @@ def update_weights(optimizer, network: Network, batch):
     
             value, reward, policy_t, hidden_state = network.recurrent_inference(hidden_state, Action(action))
             predictions.append((1.0 / len(actions), value, reward, policy_t))
-        batch_coll.append(zip(predictions, targets))
-    loss = calculate_loss(batch)
+        batch_coll.append(list(zip(predictions, targets)))
+    loss = calculate_loss(batch_coll)
     loss.backward()
     optimizer.step()
 
@@ -62,7 +64,7 @@ def train_network(config: Config, storage: SharedStorage, replay_buffer: ReplayB
     batch = replay_buffer.sample_batch(config.num_unroll_steps, config.td_steps, config.action_space_size)
 
     # Compute loss
-    loss = update_weights(optimizer, network, batch, lossfunc=lossfunc)
+    loss = update_weights(optimizer, network, batch)
 
     # Update training steps counter
     network.tot_training_steps += 1

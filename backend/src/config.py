@@ -49,7 +49,7 @@ class Config:
         # encode_game_state_fn = encode_state_atari,
         # softmax_policy_fn = softmax_policy_atari_train,
         info_print_rate=10,
-        training_interval=1_000,
+        training_interval=10,
         learning_rate: float = 0.001,
         hidden_layer_size: int = 32,
         observation_space_size: int = 4,
