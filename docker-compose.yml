@@ -6,8 +6,6 @@ services:
       - "8080"
     volumes:
       - ./backend:/app # Sync the backend folder with the container
-    networks:
-      - muzero-network
 
   frontend:
     build: ./frontend
@@ -16,9 +14,3 @@ services:
       - "9135:80"
     depends_on:
       - backend
-    networks:
-      - muzero-network
-
-networks:
-  muzero-network:
-    driver: bridge
