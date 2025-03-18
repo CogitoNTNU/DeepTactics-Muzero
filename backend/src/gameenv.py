@@ -45,7 +45,7 @@ class Environment(object):
         self.action = action
         self.obs, self.reward, terminal, truncated, info = self.env.step(action)        
         self.episode_over = terminal or truncated
-        return self.reward
+        return self.reward, self.obs
 
     def close(self):
         self.env.close()
@@ -78,9 +78,10 @@ class Game(object):
       return self.environment.get_possible_actions() #her må en othello env defienres på forhond
     
   def apply(self, action: Action):
-    reward = self.environment.step(action)
+    reward, obs = self.environment.step(action)
     self.rewards.append(reward)
     self.history.append(action)
+    self.observations.append(obs)
     self.player.change_player() #sjekk at denne ikke blir kaldt på før to_play men etter
     self.episode_over = self.terminal()
 
