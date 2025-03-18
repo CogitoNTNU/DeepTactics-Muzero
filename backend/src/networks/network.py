@@ -3,7 +3,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from typing import NamedTuple, Dict
-from src.game.action import Action
 from src.networks.residualblock import ResBlock
 
 
@@ -18,7 +17,7 @@ class NetworkOutput(NamedTuple):
     """
     value: torch.Tensor
     reward: torch.Tensor
-    policy_logits: Dict[Action, float]
+    policy_logits: list[float]
     hidden_state: torch.Tensor
 
 
@@ -31,18 +30,17 @@ class ResidualBlock(nn.Module):
         self.bn2 = nn.BatchNorm2d(channels)
 
     def forward(self, x):
-        identity = x
-        out = F.relu(self.bn1(self.conv1(x)))
-        out = self.bn2(self.conv2(out))
-        out += identity
-        return F.relu(out)
-
         """
         Expects a config object with:
           - observation_space_size: int
           - action_space_size: int
           - hidden_layer_size: int
         """
+        identity = x
+        out = F.relu(self.bn1(self.conv1(x)))
+        out = self.bn2(self.conv2(out))
+        out += identity
+        return F.relu(out)
 
 
 class Network(nn.Module):
@@ -56,7 +54,6 @@ class Network(nn.Module):
         self.representation = nn.Sequential(
             nn.Linear(config.observation_space_size, config.hidden_layer_size),
             nn.ReLU(),
-        
         )
 
         # Value head: predicts scalar value from hidden state.
@@ -119,23 +116,17 @@ class Network(nn.Module):
         reward = torch.zeros(
             (observation.shape[0], 1), device=observation.device, dtype=observation.dtype)
 
-        # Build a dictionary for the first element in the batch.
-        policy_dict = {Action(a): policy[0, a].item()
-                       for a in range(self.action_space_size)}
+        return NetworkOutput(value, reward, policy, hidden_state)
 
-        return NetworkOutput(value, reward, policy_dict, hidden_state)
-
-    def recurrent_inference(self, hidden_state: torch.Tensor, action: Action) -> NetworkOutput:
+    def recurrent_inference(self, hidden_state: torch.Tensor, action: int) -> NetworkOutput:
         """
         Takes a hidden state plus an action (converted to one-hot),
         returns the next hidden state, reward, value, and policy.
         """
         # Convert the single integer action to a one-hot.
         # For simplicity, we assume batch size of 1 or hidden_state is [1, hidden_size].
-        action_tensor = torch.tensor(
-            [action.index], device=hidden_state.device)
-        action_one_hot = F.one_hot(
-            action_tensor, num_classes=self.action_space_size).float()
+        action_tensor = torch.tensor([action], device=hidden_state.device)
+        action_one_hot = F.one_hot(action_tensor, num_classes=self.action_space_size).float()
 
         # Concatenate hidden state + action.
         nn_input = torch.cat([hidden_state, action_one_hot], dim=-1)
@@ -143,15 +134,12 @@ class Network(nn.Module):
         # Next hidden state.
         next_hidden_state = self.dynamics(nn_input)
         # Reward from the same input.
-        reward = self.reward_head(nn_input)
+        reward = self.reward_head(next_hidden_state)
         # Then compute value, policy from next hidden state.
         value = self.value_head(next_hidden_state)
         policy = self.policy_head(next_hidden_state)
-        # Build dictionary for policy.
-        policy_dict = {Action(a): policy[0, a].item()
-                       for a in range(self.action_space_size)}
 
-        return NetworkOutput(value, reward, policy_dict, next_hidden_state)
+        return NetworkOutput(value, reward, policy, next_hidden_state)
 
             
     def get_weights(self):
