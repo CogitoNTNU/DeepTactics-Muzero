@@ -51,17 +51,18 @@ class Environment(object):
         self.env.close()
     
     def action_space(self):
-      self.env.action_space
+        self.env.action_space
 
 class Game(object):
   """A single episode of interaction with the environment."""
 
   def __init__(self, action_space_size: int, discount: float, gamefile: str = 'CartPole-v1', is_cartpole: bool=True):
     self.environment = Environment(gamefile=gamefile)  # Game specific environment.
-    self.history = []
+    self.history = [] # TODO: Rename
     self.rewards = []
     self.child_visits = []
     self.root_values = []
+    self.observations = [] # TODO: add obs when doing steps
     self.action_space_size = action_space_size
     self.discount = discount
     self.is_cartpole:bool = is_cartpole
