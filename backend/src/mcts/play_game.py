@@ -6,7 +6,6 @@ from src.mcts.expand import expand_node
 from src.mcts.run_mcts import run_mcts
 from src.mcts.select_action import select_action
 from src.gameenv import Game
-import time
 
 def play_game(config: Config, network: Network) -> Game:
     game = Game(config.action_space_size, config.discount)
@@ -15,7 +14,7 @@ def play_game(config: Config, network: Network) -> Game:
     
     while not game.terminal() and len(game.action_history().history) < config.max_moves:
         # Player is always 1 becuase cartpole only has one player
-        root = Node(None, state = None, policy_value=0, player=1)  
+        root = Node(None, state = None, policy_value=0, player=1)
         
         current_observation = game.environment.obs
         
@@ -27,8 +26,8 @@ def play_game(config: Config, network: Network) -> Game:
 
         run_mcts(config, root, game.action_history(), network)
         # select action, but with respect to the temperature
-        action = select_action(config, len(
-            game.action_history().history), root, network)
+        action = select_action(config, len(game.action_history().history), root, network)
+
         game.apply(action)
         game.store_search_statistics(root)
         game.environment.env.render()
