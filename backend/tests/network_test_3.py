@@ -2,7 +2,6 @@ import torch
 import torch.nn.functional as F
 import pytest
 from src.networks.network import Network, ResidualBlock, NetworkOutput
-from src.game.action import Action
 
 
 # Dummy configuration with necessary attributes
@@ -14,7 +13,7 @@ class DummyConfig:
 # Dummy Action factory; assumes Action is initialized with an index
 
 def dummy_action(index=0):
-    return Action(index)
+    return index
 
 
 def test_initial_inference():

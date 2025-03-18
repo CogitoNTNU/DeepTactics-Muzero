@@ -1,45 +1,38 @@
 import gymnasium as gym
 import ale_py
 from src.mcts.node import Node
-from src.game.action import Action 
 from src.game.player import Player
 
-
+"""
 class ActionHistory(object):
-  """Simple history container used inside the search.
-  Only used to keep track of the actions executed.
-  """
-  def __init__(self, history: list[Action], action_space_size: int, player: Player):
+  def __init__(self, history: list[int], action_space_size: int, player: Player):
     self.history = list(history)
     self.action_space_size = action_space_size
     self.player = player
-    
 
   def clone(self):
     return ActionHistory(self.history, self.action_space_size, self.player)
 
-  def add_action(self, action: Action):
+  def add_action(self, action: int):
     self.history.append(action)
 
-  def last_action(self) -> Action:
+  def last_action(self) -> int:
     return self.history[-1]
 
-  def action_space(self) -> list[Action]:
-    return [Action(i) for i in range(self.action_space_size)]
+  def action_space(self) -> list[int]:
+    return [i for i in range(self.action_space_size)]
 
   def to_play(self) -> int:
     return self.player
-
+"""
 
 class Environment(object):
     """The environment MuZero is interacting with."""
     def __init__(self, gamefile: str): #'ALE/Breakout-v5'
-        self.env = gym.make(gamefile, render_mode="human") 
-        self.env = gym.make(gamefile, render_mode="human") 
+        self.env = gym.make(gamefile, render_mode="human")
         self.obs, self.info = self.env.reset()
         self.episode_over: bool = False
         self.input_size = self.env.action_space
-
 
     def step(self, action):
         self.action = action
@@ -58,7 +51,7 @@ class Game(object):
 
   def __init__(self, action_space_size: int, discount: float, gamefile: str = 'CartPole-v1', is_cartpole: bool=True):
     self.environment = Environment(gamefile=gamefile)  # Game specific environment.
-    self.history = [] # TODO: Rename
+    self.action_history = [] # TODO: Rename
     self.rewards = []
     self.child_visits = []
     self.root_values = []
@@ -71,27 +64,24 @@ class Game(object):
   def terminal(self) -> bool:
     return self.environment.episode_over
 
-  def legal_actions(self) -> list[Action]:
+  def legal_actions(self) -> list[int]:
     if(self.is_cartpole):
       return [0, 1]
     else:
       return self.environment.get_possible_actions() #her må en othello env defienres på forhond
     
-  def apply(self, action: Action):
+  def apply(self, action: int):
     reward, obs = self.environment.step(action)
     self.rewards.append(reward)
-    self.history.append(action)
+    self.action_history.append(action)
     self.observations.append(obs)
     self.player.change_player() #sjekk at denne ikke blir kaldt på før to_play men etter
     self.episode_over = self.terminal()
 
   def store_search_statistics(self, root: Node):
     sum_visits = sum(child.value() for child in root.children.values())
-    action_space = (Action(index) for index in range(self.action_space_size))
-    self.child_visits.append([
-        root.children[a].value() / sum_visits if a in root.children else 0
-        for a in action_space
-    ])
+    action_space = (index for index in range(self.action_space_size))
+    self.child_visits.append([root.children[a].value() / sum_visits if a in root.children else 0 for a in action_space])
     self.root_values.append(root.value())
 
   def make_image(self, state_index: int):
@@ -131,8 +121,8 @@ class Game(object):
   def to_play(self) -> Player:
     return self.player
 
-  def action_history(self) -> ActionHistory:
-    return ActionHistory(self.history, self.action_space_size, self.player)
+  def get_action_history(self) -> list[int]:
+    return self.action_history
   
   def total_rewards(self):
     return sum(self.rewards)

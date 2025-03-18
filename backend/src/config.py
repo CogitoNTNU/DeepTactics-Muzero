@@ -24,6 +24,7 @@ def visit_softmax_temperature(num_moves, training_steps):
 class Config:
     def __init__(
         self,
+        render = True,
         visit_softmax_temperature_fn=visit_softmax_temperature,
         known_bounds: Optional[KnownBounds] = None,
         action_space_size: int = 2,  # 2 legal actions in cartpole
@@ -69,6 +70,7 @@ class Config:
         self.height = height
         self.width = width
         self.num_input_moves = num_input_moves
+        self.render = render
 
         # Selfplay
         self.num_selfplay_games = num_selfplay_games
