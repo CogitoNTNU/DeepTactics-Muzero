@@ -1,78 +1,28 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "../public/vite.svg";
-import Button from "./components/Button";
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import MuZeroConfig from './pages/MuZeroConfig';
+import About from './pages/About';
+import GameHome from './pages/games/GameHome';
+import Othello from './pages/games/Othello';
+import CartPole from './pages/games/CartPole';
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [response, setResponse] = useState("");
-
-  const testBackend = async () => {
-    try {
-      const res = await fetch("/api/ping");  // 👈 Internal Docker network request
-      const data = await res.json();
-      setResponse(data.message);
-    } catch (error) {
-      setResponse("Error connecting to backend");
-      console.error("API call failed:", error);
-    }
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#242424] text-[rgba(255,255,255,0.87)]">
-      {/* Logos */}
-      <div className="flex justify-center space-x-8">
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="h-24 transition filter hover:drop-shadow-[0_0_8px_#646cffaa] animate-logo-spin" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="h-24 transition filter hover:drop-shadow-[0_0_8px_#61dafbaa] animate-logo-spin" alt="React logo" />
-        </a>
+    <div className="min-h-screen bg-[#242424] text-[rgba(255,255,255,0.87)]">
+      <Navbar />
+      <div className="container mx-auto p-4">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/config" element={<MuZeroConfig />} />
+          <Route path="/about" element={<About />} />
+          {/* Nested routes for games */}
+          <Route path="/watch/*" element={<GameHome />}>
+            <Route path="othello" element={<Othello />} />
+            <Route path="cartpole" element={<CartPole />} />
+          </Route>
+        </Routes>
       </div>
-
-      {/* Titles */}
-      <h1 className="text-5xl font-extrabold mt-6">Vite + React</h1>
-      <h2 className="text-2xl font-semibold mt-2">DeepTactics - MuZero</h2>
-      <h3 className="text-xl font-bold text-blue-500 mt-2">@Cogito NTNU</h3>
-
-      {/* Card & Button */}
-      <div className="mt-6 p-6 bg-gray-800 rounded-lg shadow-md flex flex-col items-center">
-        <button
-          className="h-10 px-6 text-white font-medium bg-red-500 rounded-lg transition hover:bg-red-600 disabled:opacity-50"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-        <p className="mt-4 text-gray-400">
-          Edit <code className="font-mono bg-gray-700 px-2 py-1 rounded">src/App.tsx</code> and save to test HMR.
-        </p>
-      </div>
-
-      <div className="p-6 bg-gray-800 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold">Card Title</h2>
-        <p className="text-gray-400">This is some card content.</p>
-      </div>
-      <div className="flex items-center justify-center bg-gray-900">
-        <Button />
-      </div>
-
-      <div className="cursor-pointer bg-blue-500 text-white p-3 rounded" onClick={() => alert("Clicked!")}>
-        Click me
-      </div>
-
-      {/* API Test Button */}
-      <button
-        onClick={testBackend}
-        className="px-4 py-2 bg-blue-500 rounded hover:bg-teal-600"
-      >
-        Test Backend
-      </button>
-
-      {/* Show API Response */}
-      <p className="mt-4">{response}</p>
-
-      {/* Footer */}
-      <p className="mt-4 text-gray-500">Click on the Vite and React logos to learn more.</p>
     </div>
   );
 }
