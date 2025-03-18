@@ -1,16 +1,1 @@
 @import "tailwindcss";
-
-@keyframes logo-spin {
-    from {
-    transform: rotate(0deg);
-    }
-    to {
-    transform: rotate(360deg);
-    }
-}
-
-@layer utilities {
-    .animate-logo-spin {
-        animation: logo-spin infinite 20s linear;
-    }
-}
