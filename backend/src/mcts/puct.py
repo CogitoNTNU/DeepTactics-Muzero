@@ -2,7 +2,6 @@
 from src.utils.minmaxstats import MinMaxStats
 from src.config import Config
 from src.mcts.node import Node
-import torch
 
 
 def select_child(config: Config,  node: Node, min_max_stats: MinMaxStats):

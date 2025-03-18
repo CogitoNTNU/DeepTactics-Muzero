@@ -1,6 +1,5 @@
 ﻿import torch
 from src.config import Config
-from src.game.action import Action
 from src.utils.replay_buffer import ReplayBuffer
 from src.utils.shared_storage import SharedStorage
 from src.networks.network import Network
@@ -45,7 +44,7 @@ def update_weights(optimizer, network: Network, batch):
         # Recurrent steps, from action and previous hidden state.
         for action in actions:
     
-            value, reward, policy_t, hidden_state = network.recurrent_inference(hidden_state, Action(action))
+            value, reward, policy_t, hidden_state = network.recurrent_inference(hidden_state, action)
             predictions.append((1.0 / len(actions), value, reward, policy_t))
         batch_coll.append(list(zip(predictions, targets)))
     loss = calculate_loss(batch_coll)

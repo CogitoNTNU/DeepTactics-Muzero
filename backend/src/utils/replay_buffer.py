@@ -24,7 +24,7 @@ class ReplayBuffer:
         games: list[Game] = [self.sample_game() for _ in range(self.batch_size)]
         game_pos = [(g, self.sample_position(g)) for g in games]
         return [(g.make_image(i), 
-                    g.history[i:i + num_unroll_steps],
+                    g.get_action_history[i:i + num_unroll_steps],
                     g.make_target(i, num_unroll_steps, td_steps, g.to_play()))
                 for (g, i) in game_pos]
     
