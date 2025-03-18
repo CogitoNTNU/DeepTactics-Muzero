@@ -5,6 +5,18 @@ import Button from "./components/Button";
 
 function App() {
   const [count, setCount] = useState(0);
+  const [response, setResponse] = useState("");
+
+  const testBackend = async () => {
+    try {
+      const res = await fetch("/api/ping");  // 👈 Internal Docker network request
+      const data = await res.json();
+      setResponse(data.message);
+    } catch (error) {
+      setResponse("Error connecting to backend");
+      console.error("API call failed:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#242424] text-[rgba(255,255,255,0.87)]">
@@ -48,7 +60,16 @@ function App() {
         Click me
       </div>
 
+      {/* API Test Button */}
+      <button
+        onClick={testBackend}
+        className="px-4 py-2 bg-blue-500 rounded hover:bg-teal-600"
+      >
+        Test Backend
+      </button>
 
+      {/* Show API Response */}
+      <p className="mt-4">{response}</p>
 
       {/* Footer */}
       <p className="mt-4 text-gray-500">Click on the Vite and React logos to learn more.</p>
