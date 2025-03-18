@@ -128,7 +128,6 @@ class Network(nn.Module):
 
         # Concatenate hidden state + action.
         nn_input = torch.cat([hidden_state, action_one_hot], dim=-1)
-
         # Next hidden state.
         next_hidden_state = self.dynamics(nn_input)
         # Reward from the same input.
@@ -138,7 +137,6 @@ class Network(nn.Module):
         policy = self.policy_head(next_hidden_state)
 
         return NetworkOutput(value, reward, policy, next_hidden_state)
-
             
     def get_weights(self):
         # Returns the weights of this network.

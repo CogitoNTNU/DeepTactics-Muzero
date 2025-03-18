@@ -8,7 +8,7 @@ def select_action(config: Config, num_moves: int, node: Node, network: Network):
     visit_counts = [(child.visits, action) for action, child in node.children.items()]
     t = config.visit_softmax_temperature_fn(num_moves=num_moves, training_steps=network.training_steps())
     action = softmax_sample(visit_counts, t)
-
+    
     return action
 
 def softmax_sample(distribution, temperature: float):

@@ -8,6 +8,7 @@ def select_child(config: Config,  node: Node, min_max_stats: MinMaxStats):
 
     _, action, child = max((puct_score(config, node, child, min_max_stats), action, child)
                            for action, child in node.children.items())
+
     return action, child
 
     # The score for a node is based on its value, plus an exploration bonus based on the prior.
@@ -21,7 +22,6 @@ def puct_score(config: Config, node: Node, child: Node, min_max_stats: MinMaxSta
         value_score = min_max_stats.normalize(child.reward + config.discount * child.value())
     else:
         value_score = 0
-  
     return prior_score + value_score        
     
     #  if node.visits == 0:

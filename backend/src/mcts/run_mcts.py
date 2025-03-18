@@ -16,7 +16,6 @@ def run_mcts(config: Config, root: Node, to_play: int, network: Network):
             action, node = select_child(config, node, min_max_stats)
             search_path.append(node)
             to_play *= -1
-
         # Inside the search tree we use the dynamics function to obtain the next
         # hidden state given an action and the previous hidden state.
         parent = search_path[-2]
