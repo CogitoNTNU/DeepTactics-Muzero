@@ -24,8 +24,6 @@ def calculate_loss(batch_coll):
             else:
                 l_b = 0
 
-            print(policy_t.keys())
-            print(target_policy)       
             l_c = F.cross_entropy(policy_t.values(), target_policy)
             
             loss += l_a + l_b + l_c       
