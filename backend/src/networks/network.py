@@ -82,8 +82,7 @@ class Network(nn.Module):
 
         # Reward head: same input as dynamics, but outputs a scalar reward.
         self.reward_head = nn.Sequential(
-            nn.Linear(config.hidden_layer_size +
-                      config.action_space_size, config.hidden_layer_size),
+            nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
             nn.ReLU(),
             nn.Linear(config.hidden_layer_size, 1),
             nn.ReLU()
@@ -115,7 +114,6 @@ class Network(nn.Module):
         # Reward is zero at the root.
         reward = torch.zeros(
             (observation.shape[0], 1), device=observation.device, dtype=observation.dtype)
-
         return NetworkOutput(value, reward, policy, hidden_state)
 
     def recurrent_inference(self, hidden_state: torch.Tensor, action: int) -> NetworkOutput:

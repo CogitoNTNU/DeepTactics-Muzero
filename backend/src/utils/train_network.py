@@ -22,11 +22,10 @@ def calculate_loss(batch_coll):
                 l_b = F.mse_loss(reward, torch.tensor([target_reward]))
             else:
                 l_b = 0
-
-            l_c = F.cross_entropy(policy_t.values(), target_policy)
+            l_c = F.cross_entropy(policy_t, torch.tensor([target_policy]))
             
             loss += l_a + l_b + l_c       
-            # loss += scale_gradient(l, gradient_scale)                   
+            loss += scale_gradient(loss, gradient_scale)                   
     return loss / len(batch_coll)
 
 
@@ -48,6 +47,7 @@ def update_weights(optimizer, network: Network, batch):
     loss = calculate_loss(batch_coll)
     loss.backward()
     optimizer.step()
+    return loss
 
 
 def train_network(config: Config, storage: SharedStorage, replay_buffer: ReplayBuffer, iterations: int):
@@ -67,13 +67,12 @@ def train_network(config: Config, storage: SharedStorage, replay_buffer: ReplayB
     network.tot_training_steps += 1
 
     network.train(False)
-    
     return loss
 
 # def scalar_loss(prediction, target) -> float:
 #     # MSE in board games, cross entropy between categorical values in Atari.
 #     return F.mse_loss(prediction, target)
 #
-# def scale_gradient(tensor, scale: float):
-#     # Scales the gradient for the backward pass.
-#     return tensor * scale + tensor.detach() * (1 - scale)
+def scale_gradient(tensor, scale: float):
+    # Scales the gradient for the backward pass.
+    return tensor * scale + tensor.detach() * (1 - scale)

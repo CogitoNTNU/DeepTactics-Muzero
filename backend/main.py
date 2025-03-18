@@ -53,13 +53,13 @@ def muzero(config: Config):
         """
 
         # training
-        loss = train_network(config, storage, replay_buffer, i).numpy()[0]
+        loss = train_network(config, storage, replay_buffer, i).detach().numpy()
                 
         # print and plot loss
         print('Loss: ' + str(loss))
         losses.append(loss)
-        plt.plot(losses)
-        plt.show()        
+        # plt.plot(losses)
+        # plt.show()        
         
 ### Entry-point function
 muzero(Config())

@@ -22,7 +22,7 @@ def run_mcts(config: Config, root: Node, to_play: int, network: Network):
         parent = search_path[-2]
         network_output = network.recurrent_inference(parent.hidden_state, action)
 
-        expand_node(node, to_play, config.action_space_size, network_output)
+        expand_node(node, to_play, network_output)
 
         backpropagate(search_path,network_output.value, to_play, config.discount, min_max_stats)
 
