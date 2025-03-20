@@ -17,7 +17,7 @@ function App() {
           <Route path="/config" element={<MuZeroConfig />} />
           <Route path="/about" element={<About />} />
           {/* Nested routes for games */}
-          <Route path="/watch/*" element={<GameHome />}>
+          <Route path="/watch" element={<GameHome />}>
             <Route path="othello" element={<Othello />} />
             <Route path="cartpole" element={<CartPole />} />
           </Route>
