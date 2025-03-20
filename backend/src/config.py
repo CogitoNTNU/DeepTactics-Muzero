@@ -95,7 +95,7 @@ class Config:
         self.training_episodes = training_episodes
         self.num_training_rolluts = num_training_rolluts
         self.td_steps = 7 # ????
-        self.num_unroll_steps = 500 # ????
+        self.num_unroll_steps = 5 # ????
 
         # Network 
         self.observation_space_size = observation_space_size

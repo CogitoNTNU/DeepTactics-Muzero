@@ -14,21 +14,20 @@ def play_game(config: Config, network: Network) -> Game:
     
     while not game.terminal() and len(game.get_action_history()) < config.max_moves:
         # Player is always 1 becuase cartpole only has one player
-        root = Node(None, state = None, policy_value=0, player=1)
+        root = Node(parent=None, state = None, policy_value=0, player=1)
         
         current_observation = game.environment.obs
         
         # inital_inference should give the inital policy, value and hiddenstate (from representation network)
-        expand_node(root, game.to_play(), network.initial_inference(current_observation))
+        expand_node(node=root, to_play=game.to_play(), network_output=network.initial_inference(current_observation))
         
-        add_exploration_noise(config, root)
+        add_exploration_noise(config=config, node=root)
 
-        run_mcts(config, root, game.get_action_history(), network)
+        run_mcts(config=config, root=root, to_play=game.to_play(), network=network)
         # select action, but with respect to the temperature
-        action = select_action(config, len(game.get_action_history()), root, network)
-        game.apply(action)
-        print(action)
-        game.store_search_statistics(root)
+        action = select_action(config=config, num_moves=len(game.get_action_history()), node=root, network=network)
+        game.apply(action=action)
+        game.store_search_statistics(root=root)
         if config.render:
             game.environment.env.render()
 

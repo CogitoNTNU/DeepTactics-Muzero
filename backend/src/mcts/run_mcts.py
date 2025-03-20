@@ -5,8 +5,9 @@ from src.networks.network import Network
 from src.utils.minmaxstats import MinMaxStats
 from src.config import Config
 from src.mcts.node import Node
+from src.game.player import Player
 
-def run_mcts(config: Config, root: Node, to_play: int, network: Network):
+def run_mcts(config: Config, root: Node, to_play: Player, network: Network):
     min_max_stats = MinMaxStats(config.known_bounds)
     for _ in range(config.n_tree_searches):
         node = root
@@ -15,7 +16,8 @@ def run_mcts(config: Config, root: Node, to_play: int, network: Network):
         while node.expanded():
             action, node = select_child(config, node, min_max_stats)
             search_path.append(node)
-            to_play *= -1
+            to_play.change_player()
+            
         # Inside the search tree we use the dynamics function to obtain the next
         # hidden state given an action and the previous hidden state.
         parent = search_path[-2]

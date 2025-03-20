@@ -51,11 +51,11 @@ class Game(object):
 
   def __init__(self, action_space_size: int, discount: float, gamefile: str = 'CartPole-v1', is_cartpole: bool=True):
     self.environment = Environment(gamefile=gamefile)  # Game specific environment.
-    self.action_history = [] # TODO: Rename
+    self.action_history = []
     self.rewards = []
     self.child_visits = []
     self.root_values = []
-    self.observations = [] # TODO: add obs when doing steps
+    self.observations = []
     self.action_space_size = action_space_size
     self.discount = discount
     self.is_cartpole:bool = is_cartpole
@@ -73,7 +73,9 @@ class Game(object):
   def apply(self, action: int):
     reward, obs = self.environment.step(action)
     self.rewards.append(reward)
-    self.action_history.append(action)
+    print(self.action_history)
+    self.action_history.append(int(action))
+    print(self.action_history)
     self.observations.append(obs)
     self.player.change_player() #sjekk at denne ikke blir kaldt på før to_play men etter
     self.episode_over = self.terminal()
@@ -86,7 +88,7 @@ class Game(object):
 
   def make_image(self, state_index: int):
     # Game specific feature planes.
-    return self.environment.obs
+    return self.observations[state_index]
 
 
   def make_target(self, state_index: int, num_unroll_steps: int, td_steps: int, to_play: Player):

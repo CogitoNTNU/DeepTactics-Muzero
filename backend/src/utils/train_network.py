@@ -8,7 +8,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 def calculate_loss(batch_coll):
-    loss = 0
+    loss = torch.tensor(0.0, dtype=torch.float32)
 
     for zipped_pairs in batch_coll:
         for step_idx, (prediction, target) in enumerate(zipped_pairs):
@@ -16,17 +16,20 @@ def calculate_loss(batch_coll):
             gradient_scale, value, reward, policy_t = prediction
             target_value, target_reward, target_policy = target
 
-            l_a = F.mse_loss(value, torch.tensor([target_value]))
+            l_a = F.mse_loss(value, torch.tensor([[target_value]]))
         
             if step_idx > 0:
-                l_b = F.mse_loss(reward, torch.tensor([target_reward]))
+                l_b = F.mse_loss(reward, torch.tensor([[target_reward]]))
             else:
-                l_b = 0
-            l_c = F.cross_entropy(policy_t, torch.tensor([target_policy]))
+                l_b = torch.tensor(0.0)
+
+            if target_policy != []:
+                l_c = F.cross_entropy(policy_t, torch.tensor([target_policy]))
+            else:
+                l_c = torch.tensor(0.0)
             
-            loss += l_a + l_b + l_c       
-            loss += scale_gradient(loss, gradient_scale)                   
-    return loss / len(batch_coll)
+            loss += l_a + l_b + l_c
+    return torch.tensor(loss, requires_grad=True, dtype=torch.float32) # / torch.tensor(len(batch_coll), dtype=torch.float32)
 
 
 def update_weights(optimizer, network: Network, batch):
@@ -40,11 +43,12 @@ def update_weights(optimizer, network: Network, batch):
 
         # Recurrent steps, from action and previous hidden state.
         for action in actions:
-    
             value, reward, policy_t, hidden_state = network.recurrent_inference(hidden_state, action)
             predictions.append((1.0 / len(actions), value, reward, policy_t))
+
         batch_coll.append(list(zip(predictions, targets)))
     loss = calculate_loss(batch_coll)
+    print("loss grad fn: ", loss.grad_fn)
     loss.backward()
     optimizer.step()
     return loss
@@ -68,11 +72,3 @@ def train_network(config: Config, storage: SharedStorage, replay_buffer: ReplayB
 
     network.train(False)
     return loss
-
-# def scalar_loss(prediction, target) -> float:
-#     # MSE in board games, cross entropy between categorical values in Atari.
-#     return F.mse_loss(prediction, target)
-#
-def scale_gradient(tensor, scale: float):
-    # Scales the gradient for the backward pass.
-    return tensor * scale + tensor.detach() * (1 - scale)

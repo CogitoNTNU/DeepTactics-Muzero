@@ -4,8 +4,6 @@ from src.utils.run_selfplay import run_selfplay
 from src.utils.replay_buffer import ReplayBuffer
 from src.utils.shared_storage import SharedStorage
 import time
-from IPython.display import clear_output
-from matplotlib import pyplot as plt
 import numpy as np
 
 # MuZero training is split into two independent parts: 
@@ -15,6 +13,9 @@ import numpy as np
 # to the training.
 
 def muzero(config: Config):
+
+    # TODO: change
+    config.training_interval = 1
     
     storage = SharedStorage()
     replay_buffer = ReplayBuffer()
