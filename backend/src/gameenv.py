@@ -29,7 +29,7 @@ class ActionHistory(object):
 class Environment(object):
     """The environment MuZero is interacting with."""
     def __init__(self, gamefile: str): #'ALE/Breakout-v5'
-        self.env = gym.make(gamefile, render_mode="human")
+        self.env = gym.make(gamefile, sutton_barto_reward=False)#"""render_mode='human',""" 
         self.obs, self.info = self.env.reset()
         self.episode_over: bool = False
         self.input_size = self.env.action_space
@@ -73,9 +73,7 @@ class Game(object):
   def apply(self, action: int):
     reward, obs = self.environment.step(action)
     self.rewards.append(reward)
-    print(self.action_history)
     self.action_history.append(int(action))
-    print(self.action_history)
     self.observations.append(obs)
     self.player.change_player() #sjekk at denne ikke blir kaldt på før to_play men etter
     self.episode_over = self.terminal()
@@ -100,7 +98,7 @@ class Game(object):
       if bootstrap_index < len(self.root_values):
         value = self.root_values[bootstrap_index] * self.discount**td_steps
       else:
-        value = 0
+        value = 0.0
 
       for i, reward in enumerate(self.rewards[current_index:bootstrap_index]):
         value += reward * self.discount**i  # pytype: disable=unsupported-operands
@@ -111,13 +109,14 @@ class Game(object):
       if current_index > 0 and current_index <= len(self.rewards):
         last_reward = self.rewards[current_index - 1]
       else:
-        last_reward = 0
+        last_reward = 0.0
 
       if current_index < len(self.root_values):
         targets.append((value, last_reward, self.child_visits[current_index]))
       else:
         # States past the end of games are treated as absorbing states.
-        targets.append((0, last_reward, []))
+        targets.append((0.0, last_reward, []))
+
     return targets
 
   def to_play(self) -> Player:

@@ -24,21 +24,21 @@ def visit_softmax_temperature(num_moves, training_steps):
 class Config:
     def __init__(
         self,
-        render = True,
+        render = False,
         visit_softmax_temperature_fn=visit_softmax_temperature,
         known_bounds: Optional[KnownBounds] = None,
         action_space_size: int = 2,  # 2 legal actions in cartpole
-        input_planes: int = 128,  # 3 rbg planes * 32 last states + 32 last actions
-        height: int = 96,  # Pixel height and with
-        width: int = 96,
+        input_planes: int = 128,  # 3 rbg planes * 32 last states + 32 last actions (othello)
+        height: int = 8,  # Pixel height and with (othello)
+        width: int = 8, #othello
         # Number of moves that is used as input to representation model
         num_input_moves: int = 32,
         max_moves: float = 50_000,  # Max moves before game ends
         game_name: str = "ALE/Breakout-v5",
         num_selfplay_games=1_000_000,
         max_replay_games=125_000,  # Replay buffer size
-        n_tree_searches=50,
-        training_episodes=200,
+        n_tree_searches=25,
+        training_episodes=100, #how many training loops
         epsilon: float = 0.001,
         discount: float = 0.997,
         c1: float = 1.25,
@@ -46,16 +46,14 @@ class Config:
         diriclet_noise=0.25,
         # Set this to 0 for deterministic prior probabilites
         dirichlet_exploaration_factor=0.25,
-        batch_size=2048,
-        # encode_game_state_fn = encode_state_atari,
-        # softmax_policy_fn = softmax_policy_atari_train,
+        batch_size=128,
         info_print_rate=10,
-        training_interval=5,
+        training_interval=100,
         learning_rate: float = 0.001,
         hidden_layer_size: int = 32,
         observation_space_size: int = 4,
         fine_tune: bool = False,
-        num_training_rolluts=5,
+        num_training_rolluts=500,
         model_load_filename="test",
         model_save_filename="test",
     ):

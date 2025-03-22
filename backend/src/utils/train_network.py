@@ -16,6 +16,7 @@ def calculate_loss(batch_coll):
             gradient_scale, value, reward, policy_t = prediction
             target_value, target_reward, target_policy = target
 
+
             l_a = F.mse_loss(value, torch.tensor([[target_value]]))
         
             if step_idx > 0:
@@ -27,9 +28,16 @@ def calculate_loss(batch_coll):
                 l_c = F.cross_entropy(policy_t, torch.tensor([target_policy]))
             else:
                 l_c = torch.tensor(0.0)
+            print(f"Pred reward: {reward}, actual reward: {target_reward}, Loss: {l_b}")
+            print(f"Pred value: {value}, actual value: {target_value}, Loss: {l_a}")
+            print(f"Pred policy: {policy_t}, actual policy: {target_policy}, Loss: {l_c}\n")
             
-            loss += l_a + l_b + l_c
-    return torch.tensor(loss, requires_grad=True, dtype=torch.float32) # / torch.tensor(len(batch_coll), dtype=torch.float32)
+            #print("L_c:", l_c, "L_b:", l_b, "L_a:", l_a)
+            loss += l_c + l_b + l_a
+            loss /= len(zipped_pairs)
+            
+
+    return loss / len(batch_coll)
 
 
 def update_weights(optimizer, network: Network, batch):
@@ -48,7 +56,6 @@ def update_weights(optimizer, network: Network, batch):
 
         batch_coll.append(list(zip(predictions, targets)))
     loss = calculate_loss(batch_coll)
-    print("loss grad fn: ", loss.grad_fn)
     loss.backward()
     optimizer.step()
     return loss

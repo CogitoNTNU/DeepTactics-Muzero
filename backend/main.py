@@ -13,10 +13,6 @@ import numpy as np
 # to the training.
 
 def muzero(config: Config):
-
-    # TODO: change
-    config.training_interval = 1
-    
     storage = SharedStorage()
     replay_buffer = ReplayBuffer()
     
@@ -46,7 +42,6 @@ def muzero(config: Config):
         print('Moving Average (100): ' + str(np.mean(rewards[-100:])))
         print('Moving Average: ' + str(np.mean(rewards)))
         print('Elapsed time: ' + str((time.time() - t) / 60) + ' minutes')       
-        
         """
         plt.plot(rewards)
         plt.plot(moving_averages)
