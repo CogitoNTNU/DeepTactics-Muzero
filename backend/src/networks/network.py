@@ -2,8 +2,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from typing import NamedTuple, Dict
-from src.networks.residualblock import ResBlock
+from typing import NamedTuple
 
 
 class NetworkOutput(NamedTuple):
