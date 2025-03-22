@@ -54,6 +54,7 @@ class Network(nn.Module):
         self.representation = nn.Sequential(
             nn.Linear(config.observation_space_size, config.hidden_layer_size),
             nn.ReLU(),
+            nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
         )
 
         # Value head: predicts scalar value from hidden state.
@@ -61,7 +62,6 @@ class Network(nn.Module):
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
             nn.ReLU(),
             nn.Linear(config.hidden_layer_size, 1),
-            nn.ReLU()
         )
 
         # Policy head: predicts action probabilities from hidden state.
@@ -85,7 +85,6 @@ class Network(nn.Module):
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
             nn.ReLU(),
             nn.Linear(config.hidden_layer_size, 1),
-            nn.ReLU()
         )
 
         self.tot_training_steps = 0
@@ -112,8 +111,7 @@ class Network(nn.Module):
         policy = self.policy_head(hidden_state)
 
         # Reward is zero at the root.
-        reward = torch.zeros(
-            (observation.shape[0], 1), device=observation.device, dtype=observation.dtype)
+        reward = torch.zeros((observation.shape[0], 1), device=observation.device, dtype=observation.dtype)
         return NetworkOutput(value, reward, policy, hidden_state)
 
     def recurrent_inference(self, hidden_state: torch.Tensor, action: int) -> NetworkOutput:
@@ -140,15 +138,8 @@ class Network(nn.Module):
             
     def get_weights(self):
         # Returns the weights of this network.
-        networks = (self.representation, 
-                    self.value, 
-                    self.policy,
-                    self.dynamics, 
-                    self.reward)
-        
-        return [variables
-                for variables_list in map(lambda n: n.weights, networks)
-                for variables in variables_list] 
+        networks = (self.representation, self.value, self.policy, self.dynamics, self.reward)
+        return [variables for variables_list in map(lambda n: n.weights, networks) for variables in variables_list] 
 
 
     def training_steps(self) -> int:
