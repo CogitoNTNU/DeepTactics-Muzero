@@ -10,6 +10,24 @@ from src.gameenv import Game
 import torch
 
 def play_game(config: Config, network: Network) -> Game:
+    """
+    Plays a game using a the MCTS.
+
+    Runs the game loop until the game terminates or the maximum number of moves is reached.
+    At each step, it:
+      - Creates a root node for MCTS.
+      - Uses the network's initial inference to expand the node.
+      - Adds exploration noise.
+      - Runs MCTS and selects an action.
+      - Applies the action and stores search statistics.
+
+    Args:
+        config (Config): Configuration parameters for the game and MuZero.
+        network (Network): The MuZero network for inference.
+
+    Returns:
+        tuple: A tuple containing the completed Game instance and the number of steps taken.
+    """
     with torch.no_grad():
         game = Game(config.action_space_size, config.discount)
         # game.history should be a list of actions taken.
