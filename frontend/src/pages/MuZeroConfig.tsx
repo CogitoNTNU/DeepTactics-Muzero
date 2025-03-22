@@ -1,12 +1,5 @@
 import InputList from "../components/InputList"
-const environmentParameters = [
-  { labelText: "Action Space Size", defaultValue: 10, tooltipMessage: "The number of possible actions in the environment." },
-  { labelText: "Input Planes", defaultValue: 5, tooltipMessage: "The number of input planes representing the state." },
-  { labelText: "Height", defaultValue: 8, tooltipMessage: "The height of the board/grid." },
-  { labelText: "Width", defaultValue: 8, tooltipMessage: "The width of the board/grid." },
-  { labelText: "Num Input Moves", defaultValue: 4, tooltipMessage: "The number of past moves used as input." },
-  { labelText: "Max Moves", defaultValue: 100.0, tooltipMessage: "The maximum number of moves in a game." }
-];
+import { environmentParameters } from "../config/muzeroParameters";
 
 
 export default function MuZeroConfig() {
