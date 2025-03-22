@@ -38,7 +38,7 @@ class Config:
         num_selfplay_games=1_000_000,
         max_replay_games=125_000,  # Replay buffer size
         n_tree_searches=25,
-        training_episodes=100, #how many training loops
+        training_episodes=1000, #how many training loops
         epsilon: float = 0.001,
         discount: float = 0.997,
         c1: float = 1.25,
@@ -46,11 +46,12 @@ class Config:
         diriclet_noise=0.25,
         # Set this to 0 for deterministic prior probabilites
         dirichlet_exploaration_factor=0.25,
-        batch_size=128,
+        batch_size=2048,
         info_print_rate=10,
         training_interval=100,
-        learning_rate: float = 0.03,
-        learning_rate_decay: float = 0.001,
+        learning_rate: float = 0.02,
+        learning_rate_decay: float = 0.8,
+        learning_rate_decay_steps: float = 1000,
         hidden_layer_size: int = 16,
         observation_space_size: int = 4,
         fine_tune: bool = False,
