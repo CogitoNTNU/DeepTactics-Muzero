@@ -129,7 +129,7 @@ class Network(nn.Module):
         # Next hidden state.
         next_hidden_state = self.dynamics(nn_input)
         # Reward from the same input.
-        reward = self.reward_head(next_hidden_state)
+        reward = self.reward_head(nn_input)
         # Then compute value, policy from next hidden state.
         value = self.value_head(next_hidden_state)
         policy = self.policy_head(next_hidden_state)
