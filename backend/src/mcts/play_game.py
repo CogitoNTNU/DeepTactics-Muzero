@@ -27,6 +27,7 @@ def self_made_children(node: Node, base):
             print("")
         else:
             self_made_children(child, base)
+
 def play_game(config: Config, network: Network) -> Game:
     """
     Plays a game using a the MCTS.

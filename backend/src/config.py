@@ -1,25 +1,13 @@
 from typing import Optional
 from src.utils.minmaxstats import KnownBounds
 
-
 def visit_softmax_temperature(num_moves, training_steps):
     if training_steps < 100:
-        return 3
-    elif training_steps < 125:
-        return 2
-    elif training_steps < 150:
-        return 1
-    elif training_steps < 175:
+        return 1.0
+    elif training_steps < 400:
         return 0.5
-    elif training_steps < 200:
-        return 0.250
-    elif training_steps < 225:
-        return 0.125
-    elif training_steps < 250:
-        return 0.075
     else:
-        return 0.001
-
+        return 0.25
 
 class Config:
     def __init__(
@@ -32,7 +20,6 @@ class Config:
         height: int = 8,  # Pixel height and with (othello)
         width: int = 8, #othello
         # Number of moves that is used as input to representation model
-        num_input_moves: int = 32,
         max_moves: float = 500,  # Max moves before game ends
         game_name: str = "CartPole-v1", #"ALE/Breakout-v5",
         n_tree_searches=50,
@@ -44,15 +31,15 @@ class Config:
         diriclet_noise=0.25,
         # Set this to 0 for deterministic prior probabilites
         dirichlet_exploaration_factor=0.25,
-        batch_size=128,
-        training_interval=100,
+        batch_size=1,
+        training_interval=50,
         learning_rate: float = 0.02,
         learning_rate_decay: float = 0.95,
         learning_rate_decay_steps: float = 100,
         hidden_layer_size: int = 16,
         observation_space_size: int = 4,
         buffer_size = 500, 
-        model_load_filename="test",
+        model_load_filename="test2",
         model_save_filename="test",
     ):
         # Only to keep the type checker happy
@@ -65,7 +52,6 @@ class Config:
         self.input_planes = input_planes
         self.height = height
         self.width = width
-        self.num_input_moves = num_input_moves
         self.render = render
 
         # Selfplay
