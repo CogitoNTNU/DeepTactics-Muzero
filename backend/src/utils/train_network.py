@@ -1,7 +1,6 @@
 ﻿import torch
 from src.config import Config
 from src.utils.replay_buffer import ReplayBuffer
-from src.utils.shared_storage import SharedStorage
 from src.networks.network import Network
 import torch.nn as nn
 import torch.optim as optim
@@ -28,13 +27,13 @@ def calculate_loss(batch_coll):
                 l_c = F.cross_entropy(policy_t, torch.tensor([target_policy]))
             else:
                 l_c = torch.tensor(0.0)
-            print(f"Pred reward: {reward}, actual reward: {target_reward}, Loss: {l_b}")
-            print(f"Pred value: {value}, actual value: {target_value}, Loss: {l_a}")
-            print(f"Pred policy: {policy_t}, actual policy: {target_policy}, Loss: {l_c}\n")
+            #print(f"Pred reward: {reward}, actual reward: {target_reward}, Loss: {l_b}")
+            #print(f"Pred value: {value}, actual value: {target_value}, Loss: {l_a}")
+            #print(f"Pred policy: {policy_t}, actual policy: {target_policy}, Loss: {l_c}\n")
             
             #print("L_c:", l_c, "L_b:", l_b, "L_a:", l_a)
-            loss += l_c + l_b + l_a
-            loss /= len(zipped_pairs)
+            loss += (l_c + l_b + l_a)/len(zipped_pairs)
+            
             
 
     return loss / len(batch_coll)
@@ -61,8 +60,7 @@ def update_weights(optimizer, network: Network, batch):
     return loss
 
 
-def train_network(config: Config, storage: SharedStorage, replay_buffer: ReplayBuffer, iterations: int):
-    network = storage.latest_network()
+def train_network(config: Config, network: Network, replay_buffer: ReplayBuffer, iterations: int):
     network.train()
 
     # learning_rate = config.learning_rate * config.lr_decay_rate**(iterations / config.lr_decay_steps)
