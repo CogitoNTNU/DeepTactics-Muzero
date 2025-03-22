@@ -4,6 +4,7 @@ export default function Navbar() {
   return (
     <nav className="bg-gray-800 text-gray-300 p-4 shadow-md">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <img src="/cogito_white.svg" alt="Cogito" className="h-8 w-8 mr-2" />
         <div className="text-xl font-bold w-1/2">
           DeepTactics
         </div>

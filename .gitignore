@@ -17,7 +17,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/ # Required lib folder in `frontend/src/lib`, as the utils.ts file is essential for the project
 lib64/
 parts/
 sdist/
