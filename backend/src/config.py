@@ -25,7 +25,7 @@ class Config:
     def __init__(
         self,
         render = False,
-        visit_softmax_temperature_fn=visit_softmax_temperature,
+        visit_softmax_temperature_fn = visit_softmax_temperature,
         known_bounds: Optional[KnownBounds] = None,
         action_space_size: int = 2,  # 2 legal actions in cartpole
         input_planes: int = 128,  # 3 rbg planes * 32 last states + 32 last actions (othello)
@@ -37,7 +37,7 @@ class Config:
         game_name: str = "ALE/Breakout-v5",
         num_selfplay_games=1_000_000,
         max_replay_games=125_000,  # Replay buffer size
-        n_tree_searches=25,
+        n_tree_searches=50,
         training_episodes=1000, #how many training loops
         epsilon: float = 0.001,
         discount: float = 0.997,
@@ -46,18 +46,20 @@ class Config:
         diriclet_noise=0.25,
         # Set this to 0 for deterministic prior probabilites
         dirichlet_exploaration_factor=0.25,
-        batch_size=2048,
+        batch_size=128,
         info_print_rate=10,
         training_interval=100,
         learning_rate: float = 0.02,
-        learning_rate_decay: float = 0.8,
+        learning_rate_decay: float = 0.9,
         learning_rate_decay_steps: float = 1000,
         hidden_layer_size: int = 16,
         observation_space_size: int = 4,
         fine_tune: bool = False,
-        num_training_rolluts=500,
+        num_training_rolluts=50,
+        buffer_size = 500, 
         model_load_filename="test",
         model_save_filename="test",
+        #Drit å dra sverre
     ):
         # Only to keep the type checker happy
         # gym.register_envs(ale_py)
@@ -93,7 +95,6 @@ class Config:
         self.model_load_filepath = "models/" + game_name + "/" + model_load_filename
         self.model_save_filepath = "models/" + game_name + "/" + model_save_filename
         self.training_episodes = training_episodes
-        self.num_training_rolluts = num_training_rolluts
         self.td_steps = 7 # ????
         self.num_unroll_steps = 5 # ????
 

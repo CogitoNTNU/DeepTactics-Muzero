@@ -8,7 +8,7 @@ def run_selfplay(config: Config, model: Network, replay_buffer: ReplayBuffer):
     tot_steps = 0
     for i in range(config.training_interval):
         #print(f"Starting game: {i}")
-        game, steps = play_game(config, model)
+        game, steps = play_game(config=config, network=model)
         replay_buffer.update_buffer(game)
         tot_steps += steps
     

@@ -14,7 +14,7 @@ import numpy as np
 # to the training.
 
 def muzero(config: Config):
-    replay_buffer = ReplayBuffer()
+    replay_buffer = ReplayBuffer(config=config)
     model = Network(config)
     
     rewards = []

@@ -4,9 +4,9 @@ from src.config import Config
 from src.gameenv import Game
 
 class ReplayBuffer:
-    def __init__(self):
-        self.buffer_size: int = 10000
-        self.batch_size = Config().batch_size
+    def __init__(self, config: Config):
+        self.buffer_size: int = config.buffer_size
+        self.batch_size = config.batch_size
         self.buffer: list[list[dict]] = []  #Stores game trajectories
         
     def update_buffer(self, game: Game):
