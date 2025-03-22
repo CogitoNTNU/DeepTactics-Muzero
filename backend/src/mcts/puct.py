@@ -4,7 +4,7 @@ from src.config import Config
 from src.mcts.node import Node
 
 
-def select_child(config: Config,  node: Node, min_max_stats: MinMaxStats):
+def select_child(config: Config,  node: Node, min_max_stats: MinMaxStats) -> tuple:
     """
     Selects the child node with the highest PUCT score.
 
@@ -28,7 +28,7 @@ def select_child(config: Config,  node: Node, min_max_stats: MinMaxStats):
 
     # The score for a node is based on its value, plus an exploration bonus based on the prior.
 
-def puct_score(config: Config, node: Node, child: Node, min_max_stats: MinMaxStats):
+def puct_score(config: Config, node: Node, child: Node, min_max_stats: MinMaxStats) -> float:
     """
     Computes the PUCT score for a child node.
 
