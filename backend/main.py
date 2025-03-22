@@ -2,10 +2,9 @@
 from src.utils.train_network import train_network
 from src.utils.run_selfplay import run_selfplay
 from src.utils.replay_buffer import ReplayBuffer
-from src.utils.shared_storage import SharedStorage
+from src.networks.network import Network
+
 import time
-from IPython.display import clear_output
-from matplotlib import pyplot as plt
 import numpy as np
 
 # MuZero training is split into two independent parts: 
@@ -15,9 +14,8 @@ import numpy as np
 # to the training.
 
 def muzero(config: Config):
-    
-    storage = SharedStorage()
     replay_buffer = ReplayBuffer()
+    model = Network(config)
     
     rewards = []
     losses = []
@@ -28,7 +26,7 @@ def muzero(config: Config):
     for i in range(config.training_episodes):
         
         # self-play
-        run_selfplay(config, storage, replay_buffer)
+        run_selfplay(config, model, replay_buffer)
         
         # print and plot rewards
         game = replay_buffer.last_game()
@@ -40,12 +38,13 @@ def muzero(config: Config):
         #for _ in range(10):
             #clear_output(wait=True)
                 
+        """
         print('Episode ' + str(i+1) + ' ' + 'reward: ' + str(reward_e))
         print('Moving Average (20): ' + str(np.mean(rewards[-20:])))
         print('Moving Average (100): ' + str(np.mean(rewards[-100:])))
         print('Moving Average: ' + str(np.mean(rewards)))
         print('Elapsed time: ' + str((time.time() - t) / 60) + ' minutes')       
-        
+        """
         """
         plt.plot(rewards)
         plt.plot(moving_averages)
@@ -53,13 +52,19 @@ def muzero(config: Config):
         """
 
         # training
-        loss = train_network(config, storage, replay_buffer, i).detach().numpy()
+        loss = train_network(config, model, replay_buffer, i).detach().numpy()
                 
         # print and plot loss
         print('Loss: ' + str(loss))
         losses.append(loss)
         # plt.plot(losses)
         # plt.show()        
+        #for name, param in model.named_parameters():
+            #if param.requires_grad:
+                #print(f"Layer: {name}")
+                #print(f"Weights:\n{param.data}\n")
+            #else:
+                #print("Huh")
         
 ### Entry-point function
 muzero(Config())
