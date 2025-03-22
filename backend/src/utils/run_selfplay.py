@@ -3,7 +3,7 @@ from src.mcts.play_game import play_game
 from src.networks.network import Network
 from src.utils.replay_buffer import ReplayBuffer
 
-def run_selfplay(config: Config, model: Network, replay_buffer: ReplayBuffer):
+def run_selfplay(config: Config, model: Network, replay_buffer: ReplayBuffer) -> None:
     """
     Runs self-play games and stores trajectories in the replay buffer.
 
