@@ -9,6 +9,24 @@ from src.gameenv import Game
 
 import torch
 
+
+def self_made_tree(root: Node):
+            print(root.visits, root.reward, root.value())
+            for key, child in root.children.items():  # Iterate over dictionary
+                base = "    "
+                print(base+f"visits: {child.visits}, rewards: {child.reward}, value: {child.value()}")
+                if child.children:  # Check if child has further children
+                    self_made_children(child, base)
+
+def self_made_children(node: Node, base):
+    base += "    "
+    for key, child in node.children.items():
+        print(base+f"visits: {child.visits}, reward: {child.reward}, value: {child.value()}")
+        if not child.children and key == max(node.children.keys()):  
+            base = base[4:]  # Adjust indentation only at the last child
+            print("")
+        else:
+            self_made_children(child, base)
 def play_game(config: Config, network: Network) -> Game:
     """
     Plays a game using a the MCTS.
@@ -29,7 +47,7 @@ def play_game(config: Config, network: Network) -> Game:
         tuple: A tuple containing the completed Game instance and the number of steps taken.
     """
     with torch.no_grad():
-        game = Game(config.action_space_size, config.discount)
+        game = Game(config.action_space_size, config.discount, gamefile=config.game_name)
         # game.history should be a list of actions taken.
         steps = 0
         
@@ -52,4 +70,8 @@ def play_game(config: Config, network: Network) -> Game:
             game.store_search_statistics(root=root)
             if config.render:
                 game.environment.env.render()
+        #self_made_tree(root)
+        
+        
+        
         return game, steps

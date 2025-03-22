@@ -1,4 +1,5 @@
-
+import os
+from pytest import Config
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -63,9 +64,9 @@ class Network(nn.Module):
             - hidden_layer_size (int): Size of the hidden layer.
             - action_space_size (int): Number of possible actions.
     """
-    def __init__(self, config) -> None:
+    def __init__(self, config: Config) -> None:
         super(Network, self).__init__()
-        self.config = config
+        self.config: Config = config
         self.hidden_layer_size = config.hidden_layer_size
         self.action_space_size = config.action_space_size
 
@@ -182,3 +183,29 @@ class Network(nn.Module):
     def training_steps(self) -> int:
         # How many steps/batches the network has been trained for.
         return self.tot_training_steps
+    
+    def save(self) -> None:
+        path = self.config.model_save_filepath
+        directory = os.path.dirname(path)
+        
+        # Check if the directory exists
+        if not os.path.exists(directory):
+            # If it doesn't exist, create it
+            os.makedirs(directory)
+        torch.save(self.state_dict(), path)
+
+    @classmethod
+    def load(cls, config: Config):
+        path = config.model_load_filepath
+
+        if not os.path.exists(path):
+            print("No models with this name exists")
+            return Network(config)
+        
+
+        model = cls(config)
+        state_dict = torch.load(path)
+        model.load_state_dict(state_dict)
+        print("Model found and loaded.")
+        
+        return model

@@ -33,12 +33,10 @@ class Config:
         width: int = 8, #othello
         # Number of moves that is used as input to representation model
         num_input_moves: int = 32,
-        max_moves: float = 50_000,  # Max moves before game ends
-        game_name: str = "ALE/Breakout-v5",
-        num_selfplay_games=1_000_000,
-        max_replay_games=125_000,  # Replay buffer size
+        max_moves: float = 500,  # Max moves before game ends
+        game_name: str = "CartPole-v1", #"ALE/Breakout-v5",
         n_tree_searches=50,
-        training_episodes=1000, #how many training loops
+        training_episodes=100_000, #how many training loops
         epsilon: float = 0.001,
         discount: float = 0.997,
         c1: float = 1.25,
@@ -47,19 +45,15 @@ class Config:
         # Set this to 0 for deterministic prior probabilites
         dirichlet_exploaration_factor=0.25,
         batch_size=128,
-        info_print_rate=10,
         training_interval=100,
         learning_rate: float = 0.02,
-        learning_rate_decay: float = 0.9,
-        learning_rate_decay_steps: float = 1000,
+        learning_rate_decay: float = 0.95,
+        learning_rate_decay_steps: float = 100,
         hidden_layer_size: int = 16,
         observation_space_size: int = 4,
-        fine_tune: bool = False,
-        num_training_rolluts=50,
         buffer_size = 500, 
         model_load_filename="test",
         model_save_filename="test",
-        #Drit å dra sverre
     ):
         # Only to keep the type checker happy
         # gym.register_envs(ale_py)
@@ -75,8 +69,6 @@ class Config:
         self.render = render
 
         # Selfplay
-        self.num_selfplay_games = num_selfplay_games
-        self.max_replay_games = max_replay_games
         self.n_tree_searches = n_tree_searches
 
         self.dirichlet_noise_alpha = diriclet_noise
@@ -86,8 +78,6 @@ class Config:
 
         # Training
         self.learning_rate = learning_rate
-        self.lr_decay_steps = 20
-        self.lr_decay_rate = 0.1
         self.batch_size = batch_size
         self.weight_decay = 1e-4
         self.momentum = 0.9
@@ -97,11 +87,13 @@ class Config:
         self.training_episodes = training_episodes
         self.td_steps = 7 # ????
         self.num_unroll_steps = 5 # ????
+        self.buffer_size = buffer_size
+        self.learning_rate_decay = learning_rate_decay
+        self.learning_rate_decay_steps = learning_rate_decay_steps
 
         # Network 
         self.observation_space_size = observation_space_size
         self.hidden_layer_size = hidden_layer_size
-        self.fine_tune = fine_tune
         
         # PUCT parameters
         self.c1 = c1
@@ -109,18 +101,4 @@ class Config:
         self.eps = epsilon
         self.discount = discount
 
-        # Functions that you might want to customize for your enviroment
-        # self.softmax_policy_fn = softmax_policy_fn
-        # self.encode_game_state_fn = encode_game_state_fn
-
-        # Logging
-        self.info_print_rate = info_print_rate
-
         self.known_bounds = known_bounds
-
-    # def init_game(self) -> gym.Env:
-    #     pass
-    def finetune(self):
-        if self.fine_tune:
-            self.learning_rate = 0.0001
-            # Add further modifications as needed

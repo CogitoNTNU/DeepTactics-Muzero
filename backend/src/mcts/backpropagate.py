@@ -24,6 +24,8 @@ def backpropagate(search_path: List[Node], value: float, to_play: Player, discou
     """
 
     for node in reversed(search_path):
+        if node.to_play != to_play.get_turn_multiplier():
+            print("not cartpole problem")
         node.value_sum += value if node.to_play == to_play.get_turn_multiplier() else -value #//TODO: Uproblematisk for cartpole, men her må man kanskje endre i othello
         node.visits += 1
         min_max_stats.update(node.value())
