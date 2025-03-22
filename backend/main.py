@@ -4,8 +4,6 @@ from src.utils.run_selfplay import run_selfplay
 from src.utils.replay_buffer import ReplayBuffer
 from src.utils.shared_storage import SharedStorage
 import time
-from IPython.display import clear_output
-from matplotlib import pyplot as plt
 import numpy as np
 
 # MuZero training is split into two independent parts: 
@@ -15,7 +13,6 @@ import numpy as np
 # to the training.
 
 def muzero(config: Config):
-    
     storage = SharedStorage()
     replay_buffer = ReplayBuffer()
     
@@ -45,7 +42,6 @@ def muzero(config: Config):
         print('Moving Average (100): ' + str(np.mean(rewards[-100:])))
         print('Moving Average: ' + str(np.mean(rewards)))
         print('Elapsed time: ' + str((time.time() - t) / 60) + ' minutes')       
-        
         """
         plt.plot(rewards)
         plt.plot(moving_averages)
