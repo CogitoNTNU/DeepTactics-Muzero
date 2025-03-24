@@ -1,1 +1,26 @@
-# TODO
+name: Frontend CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build frontend container
+        run: docker compose build frontend
+
+      - name: Start frontend container
+        run: |
+          docker compose up -d frontend
+          sleep 5
+          docker ps
+
+      - name: Shut down containers
+        run: docker compose down
