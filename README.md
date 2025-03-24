@@ -104,7 +104,7 @@ This project would not have been possible without the hard work and dedication o
     </tr>
 </table>
 
-![Group picture](docs/img/team.png)
+![Group picture](docs/images/me-and-the-boys.webp)
 
 ### License
 
