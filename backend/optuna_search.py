@@ -8,20 +8,20 @@ import time
 
 def objective(trial: optuna.Trial):
     # Suggest hyperparameters
-    learning_rate = trial.suggest_float("learning_rate", 0.0001, 0.1, log=True)
-    discount = trial.suggest_float("discount", 0.95, 0.999)
+    learning_rate = trial.suggest_float("learning_rate", 0.0001, 0.25, log=True)
     n_tree_searches = trial.suggest_int("n_tree_searches", 20, 100)
     batch_size = trial.suggest_int("batch_size", 1, 32)
+    hidden_layer_size = trial.suggest_int("hidden_layer", 32, 256)
     
     
     # Create a configuration with the sampled hyperparameters.
     # You can add more parameters as needed.
     config = Config(
         learning_rate=learning_rate,
-        discount=discount,
         n_tree_searches=n_tree_searches,
         batch_size=batch_size,
-        training_episodes=10  # use a small number for quick evaluation
+        hidden_layer_size=hidden_layer_size,
+        training_episodes=15  # use a small number for quick evaluation
     )
     
     # Initialize your replay buffer and network.
