@@ -1,21 +1,41 @@
+import { useState } from "react";
 import { CodeBlock } from "../components/CodeBlock";
-import InputList from "../components/InputList"
-import { configValues } from "../config/muzeroParameters";
+import InputList from "../components/InputList";
+import { configValues as initialConfig } from "../config/muzeroParameters";
 
 export default function MuZeroConfig() {
+  // State to track updated config values
+  const [configValues, setConfigValues] = useState(initialConfig);
+
+  // Function to handle value updates
+  const handleConfigChange = (category: string, updatedValues: Record<string, string>) => {
+    setConfigValues((prevConfig) => ({
+      ...prevConfig,
+      [category]: prevConfig[category].map((param) => ({
+        ...param,
+        defaultValue: updatedValues[param.labelText] || param.defaultValue, // Update only changed values
+      })),
+    }));
+  };
+
+  // Utility function to get the latest value dynamically
+  const getValue = (category: string, index: number) => configValues[category]?.[index]?.defaultValue ?? "N/A";
+
   return (
     <div className="flex flex-col items-center justify-center py-20">
       <h1 className="text-4xl font-bold">Welcome to the config site!</h1>
       <p className="mt-4 text-lg">Finetune the training configs here!</p>
       <div className="pt-10 flex flex-row justify-between w-full">
-        <InputList title="Enviroment" parameters={configValues.environment} />
-        <InputList title="Self Play" parameters={configValues.selfPlay} />
-        <InputList title="Exploration" parameters={configValues.exploration} />
-        <InputList title="Training" parameters={configValues.training} />
-        <InputList title="Neural Network" parameters={configValues.neuralNetwork} />
-        <InputList title="Puct" parameters={configValues.puct} />
-        <InputList title="Logging" parameters={configValues.logging} />
+        {Object.keys(configValues).map((category) => (
+          <InputList
+            key={category}
+            title={category}
+            parameters={configValues[category]}
+            onFormValuesChange={(updatedValues) => handleConfigChange(category, updatedValues)}
+          />
+        ))}
       </div>
+
       <div className="p-10">
         <CodeBlock
           code={`from typing import Optional
@@ -26,29 +46,48 @@ class Config:
         self,
         render=True,
         known_bounds: Optional[KnownBounds] = None,
-        action_space_size=${configValues.environment[0].defaultValue},
-        input_planes=${configValues.environment[1].defaultValue},
-        height=${configValues.environment[2].defaultValue},
-        width=${configValues.environment[3].defaultValue},
-        num_input_moves=${configValues.environment[4].defaultValue},
-        max_moves=${configValues.environment[5].defaultValue},
-        num_selfplay_games=${configValues.selfPlay[0].defaultValue},
-        max_replay_games=${configValues.selfPlay[1].defaultValue},
-        n_tree_searches=${configValues.selfPlay[2].defaultValue},
-        training_episodes=${configValues.training[0].defaultValue},
-        epsilon=${configValues.puct[0].defaultValue},
-        discount=${configValues.puct[1].defaultValue},
-        c1=${configValues.puct[2].defaultValue},
-        c2=${configValues.puct[3].defaultValue},
-        dirichlet_noise=${configValues.exploration[0].defaultValue},
-        dirichlet_exploration_factor=${configValues.exploration[1].defaultValue},
-        batch_size=${configValues.training[1].defaultValue},
-        info_print_rate=${configValues.logging[0].defaultValue},
-        training_interval=${configValues.training[2].defaultValue},
-        learning_rate=${configValues.training[3].defaultValue},
-        hidden_layer_size=${configValues.neuralNetwork[0].defaultValue},
-        observation_space_size=${configValues.neuralNetwork[1].defaultValue},
-        num_training_rolluts=${configValues.training[4].defaultValue},
+
+        # Environment settings
+        action_space_size=${getValue("environment", 0)},
+        input_planes=${getValue("environment", 1)},
+        height=${getValue("environment", 2)},
+        width=${getValue("environment", 3)},
+        num_input_moves=${getValue("environment", 4)},
+        max_moves=${getValue("environment", 5)},
+
+        # Self-play settings
+        num_selfplay_games=${getValue("selfPlay", 0)},
+        max_replay_games=${getValue("selfPlay", 1)},
+        n_tree_searches=${getValue("selfPlay", 2)},
+
+        # Exploration settings
+        dirichlet_noise=${getValue("exploration", 0)},
+        dirichlet_exploration_factor=${getValue("exploration", 1)},
+
+        # Training settings
+        training_episodes=${getValue("training", 0)},
+        training_interval=${getValue("training", 1)},
+        learning_rate=${getValue("training", 2)},
+        batch_size=${getValue("training", 3)},
+        momentum=${getValue("training", 4)},
+        weight_decay=${getValue("training", 5)},
+        lr_decay_steps=${getValue("training", 6)},
+        lr_decay_rate=${getValue("training", 7)},
+        num_training_rollouts=${getValue("training", 8)},
+
+        # Neural network settings
+        hidden_layer_size=${getValue("neuralNetwork", 0)},
+        observation_space_size=${getValue("neuralNetwork", 1)},
+
+        # PUCT (policy improvement) settings
+        epsilon=${getValue("puct", 0)},
+        discount=${getValue("puct", 1)},
+        c1=${getValue("puct", 2)},
+        c2=${getValue("puct", 3)},
+
+        # Logging settings
+        info_print_rate=${getValue("logging", 0)},
+
     ):`}
           language="python"
         />

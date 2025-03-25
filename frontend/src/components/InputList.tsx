@@ -10,11 +10,13 @@ interface Parameter {
 interface EnvironmentParametersFormProps {
   title: string;
   parameters: Parameter[];
+  onFormValuesChange: (values: Record<string, string>) => void; // Notify parent
 }
 
 export default function EnvironmentParametersForm({
   title,
   parameters,
+  onFormValuesChange,
 }: EnvironmentParametersFormProps) {
   // Initialize state to store input values
   const [formValues, setFormValues] = useState(
@@ -26,10 +28,11 @@ export default function EnvironmentParametersForm({
 
   // Function to update state when an input changes
   const handleValueChange = (labelText: string, value: string) => {
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [labelText]: value,
-    }));
+    setFormValues((prevValues) => {
+      const newValues = { ...prevValues, [labelText]: value };
+      onFormValuesChange(newValues); // Notify parent
+      return newValues;
+    });
   };
 
   return (
@@ -43,16 +46,6 @@ export default function EnvironmentParametersForm({
           onValueChange={handleValueChange} // Pass callback to child
         />
       ))}
-
-      {/* Display updated values */}
-      <p className="mt-4 font-medium">Current values:</p>
-      <ul className="list-disc pl-5">
-        {Object.entries(formValues).map(([label, value]) => (
-          <li key={label}>
-            <strong>{label}:</strong> {value}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
