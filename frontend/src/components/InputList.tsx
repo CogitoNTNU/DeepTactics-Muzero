@@ -2,7 +2,7 @@ import InputWithTooltip from "./InputWithTooltip";
 
 interface Parameter {
   labelText: string;
-  value: number;
+  defaultValue: number;
   tooltipMessage: string;
 }
 

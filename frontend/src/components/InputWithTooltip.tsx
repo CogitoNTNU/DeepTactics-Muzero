@@ -5,11 +5,11 @@ import { Info } from "lucide-react";
 
 interface InputWithTooltipProps {
   labelText: string;
-  value: number;
+  defaultValue: number;
   tooltipMessage: string;
 }
 
-export default function InputWithTooltip({ labelText, value, tooltipMessage }: InputWithTooltipProps) {
+export default function InputWithTooltip({ labelText, defaultValue, tooltipMessage }: InputWithTooltipProps) {
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex items-center space-x-2">
@@ -21,7 +21,7 @@ export default function InputWithTooltip({ labelText, value, tooltipMessage }: I
           <TooltipContent>{tooltipMessage}</TooltipContent>
         </Tooltip>
       </div>
-      <Input id="input-field" placeholder={value.toString()} defaultValue={value} />
+      <Input id="input-field" placeholder={defaultValue.toString()} defaultValue={defaultValue} />
     </div>
   );
 }
