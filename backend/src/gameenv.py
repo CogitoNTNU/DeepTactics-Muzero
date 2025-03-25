@@ -79,9 +79,9 @@ class Game(object):
     self.episode_over = self.terminal()
 
   def store_search_statistics(self, root: Node):
-    sum_visits = sum(child.value() for child in root.children.values())
+    sum_visits = sum(child.visits for child in root.children.values())
     action_space = (index for index in range(self.action_space_size))
-    self.child_visits.append([root.children[a].value() / sum_visits if a in root.children else 0 for a in action_space])
+    self.child_visits.append([root.children[a].visits / sum_visits if a in root.children else 0 for a in action_space])
     self.root_values.append(root.value())
 
   def make_image(self, state_index: int):
