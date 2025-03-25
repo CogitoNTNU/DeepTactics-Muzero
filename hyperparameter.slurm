@@ -1,7 +1,7 @@
 #!/bin/sh
 #SBATCH --account=studiegrupper-cogito
 #SBATCH --job-name=NEAT26
-#SBATCH --time=0-00:03:00         # format: D-HH:MM:SS
+#SBATCH --time=0-00:20:00         # format: D-HH:MM:SS
 #SBATCH --partition=CPUQ          # Asking for a GPU
 #SBATCH --mem=8G                 # Asking for xGB RAM
 #SBATCH --nodes=1
