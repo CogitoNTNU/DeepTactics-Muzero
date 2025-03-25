@@ -27,7 +27,7 @@ def muzero(config: Config):
             
             # self-play
             run_selfplay(config, model, replay_buffer)
-            
+
             # print and plot rewards
             game = replay_buffer.last_game()
             
