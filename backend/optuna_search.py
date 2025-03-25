@@ -54,7 +54,7 @@ if __name__ == "__main__":
     study = optuna.create_study(direction="minimize")
     
     # Run the hyperparameter optimization for a defined number of trials.
-    study.optimize(objective, n_trials=50)
+    study.optimize(objective, n_trials=50, n_jobs=16)
     
     # Print the best trial results.
     print("Best trial:")

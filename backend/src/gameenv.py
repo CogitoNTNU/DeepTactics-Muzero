@@ -1,5 +1,4 @@
 import gymnasium as gym
-import ale_py
 from src.mcts.node import Node
 from src.game.player import Player
 
@@ -82,8 +81,8 @@ class Game(object):
     sum_visits = sum(child.visits for child in root.children.values())
     action_space = (index for index in range(self.action_space_size))
     self.child_visits.append([root.children[a].visits / sum_visits if a in root.children else 0 for a in action_space])
-    self.root_values.append(root.value())
 
+    self.root_values.append(root.value())
   def make_image(self, state_index: int):
     # Game specific feature planes.
     return self.observations[state_index]
