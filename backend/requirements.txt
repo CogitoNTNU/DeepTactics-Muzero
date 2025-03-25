@@ -44,4 +44,5 @@ gymnasium[classic-control]==1.1.0
 IPython
 pre-commit
 torch
+optuna
     

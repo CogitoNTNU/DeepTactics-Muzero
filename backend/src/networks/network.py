@@ -73,21 +73,21 @@ class Network(nn.Module):
         # Representation: from raw observation to hidden state.
         self.representation = nn.Sequential(
             nn.Linear(config.observation_space_size, config.hidden_layer_size),
-            nn.ReLU(),
+            nn.ELU(),
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
         )
 
         # Value head: predicts scalar value from hidden state.
         self.value_head = nn.Sequential(
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
-            nn.ReLU(),
+            nn.ELU(),
             nn.Linear(config.hidden_layer_size, 1),
         )
 
         # Policy head: predicts action probabilities from hidden state.
         self.policy_head = nn.Sequential(
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
-            nn.ReLU(),
+            nn.ELU(),
             nn.Linear(config.hidden_layer_size, config.action_space_size),
             nn.Softmax(dim=-1)
         )
@@ -96,14 +96,14 @@ class Network(nn.Module):
         self.dynamics = nn.Sequential(
             nn.Linear(config.hidden_layer_size +
                       config.action_space_size, config.hidden_layer_size),
-            nn.ReLU(),
+            nn.ELU(),
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size)
         )
 
         # Reward head: same input as dynamics, but outputs a scalar reward.
         self.reward_head = nn.Sequential(
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
-            nn.ReLU(),
+            nn.ELU(),
             nn.Linear(config.hidden_layer_size, 1),
         )
 
