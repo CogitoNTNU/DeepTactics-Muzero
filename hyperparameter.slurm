@@ -5,7 +5,7 @@
 #SBATCH --partition=CPUQ          # Asking for a GPU
 #SBATCH --mem=8G                 # Asking for xGB RAM
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=1 # x CPU cores
+#SBATCH --cpus-per-task=16 # x CPU cores
 #SBATCH --output=idun-log.txt      # Specifying ‘stdout’
 #SBATCH --error=idun-log.err        # Specifying ‘stderr’
 #SBATCH --mail-user=chrisfjo@stud.ntnu.no
