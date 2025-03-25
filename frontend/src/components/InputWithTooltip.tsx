@@ -8,17 +8,21 @@ interface InputWithTooltipProps {
   labelText: string;
   defaultValue: number;
   tooltipMessage: string;
+  onValueChange: (label: string, value: string) => void; // Callback to send data to parent
 }
 
 export default function InputWithTooltip({
   labelText,
   defaultValue,
   tooltipMessage,
+  onValueChange,
 }: InputWithTooltipProps) {
-  const [inputValue, setInputValue] = useState(defaultValue.toString()); // Initialize with defaultValue as a string
+  const [inputValue, setInputValue] = useState(defaultValue.toString());
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value); // Extract the value from the event and update state
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    onValueChange(labelText, newValue); // Send value to parent
   };
 
   return (
@@ -34,8 +38,8 @@ export default function InputWithTooltip({
       </div>
       <Input
         id="input-field"
-        value={inputValue} // Bind the input value to the state
-        onChange={handleInputChange} // Pass the handleInputChange function to update state
+        value={inputValue}
+        onChange={handleInputChange}
         type="text"
         placeholder={defaultValue.toString()}
       />
