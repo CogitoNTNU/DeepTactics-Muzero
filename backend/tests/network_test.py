@@ -32,7 +32,8 @@ def test_initial_inference():
     # hidden_state should have shape [1, hidden_layer_size]
     assert output.hidden_state.shape == (1, config.hidden_layer_size)
     # policy_logits should have the same length as action_space_size
-    assert len(output.policy_logits) == config.action_space_size
+    assert output.policy_logits.shape[1] == config.action_space_size
+
 
 
 def test_recurrent_inference():
@@ -50,7 +51,9 @@ def test_recurrent_inference():
     assert rec_output.value.shape == (1, 1)
     assert rec_output.reward.shape == (1, 1)
     assert rec_output.hidden_state.shape == (1, config.hidden_layer_size)
-    assert len(rec_output.policy_logits) == config.action_space_size
+    print(rec_output.policy_logits)
+    assert rec_output.policy_logits.shape[1] == config.action_space_size
+
 
 
 def test_residual_block():
