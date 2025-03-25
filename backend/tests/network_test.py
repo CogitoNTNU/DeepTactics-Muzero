@@ -33,6 +33,8 @@ def test_initial_inference():
     assert output.hidden_state.shape == (1, config.hidden_layer_size)
     # policy_logits should have the same length as action_space_size
     assert output.policy_logits.shape[1] == config.action_space_size
+    assert sum(output.policy_logits[0]) == 1
+    
 
 
 
@@ -51,8 +53,9 @@ def test_recurrent_inference():
     assert rec_output.value.shape == (1, 1)
     assert rec_output.reward.shape == (1, 1)
     assert rec_output.hidden_state.shape == (1, config.hidden_layer_size)
-    print(rec_output.policy_logits)
     assert rec_output.policy_logits.shape[1] == config.action_space_size
+    assert sum(rec_output.policy_logits[0]) == 1
+
 
 
 
