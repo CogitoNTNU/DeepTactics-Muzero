@@ -15,7 +15,7 @@ class Config:
         render = False,
         visit_softmax_temperature_fn = visit_softmax_temperature,
         known_bounds: Optional[KnownBounds] = None,
-        action_space_size: int = 2,  # 2 legal actions in cartpole
+        action_space_size: int = 9,  # 9 in tic-tac-toe, 2 legal actions in cartpole
         input_planes: int = 128,  # 3 rbg planes * 32 last states + 32 last actions (othello)
         height: int = 8,  # Pixel height and with (othello)
         width: int = 8, #othello
