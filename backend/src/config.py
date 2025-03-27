@@ -4,7 +4,7 @@ from src.utils.minmaxstats import KnownBounds
 def visit_softmax_temperature(num_moves, training_steps):
     if training_steps < 100:
         return 1.0
-    elif training_steps < 400:
+    elif training_steps < 250:
         return 0.5
     else:
         return 0.25
@@ -31,20 +31,18 @@ class Config:
         diriclet_noise=0.25,
         # Set this to 0 for deterministic prior probabilites
         dirichlet_exploaration_factor=0.25,
-        batch_size=1,
-        training_interval=50,
-        learning_rate: float = 0.02,
-        learning_rate_decay: float = 0.95,
-        learning_rate_decay_steps: float = 100,
-        hidden_layer_size: int = 16,
+        batch_size=2,
+        epochs=25,
+        training_interval=100,
+        learning_rate: float = 0.0277,
+        learning_rate_decay: float = 0.995,
+        learning_rate_decay_steps: float = 1000,
+        hidden_layer_size: int = 188,
         observation_space_size: int = 4,
-        buffer_size = 500, 
+        buffer_size = 750, 
         model_load_filename="test2",
         model_save_filename="test",
     ):
-        # Only to keep the type checker happy
-        # gym.register_envs(ale_py)
-
         # Environment
         self.action_space_size = action_space_size
         self.max_moves = max_moves
@@ -71,8 +69,9 @@ class Config:
         self.model_load_filepath = "models/" + game_name + "/" + model_load_filename
         self.model_save_filepath = "models/" + game_name + "/" + model_save_filename
         self.training_episodes = training_episodes
-        self.td_steps = 7 # ????
-        self.num_unroll_steps = 5 # ????
+        self.td_steps = 50 # ????
+        self.num_unroll_steps = 10 # ????
+        self.epochs = epochs
         self.buffer_size = buffer_size
         self.learning_rate_decay = learning_rate_decay
         self.learning_rate_decay_steps = learning_rate_decay_steps
@@ -88,3 +87,4 @@ class Config:
         self.discount = discount
 
         self.known_bounds = known_bounds
+

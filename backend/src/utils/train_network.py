@@ -41,7 +41,7 @@ def calculate_loss(batch_coll: list) -> torch.Tensor:
                 reward_loss = torch.tensor(0.0, requires_grad=True)
 
             if target_policy != []:
-                policy_loss = F.cross_entropy(policy_t, torch.tensor([target_policy]))
+                policy_loss = F.cross_entropy(policy_t.log(), torch.tensor([target_policy]))
             else:
                 policy_loss = torch.tensor(0.0, requires_grad=True)
             
@@ -52,14 +52,14 @@ def calculate_loss(batch_coll: list) -> torch.Tensor:
             reward_loss.register_hook(lambda gradient: gradient / gradient_scale)
             policy_loss.register_hook(lambda gradient: gradient / gradient_scale)
             ''
-            print(f"Pred reward: {reward}, actual reward: {target_reward}, Loss: {reward_loss}")
-            print(f"Pred value: {value}, actual value: {target_value}, Loss: {value_loss}")
-            print(f"Pred policy: {policy_t}, actual policy: {target_policy}, Loss: {policy_loss}\n")
+            #print(f"Pred reward: {reward}, actual reward: {target_reward}, Loss: {reward_loss}")
+            #print(f"Pred value: {value}, actual value: {target_value}, Loss: {value_loss}")
+            #print(f"Pred policy: {policy_t}, actual policy: {target_policy}, Loss: {policy_loss}\n")
 
             #print("L_c:", l_c, "L_b:", l_b, "L_a:", l_a)
             # 0.25 from reanalize appendix
             loss += (policy_loss * 0.25 + reward_loss + value_loss)
-    return loss.mean()
+    return loss / len(batch_coll)
 
 
 def update_weights(optimizer: torch.optim.Optimizer, network: Network, batch: list) -> torch.Tensor:
@@ -118,18 +118,22 @@ def train_network(config: Config, network: Network, replay_buffer: ReplayBuffer,
     """
     network.train()
 
-    for _ in range(25):
+    for e in range(config.epochs):
         # learning_rate = config.learning_rate * config.lr_decay_rate**(iterations / config.lr_decay_steps)
         if(iterations>=config.learning_rate_decay_steps):
-            optimizer = optim.SGD(network.parameters(), lr=config.learning_rate*config.learning_rate_decay**config.learning_rate_decay_steps, momentum=config.momentum, weight_decay=config.weight_decay)
+            lr=config.learning_rate*config.learning_rate_decay**config.learning_rate_decay_steps
+            optimizer = optim.SGD(network.parameters(), lr=lr, momentum=config.momentum, weight_decay=config.weight_decay)
         else:
-            optimizer = optim.SGD(network.parameters(), lr=config.learning_rate*config.learning_rate_decay**(iterations+1), momentum=config.momentum, weight_decay=config.weight_decay)
-    
+            lr = config.learning_rate*config.learning_rate_decay**(network.tot_training_steps+1)
+            optimizer = optim.SGD(network.parameters(), lr=lr, momentum=config.momentum, weight_decay=config.weight_decay)
+            ''
         # Sample batch from replay buffer
         batch = replay_buffer.sample_batch(config.num_unroll_steps, config.td_steps, config.action_space_size)
 
         # Compute loss
         loss = update_weights(optimizer, network, batch)
+        #if e % 5 == 0:
+        #    print(f"Loss on epoch: {e}: {loss}. LR: {lr}, tot_training_steps: {network.tot_training_steps}")
 
         # Update training steps counter
         network.tot_training_steps += 1
