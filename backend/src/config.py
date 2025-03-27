@@ -21,7 +21,7 @@ class Config:
         width: int = 8, #othello
         # Number of moves that is used as input to representation model
         max_moves: float = 500,  # Max moves before game ends
-        game_name: str = "CartPole-v1", #"ALE/Breakout-v5",
+        game_name: str = 'tictactoe-v0', #"ALE/Breakout-v5",
         n_tree_searches=50,
         training_episodes=100_000, #how many training loops
         epsilon: float = 0.001,
