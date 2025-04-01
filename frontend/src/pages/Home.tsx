@@ -45,11 +45,11 @@ export default function Home() {
         </div>
 
         {/* Gooey Effect Section */}
-        <div className="relative w-screen -mx-[20%] min-h-[500px] flex flex-col items-center justify-center overflow-hidden">
+        <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen min-h-[500px] flex flex-col items-center justify-center overflow-hidden">
           <img
             src="https://images.aiscribbles.com/34fe5695dbc942628e3cad9744e8ae13.png?v=60d084"
             alt="impressionist painting"
-            className="w-full h-full object-cover absolute inset-0 opacity-70 scale-110"
+            className="w-full h-full object-cover absolute inset-0 opacity-70"
           />
           <GooeyFilter id="gooey-filter-pixel-trail" strength={5} />
           <div
