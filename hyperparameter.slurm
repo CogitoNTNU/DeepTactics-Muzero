@@ -27,4 +27,4 @@ pip list
 
 python --version
 cd backend
-python optuna_search.py >& log_file.txt
+python optuna_search.py &> log_file.txt

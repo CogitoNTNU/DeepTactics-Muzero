@@ -13,7 +13,7 @@ def select_child(config: Config,  node: Node, min_max_stats: MinMaxStats):
     # The score for a node is based on its value, plus an exploration bonus based on the prior.
 
 def puct_score(config: Config, node: Node, child: Node, min_max_stats: MinMaxStats):
-    pb_c = math.log((node.visits + config.c1 + 1) / config.c1) + config.c2
+    pb_c = math.log((node.visits + config.c2 + 1) / config.c1) + config.c1
     pb_c *= math.sqrt(node.visits) / (child.visits + 1)
 
     prior_score = pb_c * child.policy_value
