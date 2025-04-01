@@ -7,6 +7,7 @@ export default function GameHome() {
       <div className="flex space-x-4">
         <Link to="./othello" className="text-blue-500 hover:underline">Othello</Link>
         <Link to="./cartpole" className="text-blue-500 hover:underline">CartPole</Link>
+        <Link to="./tictactoe" className="text-blue-500 hover:underline">TicTacToe</Link>
       </div>
 
       <div className="mt-8">

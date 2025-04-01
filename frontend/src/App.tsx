@@ -6,6 +6,7 @@ import About from './pages/About';
 import GameHome from './pages/games/GameHome';
 import Othello from './pages/games/Othello';
 import CartPole from './pages/games/CartPole';
+import TicTacToe from './pages/games/TicTacToe';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/watch" element={<GameHome />}>
             <Route path="othello" element={<Othello />} />
             <Route path="cartpole" element={<CartPole />} />
+            <Route path="tictactoe" element={<TicTacToe />} />
           </Route>
         </Routes>
       </div>
