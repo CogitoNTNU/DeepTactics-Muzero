@@ -31,17 +31,46 @@ export default function Home() {
         <div className="text-center space-y-6">
           <h1 className="text-4xl font-bold">Welcome to MuZero Implementation</h1>
           <div className="space-y-4 text-lg">
-            <p className="border border-white/10 bg-white/5 backdrop-blur-sm p-6 rounded-lg">
+            <p>
               This project is our implementation of MuZero, the groundbreaking reinforcement learning algorithm developed by DeepMind. 
               We've built this from scratch following the official research paper, aiming to recreate its remarkable ability to master 
               games without prior knowledge of their rules.
             </p>
-            <p className="border border-white/10 bg-white/5 backdrop-blur-sm p-6 rounded-lg">
+            <p>
               Our implementation focuses on three classic games: Othello, TicTacToe, and CartPole, demonstrating MuZero's 
               versatility across different types of environments. We've carefully followed the architecture and training 
               procedures outlined in the original paper while optimizing for performance and clarity.
             </p>
           </div>
+        </div>
+
+        {/* Gooey Effect Section */}
+        <div className="relative w-full min-h-[400px] flex flex-col items-center justify-center">
+          <img
+            src="https://images.aiscribbles.com/34fe5695dbc942628e3cad9744e8ae13.png?v=60d084"
+            alt="impressionist painting"
+            className="w-full h-full object-cover absolute inset-0 opacity-70"
+          />
+          <GooeyFilter id="gooey-filter-pixel-trail" strength={5} />
+          <div
+            className="absolute inset-0 z-0"
+            style={{ filter: "url(#gooey-filter-pixel-trail)" }}
+          >
+            <PixelTrail
+              pixelSize={screenSize.lessThan("md") ? 24 : 32}
+              fadeDuration={100}
+              delay={16}
+              pixelClassName="bg-white"
+            />
+          </div>
+          <button
+            onClick={handleMuzeroPaperClick}
+            className="text-white text-6xl z-10 font-bold group flex items-center gap-4 hover:text-blue-400 transition-colors duration-300"
+            aria-label="Read the MuZero paper by DeepMind"
+          >
+            Muzero-Paper
+            <ArrowUpRight className="w-8 h-8 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+          </button>
         </div>
 
         {/* Neural Network Architecture Section */}
@@ -87,30 +116,6 @@ export default function Home() {
               className="w-full max-w-3xl mx-auto mt-8 rounded-lg border border-white/10"
             />
           </div>
-        </div>
-
-        {/* Gooey Effect Section */}
-        <div className="relative w-full min-h-[400px] flex flex-col items-center justify-center">
-          <GooeyFilter id="gooey-filter-pixel-trail" strength={5} />
-          <div
-            className="absolute inset-0 z-0"
-            style={{ filter: "url(#gooey-filter-pixel-trail)" }}
-          >
-            <PixelTrail
-              pixelSize={screenSize.lessThan("md") ? 24 : 32}
-              fadeDuration={100}
-              delay={16}
-              pixelClassName="bg-white"
-            />
-          </div>
-          <button
-            onClick={handleMuzeroPaperClick}
-            className="text-white text-6xl z-10 font-bold group flex items-center gap-4 hover:text-blue-400 transition-colors duration-300"
-            aria-label="Read the MuZero paper by DeepMind"
-          >
-            Muzero-Paper
-            <ArrowUpRight className="w-8 h-8 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-          </button>
         </div>
 
         {/* Test Backend Section */}
