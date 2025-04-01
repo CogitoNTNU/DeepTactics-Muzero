@@ -45,11 +45,11 @@ export default function Home() {
         </div>
 
         {/* Gooey Effect Section */}
-        <div className="relative w-screen -mx-[20%] min-h-[500px] flex flex-col items-center justify-center">
+        <div className="relative w-screen -mx-[20%] min-h-[500px] flex flex-col items-center justify-center overflow-hidden">
           <img
             src="https://images.aiscribbles.com/34fe5695dbc942628e3cad9744e8ae13.png?v=60d084"
             alt="impressionist painting"
-            className="w-full h-full object-cover absolute inset-0 opacity-70"
+            className="w-full h-full object-cover absolute inset-0 opacity-70 scale-110"
           />
           <GooeyFilter id="gooey-filter-pixel-trail" strength={5} />
           <div
@@ -76,46 +76,44 @@ export default function Home() {
         {/* Neural Network Architecture Section */}
         <div className="space-y-8 text-center">
           <h2 className="text-3xl font-semibold">Neural Network Architecture</h2>
-          <div className="border border-white/10 bg-white/5 backdrop-blur-sm p-8 rounded-lg space-y-6">
-            <p className="text-lg">
-              Our implementation features a sophisticated neural network architecture that forms the core of the MuZero algorithm.
-              This architecture consists of three key components working together to achieve state-of-the-art performance:
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-              <div className="flex flex-col items-center space-y-4 p-6 border border-white/10 rounded-lg bg-white/5">
-                <div className="p-3 rounded-full bg-blue-500/20">
-                  <Brain className="w-6 h-6 text-blue-400" />
-                </div>
-                <h3 className="font-semibold">Representation Network</h3>
-                <p className="text-sm text-gray-300">
-                  Processes the game state into a hidden representation, capturing essential features for decision making.
-                </p>
+          <p className="text-lg">
+            Our implementation features a sophisticated neural network architecture that forms the core of the MuZero algorithm.
+            This architecture consists of three key components working together to achieve state-of-the-art performance:
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <div className="flex flex-col items-center space-y-4 p-6 border border-white/10 rounded-lg bg-white/5">
+              <div className="p-3 rounded-full bg-blue-500/20">
+                <Brain className="w-6 h-6 text-blue-400" />
               </div>
-              <div className="flex flex-col items-center space-y-4 p-6 border border-white/10 rounded-lg bg-white/5">
-                <div className="p-3 rounded-full bg-purple-500/20">
-                  <Cpu className="w-6 h-6 text-purple-400" />
-                </div>
-                <h3 className="font-semibold">Dynamics Network</h3>
-                <p className="text-sm text-gray-300">
-                  Predicts the next state and rewards, enabling internal planning without explicit game rules.
-                </p>
-              </div>
-              <div className="flex flex-col items-center space-y-4 p-6 border border-white/10 rounded-lg bg-white/5">
-                <div className="p-3 rounded-full bg-teal-500/20">
-                  <Zap className="w-6 h-6 text-teal-400" />
-                </div>
-                <h3 className="font-semibold">Prediction Network</h3>
-                <p className="text-sm text-gray-300">
-                  Evaluates positions and suggests optimal actions through policy and value predictions.
-                </p>
-              </div>
+              <h3 className="font-semibold">Representation Network</h3>
+              <p className="text-sm text-gray-300">
+                Processes the game state into a hidden representation, capturing essential features for decision making.
+              </p>
             </div>
-            <img 
-              src="/images/nn.png" 
-              alt="Neural Network Architecture" 
-              className="w-full max-w-3xl mx-auto mt-8 rounded-lg border border-white/10"
-            />
+            <div className="flex flex-col items-center space-y-4 p-6 border border-white/10 rounded-lg bg-white/5">
+              <div className="p-3 rounded-full bg-purple-500/20">
+                <Cpu className="w-6 h-6 text-purple-400" />
+              </div>
+              <h3 className="font-semibold">Dynamics Network</h3>
+              <p className="text-sm text-gray-300">
+                Predicts the next state and rewards, enabling internal planning without explicit game rules.
+              </p>
+            </div>
+            <div className="flex flex-col items-center space-y-4 p-6 border border-white/10 rounded-lg bg-white/5">
+              <div className="p-3 rounded-full bg-teal-500/20">
+                <Zap className="w-6 h-6 text-teal-400" />
+              </div>
+              <h3 className="font-semibold">Prediction Network</h3>
+              <p className="text-sm text-gray-300">
+                Evaluates positions and suggests optimal actions through policy and value predictions.
+              </p>
+            </div>
           </div>
+          <img 
+            src="/images/nn.png" 
+            alt="Neural Network Architecture" 
+            className="w-full max-w-3xl mx-auto mt-8 rounded-lg border border-white/10"
+          />
         </div>
 
         {/* Test Backend Section */}
