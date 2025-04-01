@@ -45,7 +45,7 @@ export default function Home() {
         </div>
 
         {/* Gooey Effect Section */}
-        <div className="relative w-full min-h-[400px] flex flex-col items-center justify-center">
+        <div className="relative w-screen -mx-[20%] min-h-[500px] flex flex-col items-center justify-center">
           <img
             src="https://images.aiscribbles.com/34fe5695dbc942628e3cad9744e8ae13.png?v=60d084"
             alt="impressionist painting"
@@ -65,7 +65,7 @@ export default function Home() {
           </div>
           <button
             onClick={handleMuzeroPaperClick}
-            className="text-white text-6xl z-10 font-bold group flex items-center gap-4 hover:text-blue-400 transition-colors duration-300"
+            className="text-white text-7xl z-10 font-bold group flex items-center gap-4 hover:text-blue-400 transition-colors duration-300"
             aria-label="Read the MuZero paper by DeepMind"
           >
             Muzero-Paper
@@ -111,7 +111,7 @@ export default function Home() {
               </div>
             </div>
             <img 
-              src="/nn.png" 
+              src="/images/nn.png" 
               alt="Neural Network Architecture" 
               className="w-full max-w-3xl mx-auto mt-8 rounded-lg border border-white/10"
             />
