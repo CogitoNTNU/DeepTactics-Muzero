@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import { StackingNavbar } from './components/ui/stacking-navbar';
 import Home from './pages/Home';
 import MuZeroConfig from './pages/MuZeroConfig';
 import About from './pages/About';
@@ -11,7 +11,7 @@ import TicTacToe from './pages/games/TicTacToe';
 function App() {
   return (
     <div className="min-h-screen text-foreground">
-      <Navbar />
+      <StackingNavbar />
       <div className="container mx-auto p-4">
         <Routes>
           <Route path="/" element={<Home />} />
