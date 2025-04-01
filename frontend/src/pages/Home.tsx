@@ -25,7 +25,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-20 space-y-12 text-white">
+    <div className="flex flex-col items-center justify-center pt-40 pb-20 space-y-12 text-white">
       <div className="text-center max-w-4xl mx-auto space-y-6">
         <h1 className="text-4xl font-bold">Welcome to MuZero Implementation</h1>
         <div className="space-y-4 text-lg">

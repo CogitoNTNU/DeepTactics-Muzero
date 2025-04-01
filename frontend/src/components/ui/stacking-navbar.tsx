@@ -14,7 +14,7 @@ const StackingNavbar = () => {
   ];
 
   return (
-    <nav className="w-full py-6 bg-black/20 backdrop-blur-sm">
+    <nav className="fixed top-0 left-0 right-0 w-full py-6 bg-black/20 backdrop-blur-sm z-50">
       <div className="max-w-7xl mx-auto flex flex-col items-center gap-4">
         {/* Logo and Home link */}
         <Link 
@@ -61,7 +61,7 @@ const NavbarItem = ({
 }) => {
   return (
     <Link
-      className="flex items-center text-sm px-5 py-3 rounded-lg text-white hover:text-blue-400 hover:bg-white/5 transition-all duration-300"
+      className="flex items-center text-sm px-5 py-3 rounded-3xl bg-[#b0aaaa1a] text-white hover:text-blue-400 hover:bg-white/10 transition-all duration-300"
       to={to}
       style={style}
     >
