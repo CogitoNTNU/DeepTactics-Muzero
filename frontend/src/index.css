@@ -116,5 +116,8 @@
   }
   body {
     @apply bg-background text-foreground;
+    background: rgb(53,145,62);
+    background: radial-gradient(circle, rgba(53,145,62,1) 34%, rgba(0,134,255,1) 100%);
+    min-height: 100vh;
   }
 }

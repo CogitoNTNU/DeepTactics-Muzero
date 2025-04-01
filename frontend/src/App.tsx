@@ -10,7 +10,7 @@ import TicTacToe from './pages/games/TicTacToe';
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#242424] text-[rgba(255,255,255,0.87)]">
+    <div className="min-h-screen text-foreground">
       <Navbar />
       <div className="container mx-auto p-4">
         <Routes>
