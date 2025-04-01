@@ -1,14 +1,14 @@
 import ImageCard from "../components/ImageCard";
 
 const teamMembers = [
-  { imageSrc: "../../public/brage.JPG", title: "Brage", description: "Datateknologi", github: "https://github.com/brage", linkedin: "https://linkedin.com/in/brage" },
-  { imageSrc: "../../public/christian.JPG", title: "Christian", description: "Datateknologi", github: "https://github.com/christian", linkedin: "https://linkedin.com/in/christian" },
-  { imageSrc: "../../public/eirik.JPG", title: "Eirik", description: "Datateknologi", github: "https://github.com/eirik", linkedin: "https://linkedin.com/in/eirik" },
-  { imageSrc: "../../public/kristian.JPG", title: "Kristian", description: "Datateknologi", github: "https://github.com/kristian", linkedin: "https://linkedin.com/in/kristian" },
-  { imageSrc: "../../public/ludvig.JPG", title: "Ludvig", description: "Informatikk", github: "https://github.com/ludvig", linkedin: "https://linkedin.com/in/ludvig" },
-  { imageSrc: "../../public/magnus.JPG", title: "Magnus", description: "Datateknologi", github: "https://github.com/magnus", linkedin: "https://linkedin.com/in/magnus" },
-  { imageSrc: "../../public/nicolai.JPG", title: "Nicolai", description: "Datateknologi", github: "https://github.com/nicolai", linkedin: "https://linkedin.com/in/nicolai" },
-  { imageSrc: "../../public/vegard.JPG", title: "Vegard", description: "Datateknologi", github: "https://github.com/vegard", linkedin: "https://linkedin.com/in/vegard" },
+  { imageSrc: "../../public/brage.JPG", title: "Brage", description: "Datateknologi", github: "https://github.com/BrageHK", linkedin: "https://linkedin.com/in/brage" },
+  { imageSrc: "../../public/christian.JPG", title: "Christian", description: "Datateknologi", github: "https://github.com/ChristianFredrikJohnsen", linkedin: "https://linkedin.com/in/christian" },
+  { imageSrc: "../../public/eirik.JPG", title: "Eirik", description: "Datateknologi", github: "https://github.com/Eiriksol", linkedin: "https://linkedin.com/in/eirik" },
+  { imageSrc: "../../public/kristian.JPG", title: "Kristian", description: "Datateknologi", github: "https://github.com/kristiancarlenius", linkedin: "https://linkedin.com/in/kristian" },
+  { imageSrc: "../../public/ludvig.JPG", title: "Ludvig", description: "Informatikk", github: "https://github.com/ludvigovrevik", linkedin: "https://linkedin.com/in/ludvig" },
+  { imageSrc: "../../public/magnus.JPG", title: "Magnus", description: "Datateknologi", github: undefined, linkedin: "https://linkedin.com/in/magnus" },
+  { imageSrc: "../../public/nicolai.JPG", title: "Nicolai", description: "Datateknologi", github: "https://github.com/Nicolai9897", linkedin: "https://linkedin.com/in/nicolai" },
+  { imageSrc: "../../public/vegard.JPG", title: "Vegard", description: "Datateknologi", github: "https://github.com/Vegardhgr", linkedin: "https://linkedin.com/in/vegard" },
 ];
 
 export default function About() {
