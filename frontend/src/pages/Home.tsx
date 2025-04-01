@@ -19,21 +19,9 @@ export default function Home() {
   }; 
 
   return (
-    <div className="flex flex-col items-center justify-center py-20 space-y-12">
-      <div>
+    <div className="flex flex-col items-center justify-center py-20 space-y-12 text-white">
+      <div className="text-center">
         <h1 className="text-4xl font-bold">Welcome to MuZero</h1>
-        <p className="mt-4 text-lg">This is the main page.</p>
-
-        {/* API Test Button */}
-        <button
-          onClick={testBackend}
-          className="mt-4 px-4 py-2 bg-blue-500 rounded hover:bg-teal-600"
-        >
-          Test Backend
-        </button>
-
-        {/* Show API Response */}
-        <p className="mt-4">{response}</p>
       </div>
 
       {/* Gooey Effect Section */}
@@ -58,9 +46,23 @@ export default function Home() {
           />
         </div>
 
-        <p className="text-white text-7xl z-10 font-bold w-1/2">
+        <p className="text-white text-7xl z-10 font-bold">
           Muzero-Paper
         </p>
+      </div>
+
+      {/* Test Backend Section */}
+      <div className="text-center space-y-4">
+        <p className="text-lg">This is the main page.</p>
+        <button
+          onClick={testBackend}
+          className="px-6 py-3 bg-blue-500 rounded-lg hover:bg-teal-600 transition-colors"
+        >
+          Test Backend
+        </button>
+        {response && (
+          <p className="mt-4 text-lg">{response}</p>
+        )}
       </div>
     </div>
   );
