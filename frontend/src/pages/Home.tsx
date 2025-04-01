@@ -37,10 +37,10 @@ export default function Home() {
       </div>
 
       {/* Gooey Effect Section */}
-      <div className="relative w-full h-[400px] flex flex-col items-center justify-center">
+      <div className="relative w-full h-full min-h-[600px] flex flex-col items-center justify-center gap-8 bg-black text-center text-pretty">
         <img
-          src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
-          alt="AI background"
+          src="https://images.aiscribbles.com/34fe5695dbc942628e3cad9744e8ae13.png?v=60d084"
+          alt="impressionist painting"
           className="w-full h-full object-cover absolute inset-0 opacity-70"
         />
 
@@ -58,9 +58,9 @@ export default function Home() {
           />
         </div>
 
-        <h2 className="text-white text-6xl z-10 font-bold">
+        <p className="text-white text-7xl z-10 font-bold w-1/2">
           Muzero-Paper
-        </h2>
+        </p>
       </div>
     </div>
   );
