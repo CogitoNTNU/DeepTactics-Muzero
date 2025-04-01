@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useScreenSize } from "../hooks/use-screen-size";
 import { PixelTrail } from "../components/ui/pixel-trail";
 import { GooeyFilter } from "../components/ui/gooey-filter";
+import { Hero45 } from "../components/ui/hero45";
 
 export default function Home() {
   const [response, setResponse] = useState("");
@@ -64,6 +65,14 @@ export default function Home() {
           <p className="mt-4 text-lg">{response}</p>
         )}
       </div>
+
+      {/* Features Section */}
+      <Hero45 
+        badge="MuZero Features"
+        heading="State-of-the-Art Reinforcement Learning"
+        imageSrc="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2940&auto=format&fit=crop"
+        imageAlt="AI visualization"
+      />
     </div>
   );
 }
