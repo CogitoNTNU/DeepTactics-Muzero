@@ -14,6 +14,7 @@ interface Hero45Props {
   imageSrc?: string;
   imageAlt?: string;
   features?: Feature[];
+  children?: React.ReactNode;
 }
 
 const Hero45 = ({
@@ -41,6 +42,7 @@ const Hero45 = ({
         "Achieves superhuman performance in various challenging domains.",
     },
   ],
+  children,
 }: Hero45Props) => {
   return (
     <section className="py-16">
@@ -59,30 +61,33 @@ const Hero45 = ({
           <div className="absolute -right-28 -top-28 -z-10 aspect-video h-72 w-96 opacity-40 [background-size:12px_12px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_20%,transparent_100%)] sm:bg-[radial-gradient(hsl(var(--muted-foreground))_1px,transparent_1px)]"></div>
           <div className="absolute -left-28 -top-28 -z-10 aspect-video h-72 w-96 opacity-40 [background-size:12px_12px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_20%,transparent_100%)] sm:bg-[radial-gradient(hsl(var(--muted-foreground))_1px,transparent_1px)]"></div>
         </div>
-        <div className="mx-auto mt-10 flex max-w-screen-lg flex-col md:flex-row">
-          {features.map((feature, index) => (
-            <>
-              {index > 0 && (
-                <Separator
-                  orientation="vertical"
-                  className="mx-6 hidden h-auto w-[2px] bg-gradient-to-b from-muted via-transparent to-muted md:block"
-                />
-              )}
-              <div
-                key={index}
-                className="flex grow basis-0 flex-col rounded-md bg-background/5 p-4 text-white"
-              >
-                <div className="mb-6 flex size-10 items-center justify-center rounded-full bg-white/10 drop-shadow-lg">
-                  {feature.icon}
+        {children}
+        {features && features.length > 0 && (
+          <div className="mx-auto mt-10 flex max-w-screen-lg flex-col md:flex-row">
+            {features.map((feature, index) => (
+              <>
+                {index > 0 && (
+                  <Separator
+                    orientation="vertical"
+                    className="mx-6 hidden h-auto w-[2px] bg-gradient-to-b from-muted via-transparent to-muted md:block"
+                  />
+                )}
+                <div
+                  key={index}
+                  className="flex grow basis-0 flex-col rounded-md bg-background/5 p-4 text-white"
+                >
+                  <div className="mb-6 flex size-10 items-center justify-center rounded-full bg-white/10 drop-shadow-lg">
+                    {feature.icon}
+                  </div>
+                  <h3 className="mb-2 font-semibold">{feature.title}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {feature.description}
+                  </p>
                 </div>
-                <h3 className="mb-2 font-semibold">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {feature.description}
-                </p>
-              </div>
-            </>
-          ))}
-        </div>
+              </>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+
+  <!-- Neural Network Layers -->
+  <!-- Input Layer -->
+  <circle cx="200" cy="200" r="20" fill="#60a5fa" fill-opacity="0.8"/>
+  <circle cx="200" cy="300" r="20" fill="#60a5fa" fill-opacity="0.8"/>
+  <circle cx="200" cy="400" r="20" fill="#60a5fa" fill-opacity="0.8"/>
+
+  <!-- Hidden Layer -->
+  <circle cx="400" cy="150" r="20" fill="#818cf8" fill-opacity="0.8"/>
+  <circle cx="400" cy="250" r="20" fill="#818cf8" fill-opacity="0.8"/>
+  <circle cx="400" cy="350" r="20" fill="#818cf8" fill-opacity="0.8"/>
+  <circle cx="400" cy="450" r="20" fill="#818cf8" fill-opacity="0.8"/>
+
+  <!-- Output Layer -->
+  <circle cx="600" cy="200" r="20" fill="#a78bfa" fill-opacity="0.8"/>
+  <circle cx="600" cy="300" r="20" fill="#a78bfa" fill-opacity="0.8"/>
+  <circle cx="600" cy="400" r="20" fill="#a78bfa" fill-opacity="0.8"/>
+
+  <!-- Connections -->
+  <!-- Input to Hidden -->
+  <g stroke="#ffffff" stroke-opacity="0.2" stroke-width="2">
+    <!-- From first input node -->
+    <line x1="220" y1="200" x2="380" y2="150"/>
+    <line x1="220" y1="200" x2="380" y2="250"/>
+    <line x1="220" y1="200" x2="380" y2="350"/>
+    <line x1="220" y1="200" x2="380" y2="450"/>
+
+    <!-- From second input node -->
+    <line x1="220" y1="300" x2="380" y2="150"/>
+    <line x1="220" y1="300" x2="380" y2="250"/>
+    <line x1="220" y1="300" x2="380" y2="350"/>
+    <line x1="220" y1="300" x2="380" y2="450"/>
+
+    <!-- From third input node -->
+    <line x1="220" y1="400" x2="380" y2="150"/>
+    <line x1="220" y1="400" x2="380" y2="250"/>
+    <line x1="220" y1="400" x2="380" y2="350"/>
+    <line x1="220" y1="400" x2="380" y2="450"/>
+  </g>
+
+  <!-- Hidden to Output -->
+  <g stroke="#ffffff" stroke-opacity="0.2" stroke-width="2">
+    <!-- From each hidden node to each output node -->
+    <line x1="420" y1="150" x2="580" y2="200"/>
+    <line x1="420" y1="150" x2="580" y2="300"/>
+    <line x1="420" y1="150" x2="580" y2="400"/>
+
+    <line x1="420" y1="250" x2="580" y2="200"/>
+    <line x1="420" y1="250" x2="580" y2="300"/>
+    <line x1="420" y1="250" x2="580" y2="400"/>
+
+    <line x1="420" y1="350" x2="580" y2="200"/>
+    <line x1="420" y1="350" x2="580" y2="300"/>
+    <line x1="420" y1="350" x2="580" y2="400"/>
+
+    <line x1="420" y1="450" x2="580" y2="200"/>
+    <line x1="420" y1="450" x2="580" y2="300"/>
+    <line x1="420" y1="450" x2="580" y2="400"/>
+  </g>
+
+  <!-- Layer Labels -->
+  <text x="200" y="500" text-anchor="middle" fill="white" font-family="Arial" font-size="16">Input Layer</text>
+  <text x="400" y="500" text-anchor="middle" fill="white" font-family="Arial" font-size="16">Hidden Layer</text>
+  <text x="600" y="500" text-anchor="middle" fill="white" font-family="Arial" font-size="16">Output Layer</text>
+</svg> 

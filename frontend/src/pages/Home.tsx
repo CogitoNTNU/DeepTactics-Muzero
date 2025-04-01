@@ -74,33 +74,54 @@ export default function Home() {
         </button>
       </div>
 
+      {/* Features Section */}
+      <Hero45 
+        badge="MuZero Features"
+        heading="Advanced Neural Network Architecture"
+        imageSrc="/images/neural-network.svg"
+        imageAlt="Neural Network Architecture"
+      >
+        <div className="space-y-6 text-white">
+          <p className="text-lg">
+            Our implementation features a sophisticated neural network architecture with three key components:
+          </p>
+          <ul className="list-disc pl-6 space-y-3">
+            <li>
+              <strong>Representation Network:</strong> Processes the game state into a hidden representation, capturing essential features.
+            </li>
+            <li>
+              <strong>Dynamics Network:</strong> Predicts the next state and rewards, enabling internal planning without explicit rules.
+            </li>
+            <li>
+              <strong>Prediction Network:</strong> Evaluates positions and suggests optimal actions through policy and value predictions.
+            </li>
+          </ul>
+          <p className="text-lg mt-4">
+            The backend is built with FastAPI, providing a robust and efficient infrastructure for model training and inference.
+            Our implementation ensures high performance through parallel processing and optimized state management.
+          </p>
+        </div>
+      </Hero45>
+
       {/* Test Backend Section */}
-      <div className="text-center space-y-4 max-w-2xl mx-auto">
+      <div className="text-center space-y-4 max-w-2xl mx-auto text-white">
         <div className="space-y-4">
           <p className="text-lg">
             Want to see it in action? Test our backend connection below to get started with the MuZero implementation.
           </p>
           <button
             onClick={testBackend}
-            className="px-6 py-3 bg-blue-500 rounded-lg hover:bg-teal-600 transition-colors duration-300"
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300"
           >
             Test Backend Connection
           </button>
           {response && (
-            <p className="mt-4 text-lg font-medium bg-opacity-20 bg-white px-4 py-2 rounded-lg">
+            <p className="mt-4 text-lg font-medium bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
               {response}
             </p>
           )}
         </div>
       </div>
-
-      {/* Features Section */}
-      <Hero45 
-        badge="MuZero Features"
-        heading="State-of-the-Art Reinforcement Learning"
-        imageSrc="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2940&auto=format&fit=crop"
-        imageAlt="AI visualization"
-      />
     </div>
   );
 }
