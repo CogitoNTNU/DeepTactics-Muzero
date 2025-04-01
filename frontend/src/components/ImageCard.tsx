@@ -17,25 +17,25 @@ interface ProfileCardProps {
 
 export default function ProfileCard({ imageSrc, title, description, github, linkedin }: ProfileCardProps) {
   return (
-    <Card className="w-80 border shadow-lg rounded-xl">
+    <Card className="w-80 border border-white/10 bg-white/5 backdrop-blur-sm shadow-lg rounded-xl overflow-hidden">
       <CardHeader className="flex items-center flex-col text-center">
         <img
           src={imageSrc}
           alt={title}
-          className="w-50 h-50 rounded-full border-2 border-gray-300 object-cover"
+          className="w-40 h-40 rounded-full border-2 border-white/20 object-cover"
         />
-        <CardTitle className="mt-2 text-lg font-semibold text-white">{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardTitle className="mt-4 text-2xl font-semibold text-white">{title}</CardTitle>
+        <CardDescription className="text-lg text-gray-300 font-medium">{description}</CardDescription>
       </CardHeader>
       <CardContent className="flex justify-center gap-4 py-4">
         {github && (
           <a href={github} target="_blank" rel="noopener noreferrer">
-            <FaGithub size={24} className="text-gray-700 hover:text-black transition duration-200" />
+            <FaGithub size={24} className="text-white/70 hover:text-white transition duration-200" />
           </a>
         )}
         {linkedin && (
           <a href={linkedin} target="_blank" rel="noopener noreferrer">
-            <FaLinkedin size={24} className="text-blue-700 hover:text-blue-900 transition duration-200" />
+            <FaLinkedin size={24} className="text-white/70 hover:text-white transition duration-200" />
           </a>
         )}
       </CardContent>

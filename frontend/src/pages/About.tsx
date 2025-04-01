@@ -1,7 +1,7 @@
 import ImageCard from "../components/ImageCard";
 
 const teamMembers = [
-  { imageSrc: "/images/placeholder.jpg", title: "Adi", description: "Automatisering og intelligente systemer", github: "https://github.com/adisinghstudent", linkedin: "https://www.linkedin.com/in/adisinghwork/" },
+  { imageSrc: "/images/placeholder.jpg", title: "Adi", description: "Robotikk", github: "https://github.com/adisinghstudent", linkedin: "https://www.linkedin.com/in/adisinghwork/" },
   { imageSrc: "/images/brage.JPG", title: "Brage", description: "Datateknologi", github: "https://github.com/BrageHK", linkedin: "https://www.linkedin.com/in/brage-kvamme-b33318212/" },
   { imageSrc: "/images/christian.JPG", title: "Christian", description: "Datateknologi", github: "https://github.com/ChristianFredrikJohnsen", linkedin: undefined },
   { imageSrc: "/images/eirik.JPG", title: "Eirik", description: "Datateknologi", github: "https://github.com/Eiriksol", linkedin: "https://no.linkedin.com/in/eirik-solberg-b25bb0252" },
