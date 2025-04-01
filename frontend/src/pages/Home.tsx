@@ -3,6 +3,7 @@ import { useScreenSize } from "../hooks/use-screen-size";
 import { PixelTrail } from "../components/ui/pixel-trail";
 import { GooeyFilter } from "../components/ui/gooey-filter";
 import { Hero45 } from "../components/ui/hero45";
+import { ArrowUpRight } from "lucide-react";
 
 export default function Home() {
   const [response, setResponse] = useState("");
@@ -19,10 +20,26 @@ export default function Home() {
     }
   }; 
 
+  const handleMuzeroPaperClick = () => {
+    window.open('https://www.deepmind.com/blog/muzero-mastering-go-chess-shogi-and-atari-without-rules', '_blank');
+  };
+
   return (
     <div className="flex flex-col items-center justify-center py-20 space-y-12 text-white">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold">Welcome to MuZero</h1>
+      <div className="text-center max-w-4xl mx-auto space-y-6">
+        <h1 className="text-4xl font-bold">Welcome to MuZero Implementation</h1>
+        <div className="space-y-4 text-lg">
+          <p>
+            This project is our implementation of MuZero, the groundbreaking reinforcement learning algorithm developed by DeepMind. 
+            We've built this from scratch following the official research paper, aiming to recreate its remarkable ability to master 
+            games without prior knowledge of their rules.
+          </p>
+          <p>
+            Our implementation focuses on three classic games: Othello, TicTacToe, and CartPole, demonstrating MuZero's 
+            versatility across different types of environments. We've carefully followed the architecture and training 
+            procedures outlined in the original paper while optimizing for performance and clarity.
+          </p>
+        </div>
       </div>
 
       {/* Gooey Effect Section */}
@@ -47,23 +64,34 @@ export default function Home() {
           />
         </div>
 
-        <p className="text-white text-7xl z-10 font-bold">
+        <button
+          onClick={handleMuzeroPaperClick}
+          className="text-white text-7xl z-10 font-bold group flex items-center gap-4 hover:text-blue-400 transition-colors duration-300"
+          aria-label="Read the MuZero paper by DeepMind"
+        >
           Muzero-Paper
-        </p>
+          <ArrowUpRight className="w-8 h-8 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+        </button>
       </div>
 
       {/* Test Backend Section */}
-      <div className="text-center space-y-4">
-        <p className="text-lg">This is the main page.</p>
-        <button
-          onClick={testBackend}
-          className="px-6 py-3 bg-blue-500 rounded-lg hover:bg-teal-600 transition-colors"
-        >
-          Test Backend
-        </button>
-        {response && (
-          <p className="mt-4 text-lg">{response}</p>
-        )}
+      <div className="text-center space-y-4 max-w-2xl mx-auto">
+        <div className="space-y-4">
+          <p className="text-lg">
+            Want to see it in action? Test our backend connection below to get started with the MuZero implementation.
+          </p>
+          <button
+            onClick={testBackend}
+            className="px-6 py-3 bg-blue-500 rounded-lg hover:bg-teal-600 transition-colors duration-300"
+          >
+            Test Backend Connection
+          </button>
+          {response && (
+            <p className="mt-4 text-lg font-medium bg-opacity-20 bg-white px-4 py-2 rounded-lg">
+              {response}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Features Section */}
