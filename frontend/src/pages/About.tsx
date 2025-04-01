@@ -14,7 +14,7 @@ const teamMembers = [
 
 export default function About() {
   return (
-    <div className="flex flex-col items-center justify-center py-20 px-4">
+    <div className="flex flex-col items-center justify-center pt-40 pb-20 px-4 text-white">
       <h1 className="text-4xl font-bold">About us</h1>
       <p className="mt-4 text-lg text-center max-w-2xl">
         We are DeepTactics, creating an implementation of MuZero.

@@ -22,10 +22,10 @@ export default function MuZeroConfig() {
   const getValue = (category: string, index: number) => configValues[category as keyof typeof configValues]?.[index]?.defaultValue ?? "N/A";
 
   return (
-    <div className="flex flex-col items-center justify-center py-20">
+    <div className="flex flex-col items-center justify-center pt-40 pb-20 text-white">
       <h1 className="text-4xl font-bold">Welcome to the config site!</h1>
       <p className="mt-4 text-lg">Finetune the training configs here!</p>
-      <div className="pt-10 flex flex-row justify-between w-full">
+      <div className="pt-10 flex flex-row justify-between w-full max-w-7xl px-4">
         {Object.keys(configValues).map((category) => (
           <InputList
             key={category}
@@ -36,7 +36,7 @@ export default function MuZeroConfig() {
         ))}
       </div>
 
-      <div className="p-10">
+      <div className="p-10 w-full max-w-7xl">
         <CodeBlock
           code={`from typing import Optional
 from src.utils.minmaxstats import KnownBounds
