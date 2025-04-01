@@ -45,4 +45,5 @@ IPython
 pre-commit
 torch
 optuna
+tictactoe_gym
     

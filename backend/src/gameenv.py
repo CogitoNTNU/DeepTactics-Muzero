@@ -1,6 +1,7 @@
 import gymnasium as gym
 from src.mcts.node import Node
 from src.game.player import Player
+import numpy as np
 
 """
 class ActionHistory(object):
@@ -48,41 +49,39 @@ class Environment(object):
 class Game(object):
   """A single episode of interaction with the environment."""
 
-  def __init__(self, action_space_size: int, discount: float, gamefile: str = 'CartPole-v1', is_cartpole: bool=True):
+  def __init__(self, action_space_size: int, discount: float, gamefile: str):
     self.environment = Environment(gamefile=gamefile)  # Game specific environment.
     self.action_history = []
     self.rewards = []
     self.child_visits = []
     self.root_values = []
     self.observations = []
-    self.action_space_size = action_space_size
+    self.action_space_size = action_space_size#self.environment.action_space()#
     self.discount = discount
-    self.is_cartpole:bool = is_cartpole
-    self.player = Player(is_cartpole=self.is_cartpole)
+    self.player = Player()
 
   def terminal(self) -> bool:
     return self.environment.episode_over
 
   def legal_actions(self) -> list[int]:
-    if(self.is_cartpole):
-      return [0, 1]
-    else:
-      return self.environment.get_possible_actions() #her må en othello env defienres på forhond
+    return self.environment.get_actions()#_is_valid_action()#get_possible_actions() #her må en othello env defienres på forhond
     
   def apply(self, action: int):
-    reward, obs = self.environment.step(action)
+    #reward, obs observation, winner, game over indicator, truncated= self.environment.step(action)
+    obs, reward, game_over, trunc_unused= self.environment.step(action)
     self.rewards.append(reward)
     self.action_history.append(int(action))
     self.observations.append(obs)
     self.player.change_player() #sjekk at denne ikke blir kaldt på før to_play men etter
-    self.episode_over = self.terminal()
+    self.episode_over = game_over#self._is_game_over() #terminal()
 
   def store_search_statistics(self, root: Node):
-    sum_visits = sum(child.visits for child in root.children.values())
+    sum_visits = sum(np.exp(child.visits) for child in root.children.values())
     action_space = (index for index in range(self.action_space_size))
-    self.child_visits.append([root.children[a].visits / sum_visits if a in root.children else 0 for a in action_space])
+    self.child_visits.append([np.exp(root.children[a].visits) / sum_visits if a in root.children else 0 for a in action_space])
 
     self.root_values.append(root.value())
+
   def make_image(self, state_index: int):
     # Game specific feature planes.
     return self.observations[state_index]

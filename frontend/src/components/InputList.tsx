@@ -19,7 +19,7 @@ export default function EnvironmentParametersForm({
   onFormValuesChange,
 }: EnvironmentParametersFormProps) {
   // Initialize state to store input values
-  const [formValues, setFormValues] = useState(
+  const [,setFormValues] = useState(
     parameters.reduce((acc, param) => {
       acc[param.labelText] = param.defaultValue.toString();
       return acc;
