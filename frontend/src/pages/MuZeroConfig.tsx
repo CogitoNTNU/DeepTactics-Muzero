@@ -11,7 +11,7 @@ export default function MuZeroConfig() {
   const handleConfigChange = (category: string, updatedValues: Record<string, string>) => {
     setConfigValues((prevConfig) => ({
       ...prevConfig,
-      [category]: prevConfig[category].map((param: { labelText: string | number; defaultValue: any; }) => ({
+      [category]: prevConfig[category as keyof typeof configValues].map((param: { labelText: string | number; defaultValue: any; }) => ({
         ...param,
         defaultValue: updatedValues[param.labelText] || param.defaultValue, // Update only changed values
       })),
@@ -19,7 +19,7 @@ export default function MuZeroConfig() {
   };
 
   // Utility function to get the latest value dynamically
-  const getValue = (category: string, index: number) => configValues[category]?.[index]?.defaultValue ?? "N/A";
+  const getValue = (category: string, index: number) => configValues[category as keyof typeof configValues]?.[index]?.defaultValue ?? "N/A";
 
   return (
     <div className="flex flex-col items-center justify-center py-20">
@@ -30,7 +30,7 @@ export default function MuZeroConfig() {
           <InputList
             key={category}
             title={category}
-            parameters={configValues[category]}
+            parameters={configValues[category as keyof typeof configValues]}
             onFormValuesChange={(updatedValues) => handleConfigChange(category, updatedValues)}
           />
         ))}
