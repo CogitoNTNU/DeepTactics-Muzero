@@ -52,8 +52,8 @@ export default function Home() {
         >
           <PixelTrail
             pixelSize={screenSize.lessThan("md") ? 24 : 32}
-            fadeDuration={0}
-            delay={500}
+            fadeDuration={100}
+            delay={16}
             pixelClassName="bg-white"
           />
         </div>

@@ -42,7 +42,7 @@ export const PixelTrail = ({
     if (previousTimeRef.current !== undefined) {
       if (time - previousTimeRef.current >= delay) {
         setPixels((prevPixels) => [
-          ...prevPixels,
+          ...prevPixels.slice(-50),
           {
             x: mousePosition.current.x - pixelSize / 2,
             y: mousePosition.current.y - pixelSize / 2,
@@ -71,10 +71,7 @@ export const PixelTrail = ({
     if (fadeDuration <= 0) return
 
     const interval = setInterval(() => {
-      setPixels((prevPixels) => {
-        const currentTime = Date.now()
-        return prevPixels.slice(-100)
-      })
+      setPixels((prevPixels) => prevPixels.slice(-50))
     }, fadeDuration)
 
     return () => clearInterval(interval)
@@ -86,7 +83,7 @@ export const PixelTrail = ({
         <div
           key={pixel.id}
           className={cn(
-            "absolute w-4 h-4 rounded-full pointer-events-none",
+            "absolute pointer-events-none",
             pixelClassName
           )}
           style={{
