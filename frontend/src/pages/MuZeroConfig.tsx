@@ -11,7 +11,7 @@ export default function MuZeroConfig() {
   const handleConfigChange = (category: string, updatedValues: Record<string, string>) => {
     setConfigValues((prevConfig) => ({
       ...prevConfig,
-      [category]: prevConfig[category].map((param) => ({
+      [category]: prevConfig[category].map((param: { labelText: string | number; defaultValue: any; }) => ({
         ...param,
         defaultValue: updatedValues[param.labelText] || param.defaultValue, // Update only changed values
       })),
