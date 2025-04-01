@@ -113,7 +113,7 @@ export default function Home() {
             </div>
           </div>
           <img 
-            src="/images/nn.png" 
+            src="/public/nn.png" 
             alt="Neural Network Architecture" 
             className="w-full max-w-3xl mx-auto mt-8 rounded-lg border border-white/10"
           />
