@@ -45,32 +45,35 @@ export default function Home() {
         </div>
 
         {/* Gooey Effect Section */}
-        <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen min-h-[500px] flex flex-col items-center justify-center overflow-hidden">
-          <img
-            src="https://images.aiscribbles.com/34fe5695dbc942628e3cad9744e8ae13.png?v=60d084"
-            alt="impressionist painting"
-            className="w-full h-full object-cover absolute inset-0 opacity-70"
-          />
-          <GooeyFilter id="gooey-filter-pixel-trail" strength={5} />
-          <div
-            className="absolute inset-0 z-0"
-            style={{ filter: "url(#gooey-filter-pixel-trail)" }}
-          >
-            <PixelTrail
-              pixelSize={screenSize.lessThan("md") ? 24 : 32}
-              fadeDuration={100}
-              delay={16}
-              pixelClassName="bg-white"
+        <div className="w-full flex justify-center">
+          <div className="relative w-[85vw] min-h-[500px] flex flex-col items-center justify-center overflow-hidden rounded-2xl">
+            <img
+              src="https://images.aiscribbles.com/34fe5695dbc942628e3cad9744e8ae13.png?v=60d084"
+              alt="impressionist painting"
+              className="w-full h-full object-cover absolute inset-0 opacity-70"
             />
+            <div className="absolute inset-0 bg-black/20" />
+            <GooeyFilter id="gooey-filter-pixel-trail" strength={5} />
+            <div
+              className="absolute inset-0 z-0"
+              style={{ filter: "url(#gooey-filter-pixel-trail)" }}
+            >
+              <PixelTrail
+                pixelSize={screenSize.lessThan("md") ? 24 : 32}
+                fadeDuration={100}
+                delay={16}
+                pixelClassName="bg-white"
+              />
+            </div>
+            <button
+              onClick={handleMuzeroPaperClick}
+              className="text-white text-7xl z-10 font-bold group flex items-center gap-4 hover:text-blue-400 transition-colors duration-300"
+              aria-label="Read the MuZero paper by DeepMind"
+            >
+              Muzero-Paper
+              <ArrowUpRight className="w-8 h-8 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+            </button>
           </div>
-          <button
-            onClick={handleMuzeroPaperClick}
-            className="text-white text-7xl z-10 font-bold group flex items-center gap-4 hover:text-blue-400 transition-colors duration-300"
-            aria-label="Read the MuZero paper by DeepMind"
-          >
-            Muzero-Paper
-            <ArrowUpRight className="w-8 h-8 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-          </button>
         </div>
 
         {/* Neural Network Architecture Section */}
