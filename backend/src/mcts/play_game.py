@@ -48,7 +48,7 @@ def play_game(config: Config, network: Network) -> Game:
         tuple: A tuple containing the completed Game instance and the number of steps taken.
     """
     with torch.no_grad():
-        game = Game(config.action_space_size, config.discount, gamefile=config.game_name)
+        game = Game(config.action_space_size, config.discount, config)
         # game.history should be a list of actions taken.
         steps = 0
         
@@ -71,8 +71,5 @@ def play_game(config: Config, network: Network) -> Game:
             game.store_search_statistics(root=root)
             if config.render:
                 game.environment.env.render()
-        #self_made_tree(root)
-        
-        
         
         return game, steps
