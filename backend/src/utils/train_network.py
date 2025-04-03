@@ -51,12 +51,11 @@ def calculate_loss(batch_coll: list) -> torch.Tensor:
             value_loss.register_hook(lambda gradient: gradient / gradient_scale)
             reward_loss.register_hook(lambda gradient: gradient / gradient_scale)
             policy_loss.register_hook(lambda gradient: gradient / gradient_scale)
-            ''
-            #print(f"Pred reward: {reward}, actual reward: {target_reward}, Loss: {reward_loss}")
-            #print(f"Pred value: {value}, actual value: {target_value}, Loss: {value_loss}")
-            #print(f"Pred policy: {policy_t}, actual policy: {target_policy}, Loss: {policy_loss}\n")
-
-            #print("L_c:", l_c, "L_b:", l_b, "L_a:", l_a)
+            """
+            print(f"Pred reward: {reward}, actual reward: {target_reward}, Loss: {reward_loss}")
+            print(f"Pred value: {value}, actual value: {target_value}, Loss: {value_loss}")
+            print(f"Pred policy: {policy_t}, actual policy: {target_policy}, Loss: {policy_loss}\n")
+            """
             # 0.25 from reanalize appendix
             loss += (policy_loss * 0.25 + reward_loss + value_loss)
     return loss / len(batch_coll)
@@ -132,6 +131,7 @@ def train_network(config: Config, network: Network, replay_buffer: ReplayBuffer,
 
         # Compute loss
         loss = update_weights(optimizer, network, batch)
+        #print(batch)
         #if e % 5 == 0:
         #    print(f"Loss on epoch: {e}: {loss}. LR: {lr}, tot_training_steps: {network.tot_training_steps}")
 

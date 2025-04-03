@@ -112,11 +112,11 @@ class Game(object):
         self.change_player()  # sjekk at denne ikke blir kaldt på før to_play men etter
 
     def store_search_statistics(self, root: Node):
-        sum_visits = sum(np.exp(child.visits) for child in root.children.values())
+        sum_visits = sum(child.visits for child in root.children.values())
         action_space = (index for index in range(self.action_space_size))
         self.child_visits.append(
             [
-                np.exp(root.children[a].visits) / sum_visits
+                root.children[a].visits / sum_visits
                 if a in root.children
                 else 0
                 for a in action_space
