@@ -7,7 +7,7 @@ import { ArrowUpRight, Brain, Cpu, Zap } from "lucide-react";
 export default function Home() {
   const [response, setResponse] = useState("");
   const screenSize = useScreenSize();
-  
+
   const testBackend = async () => {
     try {
       const res = await fetch("/api/ping");  // Internal Docker network request
@@ -17,7 +17,7 @@ export default function Home() {
       setResponse("Error connecting to backend");
       console.error("API call failed:", error);
     }
-  }; 
+  };
 
   const handleMuzeroPaperClick = () => {
     window.open('https://www.deepmind.com/blog/muzero-mastering-go-chess-shogi-and-atari-without-rules', '_blank');
@@ -32,13 +32,13 @@ export default function Home() {
           <h1 className="text-4xl font-bold">Welcome to MuZero Implementation</h1>
           <div className="space-y-4 text-lg">
             <p>
-              This project is our implementation of MuZero, the groundbreaking reinforcement learning algorithm developed by DeepMind. 
-              We've built this from scratch following the official research paper, aiming to recreate its remarkable ability to master 
+              This project is our implementation of MuZero, the groundbreaking reinforcement learning algorithm developed by DeepMind.
+              We've built this from scratch following the official research paper, aiming to recreate its remarkable ability to master
               games without prior knowledge of their rules.
             </p>
             <p>
-              Our implementation focuses on three classic games: Othello, TicTacToe, and CartPole, demonstrating MuZero's 
-              versatility across different types of environments. We've carefully followed the architecture and training 
+              Our implementation focuses on three classic games: Othello, TicTacToe, and CartPole, demonstrating MuZero's
+              versatility across different types of environments. We've carefully followed the architecture and training
               procedures outlined in the original paper while optimizing for performance and clarity.
             </p>
           </div>
@@ -112,9 +112,9 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <img 
-            src="/public/nn.png" 
-            alt="Neural Network Architecture" 
+          <img
+            src="/nn.png"
+            alt="Neural Network Architecture"
             className="w-full max-w-3xl mx-auto mt-8 rounded-lg border border-white/10"
           />
         </div>
@@ -142,4 +142,3 @@ export default function Home() {
     </div>
   );
 }
-  
