@@ -6,20 +6,22 @@
         is_cartpole (bool): Indicates if the player is in CartPole mode.
         turn_multiplier (int): A multiplier used to determine whose turn it is to move.
     """
-    def __init__(self) -> None:
+    def __init__(self, is_board_game) -> None:
         """
         Constructor for the Player class.
 
         Args:
             is_cartpole (bool, optional): Indicates if the player is in CartPole mode. Defaults to True.
         """
+        self.is_board_game = is_board_game
         self.turn_multiplier = 1
     
     def change_player(self):
         """
         Changes the turn multiplier to indicate whose turn it is to move.
         """
-        self.turn_multiplier *= -1
+        if self.is_board_game:
+            self.turn_multiplier *= -1
         
 
     def get_turn_multiplier(self): 

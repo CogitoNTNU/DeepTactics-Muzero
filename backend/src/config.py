@@ -1,5 +1,6 @@
 from typing import Optional
 from src.utils.minmaxstats import KnownBounds
+from src.gameenv import Environment, TicTacToe, CartPole
 
 def visit_softmax_temperature(num_moves, training_steps):
     if training_steps < 100:
@@ -21,7 +22,7 @@ class Config:
         width: int = 8, #othello
         # Number of moves that is used as input to representation model
         max_moves: float = 500,  # Max moves before game ends
-        game_name: str = 'tictactoe-v0', #"ALE/Breakout-v5",
+        game_class: type[Environment] = CartPole,
         n_tree_searches=50,
         training_episodes=100_000, #how many training loops
         epsilon: float = 0.001,
@@ -46,7 +47,8 @@ class Config:
         # Environment
         self.action_space_size = action_space_size
         self.max_moves = max_moves
-        self.game_name = game_name
+        self.game_name = game_class.__name__
+        self.game_class = game_class
         self.input_planes = input_planes
         self.height = height
         self.width = width
@@ -66,8 +68,8 @@ class Config:
         self.weight_decay = 1e-4
         self.momentum = 0.9
         self.training_interval = training_interval
-        self.model_load_filepath = "models/" + game_name + "/" + model_load_filename
-        self.model_save_filepath = "models/" + game_name + "/" + model_save_filename
+        self.model_load_filepath = "models/" + self.game_name + "/" + model_load_filename
+        self.model_save_filepath = "models/" + self.game_name + "/" + model_save_filename
         self.training_episodes = training_episodes
         self.td_steps = 50 # ????
         self.num_unroll_steps = 10 # ????
@@ -88,3 +90,32 @@ class Config:
 
         self.known_bounds = known_bounds
 
+def get_cartpole_config() -> Config:
+    return Config(
+        render = False,
+        visit_softmax_temperature_fn = visit_softmax_temperature,
+        known_bounds = None,
+        action_space_size = 2,  # 9 in tic-tac-toe, 2 legal actions in cartpole
+        # Number of moves that is used as input to representation model
+        max_moves = 10000,  # Max moves before game ends
+        game_class = CartPole,
+        n_tree_searches = 25,
+        training_episodes = 100_000, #how many training loops
+        epsilon = 0.001,
+        discount = 0.997,
+        c1 = 1.25,
+        c2 = 19652,
+        diriclet_noise = 0.25,
+        # Set this to 0 for deterministic prior probabilites
+        dirichlet_exploaration_factor = 0.25,
+        batch_size = 64,
+        epochs=1,
+        training_interval = 100,
+        learning_rate = 0.0277,
+        learning_rate_decay = 0.995,
+        learning_rate_decay_steps = 1000,
+        observation_space_size = 4,
+        buffer_size = 750, 
+        model_load_filename="test2",
+        model_save_filename="test",
+    )

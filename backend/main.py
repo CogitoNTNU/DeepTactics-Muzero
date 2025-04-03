@@ -1,4 +1,4 @@
-﻿from src.config import Config 
+﻿from src.config import Config, get_cartpole_config 
 from src.utils.train_network import train_network
 from src.utils.run_selfplay import run_selfplay
 from src.utils.replay_buffer import ReplayBuffer
@@ -61,4 +61,4 @@ def muzero(config: Config):
     except KeyboardInterrupt:
         model.save()
 ### Entry-point function
-muzero(Config())
+muzero(get_cartpole_config())

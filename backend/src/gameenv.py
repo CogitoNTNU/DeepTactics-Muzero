@@ -9,18 +9,13 @@ import torch
 
 class Environment(ABC):
     """The environment MuZero is interacting with."""
-    def __init__(self, gamefile: str):  #'ALE/Breakout-v5'
-        self.env = gym.make(gamefile, sutton_barto_reward=True)  # """render_mode='human',"""
-        obs, self.info = self.env.reset()
-        self.obs = self._transform_obs(obs)
-        self.episode_over: bool = False
-        self.input_size = self.env.action_space
-        self.is_continious = True
-        self.player = Player()
+    @abstractmethod
+    def __init__(self):
+        pass
 
     def step(self, action):
         self.action = action
-        obs, self.reward, terminal, truncated, info = self.env.step(action)
+        obs, self.reward, terminal, truncated, info = self.env.step(action.item())
         self.obs = self._transform_obs(obs)
         self.episode_over = terminal or truncated
         return self.reward, self.obs
@@ -40,23 +35,39 @@ class Environment(ABC):
         pass
 
 class TicTacToe(Environment):
-    def __init__(self, gamefile: str):
-        self.env = gym.make(gamefile)  # """render_mode='human',"""
-        self.obs, self.info = self.env.reset()
+    def __init__(self):
+        self.env = gym.make("tictactoe-v0")
+        obs, self.info = self.env.reset()
+        self.obs = self._transform_obs(obs)
         self.episode_over: bool = False
         self.input_size = self.env.action_space
-        self.is_continious = False
+        self.is_board_game = True
+        self.player = Player(self.is_board_game)
         
     def get_actions(self) -> List[int]:
         return self.env.get_actions()
     
-    def _trainsform_obs(self, obs: np.ndarray):
+    def _transform_obs(self, obs: np.ndarray) -> torch.Tensor:
         obs = obs.flatten()
         torch.from_numpy(obs)
 
 class CartPole(Environment):
+    def __init__(self):  #'ALE/Breakout-v5'
+        self.env = gym.make("CartPole-v1", sutton_barto_reward=True)  # """render_mode='human',"""
+        obs, self.info = self.env.reset()
+        self.obs = self._transform_obs(obs)
+        self.episode_over: bool = False
+        self.input_size = self.env.action_space
+        self.is_board_game = False
+        self.player = Player(self.is_board_game)
+
     def get_actions(self) -> list[int]:
         return [0,1]
+    
+    def _transform_obs(self, obs):
+        return obs
+    
+    
 
 # TODO: Hvilket othello env bruker vi? Finner det ikke i requirements.txt
 """
@@ -73,8 +84,8 @@ class Othello(Environment):
 class Game(object):
     """A single episode of interaction with the environment."""
 
-    def __init__(self, action_space_size: int, discount: float, gamefile: str):
-        self.environment = Environment(gamefile=gamefile)  # Game specific environment.
+    def __init__(self, action_space_size: int, discount: float, config):
+        self.environment = config.game_class()  # Game specific environment.
         self.action_history = []
         self.rewards = []
         self.child_visits = []
@@ -95,11 +106,10 @@ class Game(object):
     def apply(self, action: int):
         # reward, obs observation, winner, game over indicator, truncated= self.environment.step(action)
         self.observations.append(self.environment.obs)
-        obs, reward, game_over, trunc_unused = self.environment.step(action)
+        reward, obs = self.environment.step(action)
         self.rewards.append(reward)
         self.action_history.append(int(action))
         self.change_player()  # sjekk at denne ikke blir kaldt på før to_play men etter
-        self.episode_over = game_over  # self._is_game_over() #terminal()
 
     def store_search_statistics(self, root: Node):
         sum_visits = sum(np.exp(child.visits) for child in root.children.values())
@@ -126,7 +136,7 @@ class Game(object):
         # into the future, plus the discounted sum of all rewards until then.
         targets = []
         for current_index in range(state_index, state_index + num_unroll_steps + 1):
-            if self.environment.is_continious:
+            if not self.environment.is_board_game:
                 bootstrap_index = current_index + td_steps
                 if bootstrap_index < len(self.root_values):
                     value = self.root_values[bootstrap_index] * self.discount**td_steps

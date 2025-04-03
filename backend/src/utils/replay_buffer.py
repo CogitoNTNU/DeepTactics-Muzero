@@ -28,7 +28,6 @@ class ReplayBuffer:
             game (Game): The game trajectory to add.
         """
         if len(self.buffer) == self.buffer_size: #Buffer reached max cap
-            print("Had to pop, buffer full")
             self.buffer.pop(0)
         self.buffer.append(game)
        
