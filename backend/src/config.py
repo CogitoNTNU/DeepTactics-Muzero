@@ -119,3 +119,33 @@ def get_cartpole_config() -> Config:
         model_load_filename="test2",
         model_save_filename="test",
     )
+
+def get_tictactoe_config() -> Config:
+    return Config(
+        render = False,
+        visit_softmax_temperature_fn = visit_softmax_temperature,
+        known_bounds = None,
+        action_space_size = 9,  # 9 in tic-tac-toe, 2 legal actions in cartpole
+        # Number of moves that is used as input to representation model
+        max_moves = 10000,  # Max moves before game ends
+        game_class = TicTacToe,
+        n_tree_searches = 25,
+        training_episodes = 100_000, #how many training loops
+        epsilon = 0.001,
+        discount = 1.0,
+        c1 = 1.25,
+        c2 = 19652,
+        diriclet_noise = 0.25,
+        # Set this to 0 for deterministic prior probabilites
+        dirichlet_exploaration_factor = 0.25,
+        batch_size = 64,
+        epochs=1,
+        training_interval = 100,
+        learning_rate = 0.0277,
+        learning_rate_decay = 0.995,
+        learning_rate_decay_steps = 1000,
+        observation_space_size = 4,
+        buffer_size = 750, 
+        model_load_filename="test2",
+        model_save_filename="test",
+    )
