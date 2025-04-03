@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 export const PixelTrail = ({
   pixelSize = 16,
@@ -17,8 +17,8 @@ export const PixelTrail = ({
   )
   const containerRef = useRef<HTMLDivElement>(null)
   const mousePosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
-  const requestRef = useRef<number>()
-  const previousTimeRef = useRef<number>()
+  const requestRef = useRef<number>(0)
+  const previousTimeRef = useRef<number>(0)
   const pixelId = useRef(0)
 
   useEffect(() => {
