@@ -18,18 +18,26 @@ export default function MuZeroConfig() {
     }));
   };
 
+  // Function that format the text. Example usage: selfPlay --> Self Play
+  const formatLabel = (label: string): string => {
+    return label
+      .replace(/([a-z])([A-Z])/g, '$1 $2') // Insert space before capital letters
+      .replace(/_/g, ' ') // Replace underscores with spaces
+      .replace(/\b\w/g, char => char.toUpperCase()); // Capitalize first letter of each word
+  };
+
   // Utility function to get the latest value dynamically
   const getValue = (category: string, index: number) => configValues[category as keyof typeof configValues]?.[index]?.defaultValue ?? "N/A";
 
   return (
     <div className="flex flex-col items-center justify-center pt-40 pb-20 text-white">
       <h1 className="text-4xl font-bold">Welcome to the config site!</h1>
-      <p className="mt-4 text-lg">Finetune the training configs here!</p>
+      <p className="mt-4 text-lg">Finetune the training config here!</p>
       <div className="pt-10 flex flex-row justify-between w-full max-w-7xl px-4">
         {Object.keys(configValues).map((category) => (
           <InputList
             key={category}
-            title={category}
+            title={formatLabel(category)}
             parameters={configValues[category as keyof typeof configValues]}
             onFormValuesChange={(updatedValues) => handleConfigChange(category, updatedValues)}
           />
