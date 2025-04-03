@@ -80,10 +80,10 @@ class Config:
         observation_space_size=${getValue("neuralNetwork", 1)},
 
         # PUCT (policy improvement) settings
-        epsilon=${getValue("puct", 0)},
-        discount=${getValue("puct", 1)},
-        c1=${getValue("puct", 2)},
-        c2=${getValue("puct", 3)},
+        c1=${getValue("puct", 0)},
+        c2=${getValue("puct", 1)},
+        epsilon=${getValue("puct", 2)},
+        discount=${getValue("puct", 3)},
 
         # Logging settings
         info_print_rate=${getValue("logging", 0)},
