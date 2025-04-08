@@ -63,8 +63,7 @@ class ReplayBuffer:
         """
         games: list[Game] = [self.sample_game() for _ in range(self.batch_size)]
         game_pos = [(g, self.sample_position(g)) for g in games]
-        return [(g.make_image(i), g.get_action_history()[i:i + num_unroll_steps], 
-                 g.make_target(i, num_unroll_steps, td_steps, g.to_play())) for (g, i) in game_pos]
+        return [(g.make_image(state_index=i), g.get_action_history()[i:i + num_unroll_steps], g.make_target(state_index=i, num_unroll_steps=num_unroll_steps, td_steps=td_steps, to_play=g.to_play())) for (g, i) in game_pos]
     
     def sample_game(self) -> Game:
         """

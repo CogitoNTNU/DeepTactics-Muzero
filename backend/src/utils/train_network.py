@@ -82,17 +82,17 @@ def update_weights(optimizer: torch.optim.Optimizer, network: Network, batch: li
     for image, actions, targets in batch:
     
         # Initial step, from the real observation.
-        value, reward, policy_t, hidden_state = network.initial_inference(image)
+        value, reward, policy_t, hidden_state = network.initial_inference(observation=image)
         predictions = [(value, reward, policy_t)]
 
         # Recurrent steps, from action and previous hidden state.
         for action in actions:
-            value, reward, policy_t, hidden_state = network.recurrent_inference(hidden_state, action)
+            value, reward, policy_t, hidden_state = network.recurrent_inference(hidden_state=hidden_state, action=action)
             hidden_state.register_hook(lambda grad: grad * 0.5)
             predictions.append((value, reward, policy_t))
 
         batch_coll.append(list(zip(predictions, targets)))
-    loss = calculate_loss(batch_coll)
+    loss = calculate_loss(batch_coll=batch_coll)
     loss.backward()
     optimizer.step()
     return loss
@@ -127,10 +127,10 @@ def train_network(config: Config, network: Network, replay_buffer: ReplayBuffer,
             optimizer = optim.SGD(network.parameters(), lr=lr, momentum=config.momentum, weight_decay=config.weight_decay)
             ''
         # Sample batch from replay buffer
-        batch = replay_buffer.sample_batch(config.num_unroll_steps, config.td_steps, config.action_space_size)
+        batch = replay_buffer.sample_batch(num_unroll_steps=config.num_unroll_steps, td_steps=config.td_steps, action_space_size=config.action_space_size)
 
         # Compute loss
-        loss = update_weights(optimizer, network, batch)
+        loss = update_weights(optimizer=optimizer, network=network, batch=batch)
         #print(batch)
         #if e % 5 == 0:
         #    print(f"Loss on epoch: {e}: {loss}. LR: {lr}, tot_training_steps: {network.tot_training_steps}")
