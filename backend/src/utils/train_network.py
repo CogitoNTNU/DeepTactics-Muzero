@@ -125,7 +125,7 @@ def train_network(config: Config, network: Network, replay_buffer: ReplayBuffer,
         else:
             lr = config.learning_rate*config.learning_rate_decay**(network.tot_training_steps+1)
             optimizer = optim.SGD(network.parameters(), lr=lr, momentum=config.momentum, weight_decay=config.weight_decay)
-            ''
+            
         # Sample batch from replay buffer
         batch = replay_buffer.sample_batch(num_unroll_steps=config.num_unroll_steps, td_steps=config.td_steps, action_space_size=config.action_space_size)
 
