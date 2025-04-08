@@ -72,7 +72,7 @@ class Config:
         self.model_save_filepath = "models/" + self.game_name + "/" + model_save_filename
         self.training_episodes = training_episodes
         self.td_steps = 50 # ????
-        self.num_unroll_steps = 10 # ????
+        self.num_unroll_steps = 500 # ????
         self.epochs = epochs
         self.buffer_size = buffer_size
         self.learning_rate_decay = learning_rate_decay
