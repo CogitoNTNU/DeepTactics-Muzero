@@ -69,7 +69,7 @@ class CartPole(Environment):
     
     
 
-# TODO: Hvilket othello env bruker vi? Finner det ikke i requirements.txt
+# TODO: Hvilket othello env bruker vi? Finner det ikke i requirements.txt, det er fordi othello enviromentet er i othello.py
 """
 class Othello(Environment):
     def __init__(self, gamefile: str):
