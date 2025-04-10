@@ -25,6 +25,9 @@ def calculate_loss(batch_coll: list) -> torch.Tensor:
         torch.Tensor: The averaged loss over the batch.
     """
     loss = torch.tensor(0.0, dtype=torch.float32)
+    tot_value_loss = torch.tensor(0.0, dtype=torch.float32)
+    tot_reward_loss = torch.tensor(0.0, dtype=torch.float32)
+    tot_policy_loss = torch.tensor(0.0, dtype=torch.float32)
 
     for zipped_pairs in batch_coll:
         for step_idx, (prediction, target) in enumerate(zipped_pairs):
@@ -58,6 +61,12 @@ def calculate_loss(batch_coll: list) -> torch.Tensor:
             """
             # 0.25 from reanalize appendix
             loss += (policy_loss * 0.25 + reward_loss + value_loss)
+            loss += (policy_loss * 0.25 + reward_loss + value_loss)
+            tot_policy_loss += policy_loss
+            tot_reward_loss += reward_loss
+            tot_value_loss += value_loss
+
+    # print(f"Total policy loss: {tot_policy_loss/len(batch_coll)}, Total reward loss: {tot_reward_loss/len(batch_coll)}, Total value loss: {tot_value_loss/len(batch_coll)}")
     return loss / len(batch_coll)
 
 
