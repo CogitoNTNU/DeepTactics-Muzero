@@ -23,7 +23,7 @@ def run_selfplay(config: Config, model: Network, replay_buffer: ReplayBuffer) ->
     for i in range(config.training_interval):
         #print(f"Starting game: {i}")
         game, steps = play_game(config=config, network=model)
-        replay_buffer.update_buffer(game)
+        replay_buffer.update_buffer(game=game)
         tot_steps += steps
     
     print("avg steps survived: ", tot_steps/config.training_interval )

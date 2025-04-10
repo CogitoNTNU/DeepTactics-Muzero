@@ -94,8 +94,7 @@ class Network(nn.Module):
 
         # Dynamics: given [hidden_state, action one-hot] -> next hidden state
         self.dynamics = nn.Sequential(
-            nn.Linear(config.hidden_layer_size +
-                      config.action_space_size, config.hidden_layer_size),
+            nn.Linear(config.hidden_layer_size + config.action_space_size, config.hidden_layer_size),
             nn.ELU(),
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size)
         )
