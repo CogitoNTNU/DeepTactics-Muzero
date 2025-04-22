@@ -3,9 +3,11 @@ from src.utils.train_network import train_network
 from src.utils.run_selfplay import run_selfplay
 from src.utils.replay_buffer import ReplayBuffer
 from src.networks.network import Network
+from src.utils.wandb_logger import WandbLogger
 
 import time
 import numpy as np
+import wandb
 
 # MuZero training is split into two independent parts: 
 # Network training and self-play data generation.
@@ -14,8 +16,29 @@ import numpy as np
 # to the training.
 
 def muzero(config: Config):
+    # Initialize wandb
+    wandb_config = {
+        "learning_rate": config.learning_rate,
+        "learning_rate_decay": config.learning_rate_decay,
+        "learning_rate_decay_steps": config.learning_rate_decay_steps,
+        "momentum": config.momentum,
+        "weight_decay": config.weight_decay,
+        "num_unroll_steps": config.num_unroll_steps,
+        "td_steps": config.td_steps,
+        "training_episodes": config.training_episodes,
+        "epochs": config.epochs,
+        "action_space_size": config.action_space_size,
+        "hidden_layer_size": config.hidden_layer_size,
+        "observation_space_size": config.observation_space_size
+    }
+    
+    logger = WandbLogger(project_name="muzero-cartpole", config=wandb_config)
+    
     replay_buffer = ReplayBuffer(config=config)
     model = Network.load(config)
+    
+    # Watch model gradients
+    logger.watch_model(model)
     
     rewards = []
     losses = []
@@ -24,42 +47,31 @@ def muzero(config: Config):
     t = time.time()
     try:
         for i in range(config.training_episodes):
-            
             # self-play
-            run_selfplay(config, model, replay_buffer)
-
-            # print and plot rewards
-            game = replay_buffer.last_game()
+            game, steps = run_selfplay(config, model, replay_buffer)
             
-            # ??????
-            #for _ in range(10):
-                #clear_output(wait=True)
-                    
-            """
-            reward_e = game.total_rewards()
-            rewards.append(reward_e)
-            moving_averages.append(np.mean(rewards[-20:]))
-            print('Episode ' + str(i+1) + ' ' + 'reward: ' + str(reward_e))
-
-            print('Moving Average (20): ' + str(np.mean(rewards[-20:])))
-            print('Moving Average (100): ' + str(np.mean(rewards[-100:])))
-            print('Moving Average: ' + str(np.mean(rewards)))
-            print('Elapsed time: ' + str((time.time() - t) / 60) + ' minutes')       
-            """
-            """
-            plt.plot(rewards)
-            plt.plot(moving_averages)
-            plt.show()
-            """
-
+            # Log game statistics
+            logger.log_game_stats(
+                episode_reward=game.total_rewards(),
+                episode_length=steps,
+                step=model.tot_training_steps
+            )
+            
             # training
-            loss = train_network(config, model, replay_buffer, i).detach().numpy()
-                    
-            # print and plot loss
-            print('Loss: ' + str(loss))
-            losses.append(loss)
+            loss = train_network(config, model, replay_buffer, i, logger)
+            
+            # Save model periodically
+            if i % 100 == 0:
+                model.save()
+                
     except KeyboardInterrupt:
         model.save()
+        logger.finish()
+        return
+        
+    logger.finish()
+    return model
+
 ### Entry-point function
 #muzero(get_cartpole_debug_config())
 muzero(get_cartpole_config())

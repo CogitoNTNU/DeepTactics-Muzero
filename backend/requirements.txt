@@ -46,4 +46,5 @@ pre-commit
 torch
 optuna
 tictactoe_gym
+wandb>=0.16.0
     
