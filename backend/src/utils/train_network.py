@@ -37,21 +37,18 @@ def calculate_loss(batch_coll: list) -> tuple[torch.Tensor, dict]:
             value, reward, policy_t = prediction
             target_value, target_reward, target_policy = target
 
-            # value_loss = F.mse_loss(value, torch.tensor([[target_value]]))
-            value_loss = (-target_value * torch.nn.LogSoftmax(dim=1)(value)).sum(1)
+            value_loss = F.mse_loss(value, torch.tensor([[target_value]]))
+            # value_loss = (-target_value * torch.nn.LogSoftmax(dim=1)(value)).sum(1)
 
             if step_idx > 0:
-                # reward_loss = F.mse_loss(reward, torch.tensor([[target_reward]]))
-                reward_loss = (-target_reward * torch.nn.LogSoftmax(dim=1)(reward)).sum(
-                    1
-                )
+                reward_loss = F.mse_loss(reward, torch.tensor([[target_reward]]))
+                # reward_loss = (-target_reward * torch.nn.LogSoftmax(dim=1)(reward)).sum( 1)
             else:
                 reward_loss = torch.tensor(0.0, requires_grad=True)
 
             if target_policy != []:
-                policy_loss = F.cross_entropy(
-                    policy_t.log(), torch.tensor([target_policy])
-                )
+                # print(f"Policy target: {target_policy}, predicted policy: {policy_t}")
+                policy_loss = F.cross_entropy(policy_t, torch.tensor([target_policy]))
                 # policy_loss = ( -target_policy * torch.nn.LogSoftmax(dim=1)(policy_t)).sum(1)
             else:
                 policy_loss = torch.tensor(0.0, requires_grad=True)

@@ -13,7 +13,7 @@ class WandbLogger:
 
     def watch_model(self, model: Network):
         """Watch model gradients and parameters."""
-        wandb.watch(model, log="all", log_freq=100, log_graph=True)
+        wandb.watch(model, log="all", log_freq=1, log_graph=True)
 
     def log_metrics(self, metrics: Dict[str, float], step: int):
         """Log metrics to wandb."""
