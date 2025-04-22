@@ -1,0 +1,44 @@
+{
+  "os":  "macOS-14.2.1-arm64-arm-64bit",
+  "python":  "CPython 3.12.7",
+  "startedAt":  "2025-04-22T16:52:14.716501Z",
+  "program":  "/Users/brage/Documents/cogito/DeepTactics-Muzero/backend/main.py",
+  "codePath":  "backend/main.py",
+  "git":  {
+    "remote":  "git@github.com:CogitoNTNU/DeepTactics-Muzero.git",
+    "commit":  "c1fbca7310dd86a3b3c710413792792319f2c778"
+  },
+  "email":  "bragehk@stud.ntnu.no",
+  "root":  "/Users/brage/Documents/cogito/DeepTactics-Muzero/backend",
+  "host":  "dhcp-10-24-107-35.wlan.ntnu.no",
+  "executable":  "/Users/brage/Documents/cogito/DeepTactics-Muzero/backend/.env/bin/python3",
+  "codePathLocal":  "main.py",
+  "cpu_count":  8,
+  "cpu_count_logical":  8,
+  "disk":  {
+    "/":  {
+      "total":  "245107195904",
+      "used":  "173034315776"
+    },
+    "/System/Volumes/Data":  {
+      "total":  "245107195904",
+      "used":  "173034315776"
+    }
+  },
+  "memory":  {
+    "total":  "8589934592"
+  },
+  "cpu":  {
+    "count":  8,
+    "countLogical":  8
+  },
+  "apple":  {
+    "name":  "Apple M1",
+    "ecpuCores":  4,
+    "pcpuCores":  4,
+    "gpuCores":  7,
+    "memoryGb":  8,
+    "swapTotalBytes":  "5368709120",
+    "ramTotalBytes":  "8589934592"
+  }
+}

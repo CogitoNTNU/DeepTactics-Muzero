@@ -1,0 +1,16 @@
+{
+  "os":  "macOS-14.2.1-arm64-arm-64bit",
+  "python":  "CPython 3.12.7",
+  "startedAt":  "2025-04-22T16:47:34.995138Z",
+  "program":  "/Users/brage/Documents/cogito/DeepTactics-Muzero/backend/main.py",
+  "codePath":  "backend/main.py",
+  "git":  {
+    "remote":  "git@github.com:CogitoNTNU/DeepTactics-Muzero.git",
+    "commit":  "c1fbca7310dd86a3b3c710413792792319f2c778"
+  },
+  "email":  "bragehk@stud.ntnu.no",
+  "root":  "/Users/brage/Documents/cogito/DeepTactics-Muzero/backend",
+  "host":  "dhcp-10-24-107-35.wlan.ntnu.no",
+  "executable":  "/Users/brage/Documents/cogito/DeepTactics-Muzero/backend/.env/bin/python3",
+  "codePathLocal":  "main.py"
+}
