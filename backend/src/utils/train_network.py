@@ -6,8 +6,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
-
-def calculate_loss(batch_coll: list) -> torch.Tensor:
+def calculate_loss(batch_coll: list) -> tuple[torch.Tensor, dict]:
     """
     Calculates the aggregated loss over a batch of predictions and targets.
 
@@ -23,7 +22,7 @@ def calculate_loss(batch_coll: list) -> torch.Tensor:
             (target_value, target_reward, target_policy).
 
     Returns:
-        torch.Tensor: The averaged loss over the batch.
+        tuple[torch.Tensor, dict]: The averaged loss over the batch and a dictionary of individual losses.
     """
     loss = torch.tensor(0.0, dtype=torch.float32)
 
@@ -37,22 +36,19 @@ def calculate_loss(batch_coll: list) -> torch.Tensor:
             value, reward, policy_t = prediction
             target_value, target_reward, target_policy = target
 
-            # value_loss = F.mse_loss(value, torch.tensor([[target_value]]))
+
+            #value_loss = F.mse_loss(value, torch.tensor([[target_value]]))
             value_loss = (-target_value * torch.nn.LogSoftmax(dim=1)(value)).sum(1)
 
             if step_idx > 0:
-                # reward_loss = F.mse_loss(reward, torch.tensor([[target_reward]]))
-                reward_loss = (-target_reward * torch.nn.LogSoftmax(dim=1)(reward)).sum(
-                    1
-                )
+                #reward_loss = F.mse_loss(reward, torch.tensor([[target_reward]]))
+                reward_loss = (-target_reward * torch.nn.LogSoftmax(dim=1)(reward)).sum(1)
             else:
                 reward_loss = torch.tensor(0.0, requires_grad=True)
 
             if target_policy != []:
-                policy_loss = F.cross_entropy(
-                    policy_t.log(), torch.tensor([target_policy])
-                )
-                # policy_loss = (-target_policy * torch.nn.LogSoftmax(dim=1)(policy_t)).sum(1)
+                #policy_loss = F.cross_entropy(policy_t.log(), torch.tensor([target_policy]))
+                policy_loss = (-target_policy * torch.nn.LogSoftmax(dim=1)(policy_t)).sum(1)
             else:
                 policy_loss = torch.tensor(0.0, requires_grad=True)
 
@@ -61,11 +57,7 @@ def calculate_loss(batch_coll: list) -> torch.Tensor:
             value_loss.register_hook(lambda gradient: gradient / gradient_scale)
             reward_loss.register_hook(lambda gradient: gradient / gradient_scale)
             policy_loss.register_hook(lambda gradient: gradient / gradient_scale)
-            """
-            print(f"Pred reward: {reward}, actual reward: {target_reward}, Loss: {reward_loss}")
-            print(f"Pred value: {value}, actual value: {target_value}, Loss: {value_loss}")
-            print(f"Pred policy: {policy_t}, actual policy: {target_policy}, Loss: {policy_loss}\n")
-            """
+
             # 0.25 from reanalize appendix
             print(policy_loss, reward_loss, value_loss)
             loss += policy_loss * 0.25 + reward_loss + value_loss
@@ -75,13 +67,23 @@ def calculate_loss(batch_coll: list) -> torch.Tensor:
             tot_reward_loss += reward_loss
             tot_value_loss += value_loss
 
-    # print(f"Total policy loss: {tot_policy_loss/len(batch_coll)}, Total reward loss: {tot_reward_loss/len(batch_coll)}, Total value loss: {tot_value_loss/len(batch_coll)}")
-    return loss / len(batch_coll)
+    # Calculate average losses
+    avg_policy_loss = tot_policy_loss / len(batch_coll)
+    avg_reward_loss = tot_reward_loss / len(batch_coll)
+    avg_value_loss = tot_value_loss / len(batch_coll)
+    avg_total_loss = loss / len(batch_coll)
+
+    loss_dict = {
+        'total_loss': avg_total_loss.item(),
+        'value_loss': avg_value_loss.item(),
+        'reward_loss': avg_reward_loss.item(),
+        'policy_loss': avg_policy_loss.item()
+    }
+
+    return loss / len(batch_coll), loss_dict
 
 
-def update_weights(
-    optimizer: torch.optim.Optimizer, network: Network, batch: list
-) -> torch.Tensor:
+def update_weights(optimizer: torch.optim.Optimizer, network: Network, batch: list) -> torch.Tensor:
     """
     Performs a weight update on the network using a sampled batch.
 
@@ -95,7 +97,7 @@ def update_weights(
             (image, actions, targets).
 
     Returns:
-        torch.Tensor: The computed loss for the batch.
+        tuple[torch.Tensor, dict]: The computed loss for the batch and a dictionary of individual losses.
     """
     optimizer.zero_grad()
     batch_coll = []
@@ -115,15 +117,13 @@ def update_weights(
             predictions.append((value, reward, policy_t))
 
         batch_coll.append(list(zip(predictions, targets)))
-    loss = calculate_loss(batch_coll=batch_coll)
+    loss, loss_dict = calculate_loss(batch_coll=batch_coll)
     loss.backward()
     optimizer.step()
-    return loss
+    return loss, loss_dict
 
 
-def train_network(
-    config: Config, network: Network, replay_buffer: ReplayBuffer, iterations: int
-) -> torch.Tensor:
+def train_network(config: Config, network: Network, replay_buffer: ReplayBuffer, iterations: int) -> torch.Tensor:
     """
     Trains the network for one iteration using a batch sampled from the replay buffer.
 
@@ -136,6 +136,7 @@ def train_network(
         network (Network): The network to be trained.
         replay_buffer (ReplayBuffer): The replay buffer from which training batches are sampled.
         iterations (int): The current iteration count used for learning rate decay.
+        logger (WandbLogger, optional): Logger for tracking metrics.
 
     Returns:
         torch.Tensor: The loss computed during the training update.
@@ -144,17 +145,9 @@ def train_network(
 
     for e in range(config.epochs):
         # learning_rate = config.learning_rate * config.lr_decay_rate**(iterations / config.lr_decay_steps)
-        if iterations >= config.learning_rate_decay_steps:
-            lr = (
-                config.learning_rate
-                * config.learning_rate_decay**config.learning_rate_decay_steps
-            )
-            optimizer = optim.SGD(
-                network.parameters(),
-                lr=lr,
-                momentum=config.momentum,
-                weight_decay=config.weight_decay,
-            )
+        if(iterations>=config.learning_rate_decay_steps):
+            lr=config.learning_rate*config.learning_rate_decay**config.learning_rate_decay_steps
+            optimizer = optim.SGD(network.parameters(), lr=lr, momentum=config.momentum, weight_decay=config.weight_decay)
         else:
             lr = config.learning_rate * config.learning_rate_decay ** (
                 network.tot_training_steps + 1
@@ -175,8 +168,8 @@ def train_network(
 
         # Compute loss
         loss = update_weights(optimizer=optimizer, network=network, batch=batch)
-        # print(batch)
-        # if e % 5 == 0:
+        #print(batch)
+        #if e % 5 == 0:
         #    print(f"Loss on epoch: {e}: {loss}. LR: {lr}, tot_training_steps: {network.tot_training_steps}")
 
         # Update training steps counter

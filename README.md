@@ -61,6 +61,27 @@ For example: OS version, programs, libraries, etc.
 
 -->
 - Ensure that git is installed on your machine. [Download Git](https://git-scm.com/downloads)
+- Weights & Biases (wandb) account for experiment tracking
+
+### Weights & Biases Setup
+1. Install wandb:
+```bash
+pip install wandb
+```
+
+2. Login to wandb (you'll need to provide your API key):
+```bash
+wandb login
+```
+
+3. The project uses wandb to track:
+- Model gradients and parameters
+- Training losses (value, reward, policy, total)
+- Learning rate
+- Game statistics (episode rewards and lengths)
+- Training configuration
+
+You can view all metrics in real-time on the wandb dashboard at https://wandb.ai
 
 ## Usage
 
