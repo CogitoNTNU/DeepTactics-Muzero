@@ -21,19 +21,16 @@ class WandbLogger:
 
     def log_losses(
         self,
-        total_loss: float,
-        value_loss: float,
-        reward_loss: float,
-        policy_loss: float,
+        loss_dict: dict,
         step: int,
     ):
         """Log all loss components."""
         self.log_metrics(
             {
-                "loss/total": total_loss,
-                "loss/value": value_loss,
-                "loss/reward": reward_loss,
-                "loss/policy": policy_loss,
+                "loss/total": loss_dict["total_loss"],
+                "loss/value": loss_dict["value_loss"],
+                "loss/reward": loss_dict["reward_loss"],
+                "loss/policy": loss_dict["policy_loss"],
             },
             step=step,
         )
