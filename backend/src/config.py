@@ -117,7 +117,7 @@ def get_cartpole_config() -> Config:
         diriclet_noise=0.25,
         # Set this to 0 for deterministic prior probabilites
         dirichlet_exploaration_factor=0.25,
-        batch_size=64,
+        batch_size=128,
         epochs=1,
         training_interval=100,
         learning_rate=0.0277,
@@ -191,4 +191,3 @@ def get_tictactoe_config() -> Config:
         model_load_filename="test2",
         model_save_filename="test",
     )
-

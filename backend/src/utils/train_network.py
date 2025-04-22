@@ -63,7 +63,7 @@ def calculate_loss(batch_coll: list) -> tuple[torch.Tensor, dict]:
             policy_loss.register_hook(lambda gradient: gradient / gradient_scale)
 
             # 0.25 from reanalize appendix
-            print(loss, policy_loss, reward_loss.squeeze(), value_loss.squeeze())
+            # print(loss, policy_loss, reward_loss.squeeze(), value_loss.squeeze())
             loss += policy_loss * 0.25 + reward_loss.squeeze() + value_loss.squeeze()
 
             # Accumulate losses for logging/debugging
@@ -153,6 +153,7 @@ def train_network(
     Returns:
         torch.Tensor: The loss computed during the training update.
     """
+    print("Starting training")
     network.train()
 
     for e in range(config.epochs):
@@ -194,9 +195,9 @@ def train_network(
         # print(batch)
         # if e % 5 == 0:
         #    print(f"Loss on epoch: {e}: {loss}. LR: {lr}, tot_training_steps: {network.tot_training_steps}")
+        logger.log_losses(loss_dict, network.tot_training_steps)
 
         # Update training steps counter
         network.tot_training_steps += 1
-
     network.train(False)
     return loss
