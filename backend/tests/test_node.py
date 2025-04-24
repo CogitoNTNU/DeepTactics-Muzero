@@ -3,7 +3,7 @@ from src.game.player import Player
 
 
 def test_node_initialization():
-    player = Player()
+    player = Player(is_board_game=False)
     node = Node(parent=None, policy_value=0.5, player=player, state=None)
 
     assert node.policy_value == 0.5
