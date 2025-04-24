@@ -74,14 +74,14 @@ class Network(nn.Module):
         self.representation = nn.Sequential(
             nn.Linear(config.observation_space_size, config.hidden_layer_size),
             nn.ELU(),
-            nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
+            nn.Linear(config.hidden_layer_size, config.hidden_layer_size)
         )
 
         # Value head: predicts scalar value from hidden state.
         self.value_head = nn.Sequential(
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
             nn.ELU(),
-            nn.Linear(config.hidden_layer_size, 1),
+            nn.Linear(config.hidden_layer_size, 1, bias=True)
         )
 
         # Policy head: predicts action probabilities from hidden state.
@@ -103,7 +103,7 @@ class Network(nn.Module):
         self.reward_head = nn.Sequential(
             nn.Linear(config.hidden_layer_size, config.hidden_layer_size),
             nn.ELU(),
-            nn.Linear(config.hidden_layer_size, 1),
+            nn.Linear(config.hidden_layer_size, 1, bias=True)
         )
 
         self.tot_training_steps = 0
