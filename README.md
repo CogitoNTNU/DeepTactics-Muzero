@@ -20,7 +20,7 @@
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
-    - [Weights & Biases Setup](#weights--biases-setup)
+    - [Weights \& Biases Setup](#weights--biases-setup)
   - [Usage](#usage)
     - [Running with Docker Compose](#running-with-docker-compose)
     - [Accessing the Application](#accessing-the-application)
@@ -78,8 +78,8 @@ The project consists of two main components:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/dpmuzero.git
-   cd dpmuzero
+   git clone https://github.com/CogitoNTNU/DeepTactics-Muzero.git
+   cd DeepTactics-Muzero
    ```
 
 2. Build and start the containers:
